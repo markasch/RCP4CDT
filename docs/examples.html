@@ -319,7 +319,7 @@ optimal value = 0.67</code></pre>
 </section>
 <section id="cdt-implementation" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cdt-implementation">CDT Implementation</h2>
-<p>Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in <a href="#fig-imp" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-imp</span></a>.</p>
+<p>Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in <a href="#fig-imp" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
 <div id="fig-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -373,7 +373,7 @@ Figure&nbsp;1.1: The implementation in 4 stages.
 <div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;These are of type data transfer, data storage, data processing, etc.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;This is an optional sub-group–the operations can just be considered as additional jobs.</p></div><div id="fn4"><p><sup>4</sup>&nbsp;These are the facilities that can be exploited for each category of job: networks, data centers, HPC centers, etc.</p></div><div id="fn5"><p><sup>5</sup>&nbsp;Successors, predecessors, as defined by a workflow DAG</p></div></div></section>
 <section id="model-function" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="model-function">Model Function</h3>
-<p>All the above are necessary and sufficient for the mathematical formulation presented in the section <a href="#sec-math" class="quarto-xref"><span class="quarto-unresolved-ref">sec-math</span></a>. We define a <code>pyomo</code> function that takes a dictionary of tasks as input<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, and returns a <code>pyomo</code> model.</p>
+<p>All the above are necessary and sufficient for the mathematical formulation presented in the section <a href="theory.html#sec-math" class="quarto-xref"><span>Mathematical Formulation - Deterministic Model</span></a>. We define a <code>pyomo</code> function that takes a dictionary of tasks as input<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, and returns a <code>pyomo</code> model.</p>
 <div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;See below for examples.</p></div></div><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model function generator</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MRCPSP_model(TASKS):</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel()</span>
@@ -574,7 +574,7 @@ Figure&nbsp;1.3: A line plot
 </div>
 </div>
 </div>
-<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-line-plot</span></a> that there is a clear trend, up and down.</p>
+<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> that there is a clear trend, up and down.</p>
 <p>To only have code displayed, but not executed…</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-line-plot</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "A line plot "</span></span>

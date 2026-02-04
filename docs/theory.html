@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -184,7 +204,10 @@ window.Quarto = {
   <li><a href="#sec-math" id="toc-sec-math" class="nav-link" data-scroll-target="#sec-math">Mathematical Formulation - Deterministic Model</a></li>
   </ul></li>
   <li><a href="#dynamic-networks" id="toc-dynamic-networks" class="nav-link" data-scroll-target="#dynamic-networks">Dynamic Networks</a></li>
-  <li><a href="#sec-stoch" id="toc-sec-stoch" class="nav-link" data-scroll-target="#sec-stoch">Uncertainty</a></li>
+  <li><a href="#sec-stoch" id="toc-sec-stoch" class="nav-link" data-scroll-target="#sec-stoch">Uncertainty</a>
+  <ul class="collapse">
+  <li><a href="#stochastic-multistage-programming" id="toc-stochastic-multistage-programming" class="nav-link" data-scroll-target="#stochastic-multistage-programming">Stochastic, multistage programming</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -251,9 +274,9 @@ Figure&nbsp;1: Two different viewponts of the CDT: a supply chain model (left) a
 <p>These two models are complementary:</p>
 <ul>
 <li>the SCND can be used for global, over a <em>fixed period</em>, modelling—for example over an entire project duration, or annualized;</li>
-<li>the RCPSP can be used for time-dependent models, especially when uncertainty is introduced, as in a two-stage, or multi-stage, model—see below Section <a href="#sec-stoch" class="quarto-xref"><span class="quarto-unresolved-ref">sec-stoch</span></a>.</li>
+<li>the RCPSP can be used for time-dependent models, especially when uncertainty is introduced, as in a two-stage, or multi-stage, model—see below Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</li>
 </ul>
-<p>In <a href="#fig-wf" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-wf</span></a> and <a href="#fig-wf2" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-wf2</span></a> below, we show the two alternative viewpoints of a simple 4-job, 4-machine scheduling problem. The global mathematical formulation will effectively include and <em>combine</em> these two viewpoints, as depicted in <a href="#fig-CDT_RCP_SC" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-CDT_RCP_SC</span></a> and formulated below.</p>
+<p>In <a href="#fig-wf" class="quarto-xref">Figure&nbsp;<span>2</span></a> and <a href="#fig-wf2" class="quarto-xref">Figure&nbsp;<span>3</span></a> below, we show the two alternative viewpoints of a simple 4-job, 4-machine scheduling problem. The global mathematical formulation will effectively include and <em>combine</em> these two viewpoints, as depicted in <a href="#fig-CDT_RCP_SC" class="quarto-xref">Figure&nbsp;<span>4</span></a> and formulated below.</p>
 <div id="fig-wf" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -383,7 +406,7 @@ Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
 <p>Note that the above formulation is restricted to temporal scheduling on a <em>single</em> machine, and for a single project—a collection of jobs. This formulation can be generalized to deal with multiple machines and multiple projects. In this case, the formulation becomes very similar to that of a supply chain. It is referred to in the literature as the <em>multi-mode resource-constrained multi-project scheduling problem</em>, or MRCMPSP.</p>
 <p><strong>Multi-Mode</strong> The single-mode RCPSP assumed that each activity has only one way to be executed, whereas the multi-mode RCPSP considers multiple ways to execute an activity, which often have tradeoffs in duration, cost, or resource requirement.</p>
 <p>Let the decision variable <span class="math inline">\(x_{jmt} \in \{0,1 \}\)</span> denote the execution of job <span class="math inline">\(j\)</span> in mode <span class="math inline">\(m\)</span> completed in period <span class="math inline">\(t.\)</span> Then the MRCPSP with tight, time-indexed formulation<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> can be written as:</p>
-<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;A disjunctive formulation, based on XOR relations, is also possible—see <a href="#sec-exam" class="quarto-xref"><span class="quarto-unresolved-ref">sec-exam</span></a></p></div></div><p><span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;A disjunctive formulation, based on XOR relations, is also possible—see <a href="examples.html" class="quarto-xref"><span>Implementation</span></a></p></div></div><p><span class="math display">\[
 \begin{align}
 \min \quad &amp;  \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J} t\cdot x_{J1t} &amp; (1)\\
 \text{s.t.} \quad &amp;
@@ -400,7 +423,7 @@ Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
 </section>
 <section id="dynamic-networks" class="level2">
 <h2 class="anchored" data-anchor-id="dynamic-networks">Dynamic Networks</h2>
-<p>We can generalize the supply chain by considering a multi-stage network with an added time dimension. This enables flow and carrying of data and jobs across time periods, in addition to flow among facilities. For example, if certain facilites become unavailable, or less available, as the project evolves over time. This is a kind of recourse, which will be considered below in Section <a href="#sec-stoch" class="quarto-xref"><span class="quarto-unresolved-ref">sec-stoch</span></a>.</p>
+<p>We can generalize the supply chain by considering a multi-stage network with an added time dimension. This enables flow and carrying of data and jobs across time periods, in addition to flow among facilities. For example, if certain facilites become unavailable, or less available, as the project evolves over time. This is a kind of recourse, which will be considered below in Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</p>
 <div id="fig-wf3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -443,9 +466,98 @@ Figure&nbsp;5: Multi-stage, dynamic network that evolves over time due to changi
 <section id="sec-stoch" class="level2">
 <h2 class="anchored" data-anchor-id="sec-stoch">Uncertainty</h2>
 <p>In practice some of the scheduling parameters may be uncertain. The exact duration of an activity, for instance, might not be known at the beginning of the project. Similarly, the number of available resources is another parameter that may not be known before project execution. These uncertainties may be due to different sources, including estimation errors, unforeseen (weather) conditions, late “delivery” (unavailability) of some required resources, unpredictable incidents such as machine breakdown or worker accidents, etc.</p>
-<p>TBC…</p>
+<section id="stochastic-multistage-programming" class="level3">
+<h3 class="anchored" data-anchor-id="stochastic-multistage-programming">Stochastic, multistage programming</h3>
+<p><strong>Background</strong></p>
+<p>Stochastic programming/optimization (optimal decision-making under uncertainty) is the part of mathematical programming and operations research that studies how to incorporate uncertainty into decision problems. Stochastic programs are primarily about transient decision making.</p>
+<div class="warning" style="background-color:#E9D8FD; color: #69337A; border-left: solid #b199e4 4px; border-radius: 4px; padding:0.7em;">
+<span>
+<p style="margin-top:1em; text-align:center">
+<b>Information:</b>
+</p>
+<p style="margin-left:1em;">
+Some decisions must be made today, but important information will not be available until after the decision is made.
+</p>
+</span></div>
+<pre><code>    Some decisions must be made today, but important 
+    information will not be available until after the 
+    decision is made.</code></pre>
+<p>An <em>information stage</em> (normally simply called “stage”) is the most important concept that distinguishes stochastic programming. A stage is a point in time where decisions are made within a model. Stages define the boundaries of time intervals. Stages sometimes follow naturally from the problem setting and sometimes are modeling approximations.</p>
+<p>The starting point of a stochastic program is the present situation. The model is intended to tell us what to do in light of our goals, constraints, and resources. We then ask what we should do. We are not asking what to do in all possible situations, just what to do based on our present state.</p>
+<ul>
+<li>An inherently <em>two-stage model</em> is a model where the first decision is a major long-term decision, whereas the remaining stages represent the use of this investment. In these cases, mathematically speaking, the first stage will look totally different from the remaining stages, which will all look more or less the same. This is a very important class of models, possibly the most important one for stochastic programming.</li>
+<li>In inherently <em>multistage models</em>, all stages are of the same type. We face random resource availability, energy prices, unexpected maintenance, etc. We should not confuse information stages with time periods. Stages model the flow of information; time periods represent the ticking of the clock in a model. Stages, on the other hand, are points in time where we make decisions in the model after having learned something new.</li>
+</ul>
+<p>Finding a good trade-off between time periods and stages is often crucial when modeling, as it has consequences for model quality, data collection, and solvability of the model.</p>
+<div class="warning" style="background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;">
+<span>
+<p style="margin-top:1em; text-align:center">
+<b>Warning/Fact:</b>
+</p>
+<p style="margin-left:1em;">
+In the long run we are all dead.
+</p>
+<p style="margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia">
+<b>- John Maynard Keynes</b> <i>(A Tract on Monetary Reform, 1923)</i>
+</p>
+<p></p>
+</span></div>
+<p>In other words, one should not wait too long before taking a decision.</p>
+<p><strong>Mathematical Formulation</strong></p>
+<div id="fig-sdp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="graphics/sdp.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: A multistage decision process with uncertainty. Uncertain, exogenous inputs <span class="math inline">\(\xi_t\)</span> arrive, starting from stage <span class="math inline">\(t=2,\)</span> and trigger subsequent recourse actions.
+</figcaption>
+</figure>
+</div>
+<p>In the Figure we depict a generic multistage decision process with state <span class="math inline">\(\mathbf{x}_t\)</span> that evolves over time, starting at stage <span class="math inline">\(t=1,\)</span> and then receives uncertain, exogenous inputs, <span class="math inline">\(\xi_2, \xi_3, \ldots, \xi_T,\)</span> at given stages <span class="math inline">\(t = 2,3,\ldots, T.\)</span> At stage 1, a here-and-now (deterministic) decision is taken. The subsequent sequence of wait-and-see decision functions <span class="math inline">\({\mathbf{x}_t(\xi_t)}_{t\in [T]}\)</span> constitutes a , <span class="math inline">\(\pi.\)</span> The policy thus obtained, provides a decision rule for all stages <span class="math inline">\(t \in [T].\)</span> The aim of the decision process (stochastic multistage optimization) is then to compute an <em>optimal</em> policy subject to a given objective and constraints.</p>
+<p>We will describe in detail the two-stage problem, since the multistage is a straightforward generalisation. In the stochastic setting, we can naturally classify <span class="math inline">\(x\in\mathscr{X}\)</span> as the <em>first-stage</em> decision variables, since the major centres are fixed and <span class="math inline">\(y\in\mathbb{R}^{\left|\mathscr{A}\right|\times\left|\mathscr{K}\right|}\)</span> as the <em>second-stage</em> decision variables, since the job-flow operating conditions are uncertain.</p>
+<p>The two-stage stochastic linear program <span class="citation" data-cites="birgelouveaux2011">(<a href="index.html#ref-birgelouveaux2011" role="doc-biblioref">Birge and Louveaux 2011</a>)</span>, <span class="citation" data-cites="shapiro_lectures_2009">(<a href="index.html#ref-shapiro_lectures_2009" role="doc-biblioref">Shapiro, Dentcheva, and Ruszczyński 2009</a>)</span> is then</p>
+<p><span class="math display">\[\begin{align} \label{eq:2stage}
+\min_{x\in\mathscr{X}} &amp; \,\,c^{\top}x + \mathrm{E}\left[Q(x;\xi)\right],
+\end{align}\]</span> where <span class="math inline">\(Q(x;\xi)\)</span> is the optimal value of the second-stage problem <span class="math display">\[\begin{align*}
+\min_{y\ge0} &amp; \,\,q^{\top}y\\
+\textrm{s.t.} &amp; \,\,Ny=0,\\
+&amp; Cy\ge d,\\
+&amp; Sy\le s,\\
+&amp; Ry\le Mx,
+\end{align*}\]</span> where <span class="math inline">\(d\)</span> is the (uncertain) demand, <span class="math inline">\(s\)</span> is the (uncertain) supply, the random vector <span class="math inline">\(\xi=(q,d,s,R,M)\)</span> and <span class="math inline">\(y=y(\xi).\)</span> The expectation is taken with respect to the joint probability distribution function of <span class="math inline">\(\xi.\)</span> In the terminology of state-space, we can consider <span class="math inline">\(x\)</span> as the <em>state</em> variable, and <span class="math inline">\(y\)</span> as the <em>control</em> variable.</p>
+<p>To treat the occurrence of infeasibility, where the first-stage solution does not satisfy the second-stage constraints, e.g.&nbsp;<span class="math inline">\(Cy\nleqslant d,\)</span> we can introduce a <em>recourse</em> action <span class="math inline">\(z\)</span> that supplies the deficit <span class="math inline">\(d-Cy\)</span> at some penalty cost. Then the second-stage problem becomes <span class="math display">\[\begin{align*}
+\min_{y\ge0} &amp; \,\,q^{\top}y+h^{\top}z\\
+\textrm{s.t.} &amp; \,\,Ny=0,\\
+&amp; Cy+z\ge d,\\
+&amp; Sy\le s,\\
+&amp; Ry\le Mx,
+\end{align*}\]</span> where <span class="math inline">\(h\)</span> represents the vector of (positive) recourse costs.</p>
+<p>In the multistage case, we have a succession of recourse stages, yielding the multistage program <span class="citation" data-cites="powell2022">(<a href="index.html#ref-powell2022" role="doc-biblioref">Powell 2022</a>)</span>,</p>
+<p><span class="math display">\[
+    \min_{\pi \in \Pi} \mathrm{E} \left[ \sum^{T}_{t=1} \gamma^{t-1} f_t(x_t;\xi_t) \right],
+\]</span> subject to <span class="math display">\[
+     x_t \in \mathcal{X}_t(x_{t-1};\xi_{t-1}), \quad t=1 \ldots, T,
+\]</span> where <span class="math inline">\(\pi\)</span> is a policy, <span class="math inline">\(\gamma\)</span> is a discount factor, <span class="math inline">\(f_t\)</span> is a cost function, <span class="math inline">\(x_t\)</span> is a decision and <span class="math inline">\(\mathcal{X}_t\)</span> are the constraints. A policy is, by definition, a method that optimizes the objective. For example, in Google maps, the policy is to decide whether to turn left or right by optimizing over the time required to transverse the next link in the network plus the remaining time to get to the destination.</p>
+<p>Note that there are various forms of minimization in stochastic scheduling. Whenever an objective function has to be minimized, it has to be specified in what sense the objective has to be minimized.</p>
+<ul>
+<li><em>Expectation</em> sense is the crudest form of optimization, e.g., one wishes to minimize (a function of) the expected makespan, that is <span class="math inline">\(\mathrm{E}\left[f\left(C_{\mathrm{max}}\right)\right],\)</span> and find a policy under which the expected makespan is smaller than the expected makespan under any other policy.</li>
+<li><em>Stochastic</em> sense is a stronger form of optimization. If a schedule or policy minimizes <span class="math inline">\(f\left(C_{\mathrm{max}}\right)\)</span> stochastically, then the makespan under the optimal schedule or policy is stochastically (in probability, or in law) less than the makespan under any other schedule or policy.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-birgelouveaux2011" class="csl-entry" role="listitem">
+Birge, John R., and François Louveaux. 2011. <em>Introduction to Stochastic Programming</em>. <span>Second edition</span>. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-4614-0237-4">https://doi.org/10.1007/978-1-4614-0237-4</a>.
+</div>
+<div id="ref-powell2022" class="csl-entry" role="listitem">
+Powell, Warren B. 2022. <em>Reinforcement Learning and Stochastic Optimization: A Unified Framework for Sequential Decisions</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-shapiro_lectures_2009" class="csl-entry" role="listitem">
+Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009. <em>Lectures on <span>Stochastic</span> <span>Programming</span></em>. SIAM, Society for Industrial; Applied Mathematics. <a href="https://doi.org/10.1137/1.9780898718751">https://doi.org/10.1137/1.9780898718751</a>.
+</div>
+</div>
+</section>
 </section>
 
 
