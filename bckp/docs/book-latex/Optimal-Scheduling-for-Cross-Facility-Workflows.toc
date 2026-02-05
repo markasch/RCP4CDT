@@ -1,0 +1,32 @@
+\contentsline {chapter}{Welcome}{5}{chapter*.2}%
+\contentsline {section}{Author}{6}{chapter*.2}%
+\contentsline {section}{Citation}{6}{chapter*.2}%
+\contentsline {section}{License}{6}{chapter*.2}%
+\contentsline {section}{References}{6}{chapter*.2}%
+\contentsline {chapter}{Introduction}{9}{chapter*.4}%
+\contentsline {section}{The Exa-AtoW Project}{9}{chapter*.4}%
+\contentsline {section}{Continuum Digital Twin or Shadow}{9}{chapter*.4}%
+\contentsline {section}{Uncertainty}{11}{figure.caption.6}%
+\contentsline {chapter}{Theory}{13}{chapter*.7}%
+\contentsline {section}{Supply Chains and Scheduling}{13}{section*.8}%
+\contentsline {section}{Supply Chain Network Design}{15}{figure.caption.10}%
+\contentsline {subsection}{Problem Definition}{15}{figure.caption.10}%
+\contentsline {subsection}{State Variables}{15}{figure.caption.10}%
+\contentsline {subsection}{Objective Function}{15}{figure.caption.10}%
+\contentsline {subsection}{Configuration Decisions}{16}{figure.caption.10}%
+\contentsline {subsection}{Mathematical Formulation - Deterministic Model}{16}{figure.caption.10}%
+\contentsline {subsection}{Simplified Cases}{18}{AMS.22}%
+\contentsline {section}{Optimization}{20}{AMS.28}%
+\contentsline {subsection}{MILP formulations for RCPSP and SCND}{20}{AMS.28}%
+\contentsline {subsection}{Precedence Constraints}{21}{AMS.28}%
+\contentsline {subsection}{Disjunctions}{21}{AMS.28}%
+\contentsline {section}{Uncertainty}{21}{AMS.28}%
+\contentsline {chapter}{Examples}{23}{chapter*.29}%
+\contentsline {section}{Examples}{23}{section*.30}%
+\contentsline {section}{Use-Cases}{23}{figure.caption.31}%
+\contentsline {subsection}{Setup and Linear Programming Example}{23}{figure.caption.31}%
+\contentsline {subsection}{Precedence Example}{24}{figure.caption.31}%
+\contentsline {subsection}{Disjunctions}{24}{figure.caption.31}%
+\contentsline {subsection}{Simplified Supply Chain Example}{24}{figure.caption.31}%
+\contentsline {subsection}{Simplified RCPSP Example}{24}{figure.caption.31}%
+\contentsfinish 

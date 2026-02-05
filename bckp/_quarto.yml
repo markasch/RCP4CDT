@@ -1,0 +1,28 @@
+project:
+  type: tufte
+
+book:
+  title: "Optimal Scheduling for Cross-Facility Workflows"
+  subtitle: "RCPSP for CDT"
+  author: "Mark Asch"
+  date: last-modified
+  sidebar:
+    logo: cover.png
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+#format:
+  #html:
+  #  theme:
+  #    - cosmo
+  #    - brand
+#  pdf:
+#    documentclass: scrreprt
+
+
+

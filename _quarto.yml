@@ -1,0 +1,45 @@
+project:
+  type: tufte
+  output-dir: docs
+
+book:
+  title: "Optimal Scheduling for Cross-Facility Workflows"
+  subtitle: "XWF for CDT"
+  author: "Mark Asch"
+  date: last-modified
+  sidebar:
+    logo: graphics/xwf_logo.svg
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - theory.qmd
+    - examples.qmd
+
+bibliography: references.bib
+
+highlight-style: pygments
+
+format:
+  #html:
+  #  theme:
+  #    - cosmo
+  #    - brand
+  pdf:
+    documentclass: scrreprt
+  latex:
+    echo: false
+    documentclass: tufte-book # book # tufte-book # scrreprt
+    # classoption: nohyper
+    # classoption: [symmetric]
+    pdf-engine: pdflatex
+    # from tufte-quarto extension
+    # reference-location: margin
+    # citation-location: margin
+    # fig-cap-location: bottom
+    fontfamily: palatino
+    mainfont: "ETbb"
+    sansfont: "TeX Gyre Heros"
+    sansfontoptions: "Scale=MatchUppercase"
+
+
+

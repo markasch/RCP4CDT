@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Mark Asch">
-<meta name="dcterms.date" content="2026-02-05">
 
-<title>Optimal Scheduling for Cross-Facility Workflows</title>
+<title>Examples – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,27 +55,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -87,7 +65,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./theory.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -95,10 +73,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-68c8bffd90dad8f2b55c52d7b6410dc0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d661fd49052cdedcb9ca2693aa63deef.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d486aff94d584f320fbb5454f7925f24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -127,11 +105,40 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
 </head>
 
-<body class="nav-sidebar floating slimcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -140,7 +147,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./examples.html">Examples</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -171,7 +178,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
@@ -189,7 +196,8 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Implementation</span></a>
+  <a href="./examples.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Examples</span></a>
   </div>
 </li>
     </ul>
@@ -198,12 +206,14 @@ div.csl-indent {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
+  <li><a href="#examples" id="toc-examples" class="nav-link active" data-scroll-target="#examples">Examples</a></li>
+  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases">Use-Cases</a>
   <ul class="collapse">
-  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
-  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
-  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#setup-and-linear-programming-example" id="toc-setup-and-linear-programming-example" class="nav-link" data-scroll-target="#setup-and-linear-programming-example">Setup and Linear Programming Example</a></li>
+  <li><a href="#precedence-example" id="toc-precedence-example" class="nav-link" data-scroll-target="#precedence-example">Precedence Example</a></li>
+  <li><a href="#disjunctions" id="toc-disjunctions" class="nav-link" data-scroll-target="#disjunctions">Disjunctions</a></li>
+  <li><a href="#simplified-supply-chain-example" id="toc-simplified-supply-chain-example" class="nav-link" data-scroll-target="#simplified-supply-chain-example">Simplified Supply Chain Example</a></li>
+  <li><a href="#simplified-rcpsp-example" id="toc-simplified-rcpsp-example" class="nav-link" data-scroll-target="#simplified-rcpsp-example">Simplified RCPSP Example</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -213,31 +223,18 @@ div.csl-indent {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content page-columns page-full column-body" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Optimal Scheduling for Cross-Facility Workflows</h1>
-<p class="subtitle lead">XWF for CDT</p>
+<h1 class="title">Examples</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta column-page-right">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Mark Asch </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 5, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -247,122 +244,112 @@ div.csl-indent {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered page-columns page-full">
-<h1 class="unnumbered">Welcome</h1>
-<p>This (online) user-guide contains a complete presentation of <em>optimal scheduling</em> applied to Exascale and post-Exascale workflows. These workflows combine data acquisition, data storage, data transfer and data analysis. The HPC components of such workflows can incorporate a diverse range of models, including partial differential equation solvers, algebraic solvers, AI/ML-based models, and data analytics components, all integrated into a single process <span class="citation" data-cites="Badia2024">(<a href="index.html#ref-Badia2024" role="doc-biblioref">Ferreira da Silva et al. 2024</a>)</span>, <span class="citation" data-cites="Unat2025">(<a href="index.html#ref-Unat2025" role="doc-biblioref">Unat et al. 2025</a>)</span>.</p>
-<p>The objective here is to address the inherent cross-facility, multi-domain character of these workflows. This requires a very carefully-crafted theoretical foundation that can be readily generalized and extended to these contexts. The material covers both the theory and its application to practical use-cases, including real contexts with uncertainties emanating from different causes. To understand these well, numerous examples are provided in the form of python code snippets and jupyter notebooks. All of these are intgerated in a <em>digital twin</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of the underlying cyberinfrastructure, the so-called <em>digital continuum</em>.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Known as the CDT</p></div></div><p>The Continuum Digital Twin (CDT) is defined and described in the series of forthcoming papers <span class="citation" data-cites="MGG2025implementation MGG2025usecases MGG2025math">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Bodin, and Asch 2025a</a>, <a href="index.html#ref-MGG2025usecases" role="doc-biblioref">2025b</a>, <a href="index.html#ref-MGG2025math" role="doc-biblioref">2025c</a>)</span>. For optimization and scheduling, there are numerous excellent references. Among these we point out particularly <span class="citation" data-cites="birgelouveaux2011">(<a href="index.html#ref-birgelouveaux2011" role="doc-biblioref">Birge and Louveaux 2011</a>)</span>, <span class="citation" data-cites="Pinedo2022">(<a href="index.html#ref-Pinedo2022" role="doc-biblioref">Pinedo 2022</a>)</span>, and <span class="citation" data-cites="powell2022">(<a href="index.html#ref-powell2022" role="doc-biblioref">Powell 2022</a>)</span>. Most of the codes are based on the wonderful <code>pyomo</code> framework <span class="citation" data-cites="bynum2021pyomo">(<a href="index.html#ref-bynum2021pyomo" role="doc-biblioref">Bynum et al. 2021</a>)</span>, <span class="citation" data-cites="hart2011pyomo">(<a href="index.html#ref-hart2011pyomo" role="doc-biblioref">Hart, Watson, and Woodruff 2011</a>)</span> and <span class="citation" data-cites="PZGK2025book">(<a href="index.html#ref-PZGK2025book" role="doc-biblioref">Postek et al. 2025</a>)</span>. General background on exascale workflows can be found in <span class="citation" data-cites="asch2018pathways">(<a href="index.html#ref-asch2018pathways" role="doc-biblioref">M. Asch et al. 2018</a>)</span>.</p>
-<div class="page-columns page-full"><p>Finally, in <span class="citation" data-cites="Asch2022">(<a href="index.html#ref-Asch2022" role="doc-biblioref">Mark Asch 2022</a>)</span> there are basic explanations of optimization, uncertainty quantification, inverse problems and their use for digital twins. </p><div class="no-row-height column-margin column-container"><span class="">This book explains <strong>all</strong> the tools needed for formulating and implementing digital twins.</span></div></div>
-<section id="author" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="author">Author</h2>
-<p>Mark Asch is Emeritus Professor of the Université de Picardie Jules Verne, Mathematics department.</p>
-<p><img src="graphics/icon_homepage.svg" class="img-fluid" style="width:0.20833in"> <a href="https://markasch.github.io/DT-tbx-v1/" class="uri">https://markasch.github.io/DT-tbx-v1/</a></p>
-<p><img src="graphics/icon_github.svg" class="img-fluid" style="width:0.20833in"> <a href="https://github.com/markasch/" class="uri">https://github.com/markasch/</a></p>
-<p><img src="graphics/icon_homepage.svg" class="img-fluid" style="width:0.20833in"> <a href="http://masch.perso.math.cnrs.fr/" class="uri">http://masch.perso.math.cnrs.fr/</a></p>
-<p><img src="graphics/icon_maildotru.svg" class="img-fluid" style="width:0.20833in"> <a href="mailto:mark.asch@u-picardie.fr" class="email">mark.asch@u-picardie.fr</a></p>
+<div id="exam">
+
+</div>
+<p>In summary, this book has no content whatsoever.</p>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>In summary, this book has no content whatsoever.</p>
+<div id="cell-fig-line-plot" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">1</span>,<span class="dv">23</span>,<span class="dv">2</span>,<span class="dv">4</span>])</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="fig-line-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-line-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="examples_files/figure-html/fig-line-plot-output-1.png" width="566" height="411" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: A line plot
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span>1</span></a> that there is a clear trend, up and down.</p>
 </section>
-<section id="citation" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="citation">Citation</h2>
-<p>Asch, Mark. Optimal Scheduling for Cross-Facility Workflows. Online (2026) <a href="https://markasch.github.io/RCP4CDT/" class="uri">https://markasch.github.io/RCP4CDT/</a></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode tex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@book{Asch2026</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    title = {Optimal {S}cheduling for {C}ross-{F}acility {W}orkflows},</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    author = {Asch, Mark},</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    url = {https://markasch.github.io/RCP4CDT/},</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    year = {2026},</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    publisher = {Online}</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="use-cases" class="level2">
+<h2 class="anchored" data-anchor-id="use-cases">Use-Cases</h2>
+<section id="setup-and-linear-programming-example" class="level3">
+<h3 class="anchored" data-anchor-id="setup-and-linear-programming-example">Setup and Linear Programming Example</h3>
+<p>As an introduction we load the necessary <code>pyomo</code> packages and solve an ultra-simple linear programming example. <span class="math display">\[
+\begin{array}{ll}
+  \min       &amp; 2 x_1 + 3 x_2\\
+  \mathrm{s.t.} &amp; 3 x_1 + 4 x_2 \geq 1\\
+             &amp; x_1, x_2 \geq 0
+\end{array}
+\]</span></p>
+<ul>
+<li><code>pyomo.environ</code> provides the framework for building the model</li>
+<li><code>SolverFactory</code> allows to call the solver used to solve the optimization problem</li>
+</ul>
+<div id="9b9d428c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.opt <span class="im">import</span> SolverFactory </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Simple Linear"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision variables and domains</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>model.x <span class="op">=</span> pyo.Var([<span class="dv">1</span>,<span class="dv">2</span>], domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Objective function</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>model.OBJ <span class="op">=</span> pyo.Objective(expr <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>model.x[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>model.x[<span class="dv">2</span>])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Constraint(s)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>model.Constraint1 <span class="op">=</span> pyo.Constraint(expr <span class="op">=</span> <span class="dv">3</span><span class="op">*</span>model.x[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>model.x[<span class="dv">2</span>] <span class="op">&gt;=</span> <span class="dv">1</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> <span class="st">'appsi_highs'</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>SOLVER <span class="op">=</span> pyo.SolverFactory(solver)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> SOLVER.available(), <span class="ss">f"Solver </span><span class="sc">{</span>solver<span class="sc">}</span><span class="ss"> is not available."</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve and print solution</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>SOLVER.solve(model)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"x = (</span><span class="sc">{</span>pyo<span class="sc">.</span>value(model.x[<span class="dv">1</span>])<span class="sc">:.2f}</span><span class="ss">, </span><span class="sc">{</span>pyo<span class="sc">.</span>value(model.x[<span class="dv">2</span>])<span class="sc">:.2f}</span><span class="ss">)"</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"optimal value = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(model.OBJ)<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x = (0.33, 0.00)
+optimal value = 0.67</code></pre>
+</div>
+</div>
+<p>We can print out</p>
+<ul>
+<li>the complete model;</li>
+<li>a full trace of the optimization process.</li>
+</ul>
+<p>(use collapsed display here - click to expand and view output)</p>
 </section>
-<section id="license" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="license">License</h2>
-<p>This online book is frequently updated and edited. It’s content is free to use, licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons licence</a>, and the code can be found on <a href="https://github.com/markasch/RCPSP4CDT">GitHub</a>. A physical copy of the book will be available at a later date.</p>
-<p><strong>License:</strong> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a></p>
+<section id="precedence-example" class="level3">
+<h3 class="anchored" data-anchor-id="precedence-example">Precedence Example</h3>
+<p>We illustrate how to set up a <em>precedence table</em>, made up of job pairs that define pairwise precedences.</p>
 </section>
-<section id="references" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-Asch2022" class="csl-entry" role="listitem">
-Asch, Mark. 2022. <em>A <span>Toolbox</span> for <span>Digital</span>
-<span>Twins</span>: <span>From</span>
-<span>Model</span>-<span>Based</span> to
-<span>Data</span>-<span>Driven</span></em>. Philadelphia, PA: Society
-for Industrial; Applied Mathematics. <a href="https://doi.org/10.1137/1.9781611976977">https://doi.org/10.1137/1.9781611976977</a>.
-</div>
-<div id="ref-asch2018pathways" class="csl-entry" role="listitem">
-Asch, M, T Moore, R Badia, M Beck, P Beckman, T Bidot, F Bodin, et al.
-2018. <span>“Big Data and Extreme-Scale Computing: Pathways to
-Convergence-Toward a Shaping Strategy for a Future Software and Data
-Ecosystem for Scientific Inquiry.”</span> <em>The International Journal
-of High Performance Computing Applications</em> 32 (4): 435–79. <a href="https://doi.org/10.1177/1094342018778123">https://doi.org/10.1177/1094342018778123</a>.
-</div>
-<div id="ref-birgelouveaux2011" class="csl-entry" role="listitem">
-Birge, John R., and François Louveaux. 2011. <em>Introduction to
-Stochastic Programming</em>. <span>Second edition</span>. Springer New
-York, NY. <a href="https://doi.org/10.1007/978-1-4614-0237-4">https://doi.org/10.1007/978-1-4614-0237-4</a>.
-</div>
-<div id="ref-bynum2021pyomo" class="csl-entry" role="listitem">
-Bynum, Michael L., Gabriel A. Hackebeil, William E. Hart, Carl D. Laird,
-Bethany L. Nicholson, John D. Siirola, Jean-Paul Watson, and David L.
-Woodruff. 2021. <em>Pyomo–Optimization Modeling in Python</em>. Third.
-Vol. 67. Springer Science &amp; Business Media.
-</div>
-<div id="ref-Badia2024" class="csl-entry" role="listitem">
-Ferreira da Silva, Rafael, Rosa M. Badia, Deborah Bard, Ian T. Foster,
-Shantenu Jha, and Frederic Suter. 2024.<span>“<span class="nocase">Frontiers in Scientific Workflows: Pervasive Integration
-With High-Performance Computing </span>.”</span> <em>Computer</em> 57
-(08): 36–44. <a href="https://doi.org/10.1109/MC.2024.3401542">https://doi.org/10.1109/MC.2024.3401542</a>.
-</div>
-<div id="ref-MGG2025implementation" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, François Bodin, and Mark Asch. 2025a.
-<span>“Continuum Digital Twin Implementation.”</span> <a href="https://arxiv.org/abs/25xx.xxxx">https://arxiv.org/abs/25xx.xxxx</a>.
-</div>
-<div id="ref-MGG2025usecases" class="csl-entry" role="listitem">
-———. 2025b. <span>“Continuum Digital Twin Use Cases.”</span> <a href="https://arxiv.org/abs/25xx.xxxx">https://arxiv.org/abs/25xx.xxxx</a>.
-</div>
-<div id="ref-MGG2025math" class="csl-entry" role="listitem">
-———. 2025c. <span>“Continuum Digital Twin—Mathematical Models.”</span>
-<a href="https://arxiv.org/abs/25xx.xxxx">https://arxiv.org/abs/25xx.xxxx</a>.
-</div>
-<div id="ref-hart2011pyomo" class="csl-entry" role="listitem">
-Hart, William E, Jean-Paul Watson, and David L Woodruff. 2011.
-<span>“Pyomo: Modeling and Solving Mathematical Programs in
-Python.”</span> <em>Mathematical Programming Computation</em> 3 (3):
-219–60.
-</div>
-<div id="ref-IEA2025" class="csl-entry" role="listitem">
-IEA, Paris. 2025. <span>“Energy and AI.”</span> <a href="https://www.iea.org/reports/energy-and-ai">https://www.iea.org/reports/energy-and-ai</a>.
-</div>
-<div id="ref-Pinedo2022" class="csl-entry" role="listitem">
-Pinedo, Michael L. 2022. <em>Scheduling: Theory, Algorithms, and
-Systems</em>. <span>6th edition</span>. Springer Cham.
-</div>
-<div id="ref-PZGK2025book" class="csl-entry" role="listitem">
-Postek, Krzysztof, Alessandro Zocca, Joaquim Gromicho, and Jeffrey
-Kantor. 2025. <em><span class="nocase">Hands-On Mathematical
-Optimization with Python</span></em>. Cambridge University Press. <a href="https://doi.org/10.1017/9781009493512">https://doi.org/10.1017/9781009493512</a>.
-</div>
-<div id="ref-powell2022" class="csl-entry" role="listitem">
-Powell, Warren B. 2022. <em>Reinforcement Learning and Stochastic
-Optimization: A Unified Framework for Sequential Decisions</em>. John
-Wiley &amp; Sons.
-</div>
-<div id="ref-shapiro_lectures_2009" class="csl-entry" role="listitem">
-Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009.
-<em>Lectures on <span>Stochastic</span> <span>Programming</span></em>.
-SIAM, Society for Industrial; Applied Mathematics. <a href="https://doi.org/10.1137/1.9780898718751">https://doi.org/10.1137/1.9780898718751</a>.
-</div>
-<div id="ref-Unat2025" class="csl-entry" role="listitem">
-Unat, Didem, Anshu Dubey, Emmanuel Jeannot, and John Shalf. 2025.
-<span>“The Persistent Challenge of Data Locality in the Post-Exascale
-Era.”</span> <em>Computing in Science &amp; Engineering</em> 27 (4):
-19–27. <a href="https://doi.org/10.1109/MCSE.2025.3567586">https://doi.org/10.1109/MCSE.2025.3567586</a>.
-</div>
-</div>
+<section id="disjunctions" class="level3">
+<h3 class="anchored" data-anchor-id="disjunctions">Disjunctions</h3>
+<p>When faced with a choice among exclusive options, we resort to disjunctive programming, based on:</p>
+<ul>
+<li>Big-M formulation.</li>
+<li>Logical formulation.</li>
+</ul>
+</section>
+<section id="simplified-supply-chain-example" class="level3">
+<h3 class="anchored" data-anchor-id="simplified-supply-chain-example">Simplified Supply Chain Example</h3>
+<p>Putting together:</p>
+<ul>
+<li>precedence</li>
+<li>TBC</li>
+</ul>
+</section>
+<section id="simplified-rcpsp-example" class="level3">
+<h3 class="anchored" data-anchor-id="simplified-rcpsp-example">Simplified RCPSP Example</h3>
+<p>Putting together:</p>
+<ul>
+<li>precedence</li>
+<li>TBC</li>
+</ul>
 
 
 </section>
 </section>
-
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -765,13 +752,13 @@ Era.”</span> <em>Computing in Science &amp; Engineering</em> 27 (4):
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
+      <a href="./theory.html" class="pagination-link" aria-label="Theory">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Theory</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Introduction">
-        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -1,0 +1,23 @@
+# Introduction {.unnumbered}
+
+This is a book created from markdown and executable code.
+
+See @knuth84 for additional discussion of literate programming.
+
+
+We present, step-by-step, the Resource Constrained Process Scheduling---RCPSP---approach for the Continuum Digital Twin---CDT[^1].
+
+[^1]: Here is the footnote.
+
+The basic problem is: find an optimal schedule $S$ for a collection of jobs $J.$^[Inline notes are easier to write, since you don't have to pick an identifier and move down to
+type the note, where $J=\{ J_1, J_2, \ldots J_N\}.$]
+
+## Sub-section of Intro
+
+blablablabla
+
+
+### sub-sub section
+
+
+## Another Sub-section

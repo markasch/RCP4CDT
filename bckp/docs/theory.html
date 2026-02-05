@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Theory – Optimal Scheduling for Cross-Facility Workflows</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./examples.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d486aff94d584f320fbb5454f7925f24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./graphics/xwf_logo.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./graphics/xwf_logo.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Optimal Scheduling for Cross-Facility Workflows</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./theory.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Theory</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Examples</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#supply-chains-and-scheduling" id="toc-supply-chains-and-scheduling" class="nav-link active" data-scroll-target="#supply-chains-and-scheduling">Supply Chains and Scheduling</a></li>
+  <li><a href="#supply-chain-network-design" id="toc-supply-chain-network-design" class="nav-link" data-scroll-target="#supply-chain-network-design">Supply Chain Network Design</a>
+  <ul class="collapse">
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link" data-scroll-target="#problem-definition">Problem Definition</a></li>
+  <li><a href="#state-variables" id="toc-state-variables" class="nav-link" data-scroll-target="#state-variables">State Variables</a></li>
+  <li><a href="#objective-function" id="toc-objective-function" class="nav-link" data-scroll-target="#objective-function">Objective Function</a></li>
+  <li><a href="#configuration-decisions" id="toc-configuration-decisions" class="nav-link" data-scroll-target="#configuration-decisions">Configuration Decisions</a></li>
+  <li><a href="#dynamic-networks" id="toc-dynamic-networks" class="nav-link" data-scroll-target="#dynamic-networks">Dynamic Networks</a></li>
+  <li><a href="#mathematical-formulation---deterministic-model" id="toc-mathematical-formulation---deterministic-model" class="nav-link" data-scroll-target="#mathematical-formulation---deterministic-model">Mathematical Formulation - Deterministic Model</a></li>
+  <li><a href="#simplified-cases" id="toc-simplified-cases" class="nav-link" data-scroll-target="#simplified-cases">Simplified Cases</a></li>
+  </ul></li>
+  <li><a href="#optimization" id="toc-optimization" class="nav-link" data-scroll-target="#optimization">Optimization</a>
+  <ul class="collapse">
+  <li><a href="#milp-formulations-for-rcpsp-and-scnd" id="toc-milp-formulations-for-rcpsp-and-scnd" class="nav-link" data-scroll-target="#milp-formulations-for-rcpsp-and-scnd">MILP formulations for RCPSP and SCND</a></li>
+  <li><a href="#precedence-constraints" id="toc-precedence-constraints" class="nav-link" data-scroll-target="#precedence-constraints">Precedence Constraints</a></li>
+  <li><a href="#disjunctions" id="toc-disjunctions" class="nav-link" data-scroll-target="#disjunctions">Disjunctions</a></li>
+  </ul></li>
+  <li><a href="#sec-stoch" id="toc-sec-stoch" class="nav-link" data-scroll-target="#sec-stoch">Uncertainty</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Theory</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="theo">
+
+</div>
+<p>There are two ways to view the the Continuum Digital Twin<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;CDT</p></div></div><ol type="1">
+<li>Job-centered view.</li>
+<li>Facility- or Machine-centered view.</li>
+</ol>
+<p>The first is best modelled by a <em>scheduling</em> approach. The second is principally a <em>supply chain</em> model.</p>
+<p>We propose a <em>hierarchical</em> model for the CDT, composed of a Supply Chain Network Design<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> coupled with a Resource Constrained Process Scheduling<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In such a hierarchical system, the supply chain model allocates jobs to the best facilities, and the scheduling model then (optimally) sequences jobs within a given facility. Supply chain optimization emphasizes “where” (facility location, data transfer mode, sourcing). Scheduling emphasizes “when” and “in what order.”</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;SCND</p></div><div id="fn3"><p><sup>3</sup>&nbsp;RCPSP</p></div></div><div class="page-columns page-full"><p>Recall the basic problem: given a directed graph of <span class="math inline">\(N\)</span> storage and processing jobs <span class="math inline">\(\mathscr{J},\)</span> find an optimal allocation <span class="math inline">\(A\)</span> and a feasible schedule <span class="math inline">\(S.\)</span> Further details below.</p><div class="no-row-height column-margin column-container"><span class=""><span class="math inline">\(\mathscr{J}=\{ J_1, J_2, \ldots J_N\},\)</span></span></div></div>
+<section id="supply-chains-and-scheduling" class="level2">
+<h2 class="anchored" data-anchor-id="supply-chains-and-scheduling">Supply Chains and Scheduling</h2>
+<p>Let us begin by defining supply chains and scheduling in the context of the CDT.</p>
+<div id="def-supp" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Supply Chain)</strong></span> A <em>supply chain</em> is a network (directed graph) of jobs, facilities, data storage, networks, processing and end-product delivery to users. The design poroblem is to optimally allocate an ordered list of data storage and data processing jobs to an optimal choice of storage and processing centres.</p>
+</div>
+<div id="def-sched" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 (Scheduling)</strong></span> <em>Scheduling</em> is a decision-making process that deals with the allocation of (limited) resources to tasks over given time periods. Its goal is to optimize one or more objectives. The resulting <em>schedule</em> is a job sequence determined for every machine (facility) of the processing system.</p>
+</div>
+<p>These two models are complementary:</p>
+<ul>
+<li>the SCND can be used for global, over a <em>fixed period</em>, modelling—for example over an entire project duration, or annualized;</li>
+<li>the RCPSP can be used for time-dependent models, especially when uncertainty is introduced, as in a two-stage, or multi-stage, model—see below Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</li>
+</ul>
+<p>In <a href="#fig-wf" class="quarto-xref">Figure&nbsp;<span>1</span></a> and <a href="#fig-wf2" class="quarto-xref">Figure&nbsp;<span>2</span></a> below, we show two alternative viewpoints of a simple 4-job, 4-machine scheduling problem. The global mathematical formulation will effectively include and <em>combine</em> these two viewpoints, as depicted in <a href="#fig-CDT_RCP_SC" class="quarto-xref">Figure&nbsp;<span>3</span></a> and formulated below.</p>
+<div id="fig-wf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A[0] --&gt;|"$$c_{0,1}$$"| B("$$J_1$$")
+    B --&gt;|"$$c_{1,2}$$"| C("$$J_2$$")
+    C --&gt;|"$$c_{2,3}$$"| D("$$J_3$$")
+    C --&gt;|"$$c_{2,4}$$"| E("$$J_4$$")
+    D --&gt;|"$$c_{3,5}$$"| F[5]
+    E --&gt;|"$$c_{4,5}$$"| F
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Job-centered view: A simple directed graph (DAG) for a genomics workflow with 4 processing jobs <span class="math inline">\(J_1,\cdots, J_4,\)</span> and data transfers <span class="math inline">\(c_{i,j}\)</span> between them, including initial upload and final download. The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
+</figcaption>
+</figure>
+</div>
+<div id="fig-wf2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[(DC1)]:::otherclass --&gt; C{{HPC1}}:::thirdclass
+    B[(DC2)]:::otherclass 
+    A --&gt; D{{HPC2}}:::thirdclass
+    %%A[(data1)]:::someclass --&gt; E{{HPC3}}:::thirdclass
+    C --&gt; F[(DC1)]:::otherclass
+    C --&gt; G[(DC2)]:::otherclass
+    F --&gt; H{{HPC1}}:::thirdclass
+    F --&gt; I{{HPC2}}:::thirdclass  
+    classDef someclass stroke:#f00
+    classDef otherclass stroke:#0f0
+    classDef thirdclass stroke:#00f
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Machine-centered view: Supply chain model for the CDT. For a given job, the dataset (stored in one of two Datacentres, <span class="math inline">\(\mathrm{DC}_1\)</span> or <span class="math inline">\(\mathrm{DC}_2\)</span>) can be processed on one of two HPC centres (<span class="math inline">\(\mathrm{HPC}_1\)</span> or <span class="math inline">\(\mathrm{HPC}_2\)</span>), and ouput data is sent to (and stored on) one of the two Datacentres, ready as input for the next job. This is repeated for each job in the ordered job list (DAG).
+</figcaption>
+</figure>
+</div>
+<div id="fig-CDT_RCP_SC" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CDT_RCP_SC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="graphics/CDT_RCP_SC.svg" class="img-fluid figure-img" style="width:40.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CDT_RCP_SC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The CDT model is based on RCPSP and SCND.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="supply-chain-network-design" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="supply-chain-network-design">Supply Chain Network Design</h2>
+<section id="problem-definition" class="level3">
+<h3 class="anchored" data-anchor-id="problem-definition">Problem Definition</h3>
+<p>Let <span class="math inline">\(\mathscr{J},\)</span> <span class="math inline">\(\mathscr{F},\)</span> and <span class="math inline">\(\mathscr{U}\)</span> be respective (finite) sets of jobs and datasets, HPC and datacentres (facilities), and end-users. The union <span class="math display">\[\mathscr{N} \doteq \mathscr{J} \cup \mathscr{F} \cup \mathscr{U}\]</span> of these sets is viewed as the set of nodes of a directed graph <span class="math inline">\((\mathscr{N},\mathscr{A}),\)</span> where <span class="math inline">\(\mathscr{A}\)</span> is a set of arcs (directed links) connecting these nodes in a way representing flow of the jobs—see <a href="#fig-wf" class="quarto-xref">Figure&nbsp;<span>1</span></a> and <a href="#fig-wf2" class="quarto-xref">Figure&nbsp;<span>2</span></a>. The processing facilities <span class="math inline">\(\mathscr{F}\)</span> can include HPC centres <span class="math inline">\(\mathscr{H},\)</span> data storage centres <span class="math inline">\(\mathscr{D},\)</span> and post-processing centres <span class="math inline">\(\mathscr{P},\)</span> i.e.&nbsp;<span class="math inline">\(\mathscr{F}=\mathscr{H}\cup\mathscr{D}\cup\mathscr{P}.\)</span> Furthermore, HPC (<span class="math inline">\(i\in\mathscr{H}\)</span>), data (<span class="math inline">\(i\in\mathscr{D}\)</span>), and post-processing (<span class="math inline">\(i\in\mathscr{P}\)</span>) centers can each be composed of sets of individual machines, <span class="math inline">\(\mathscr{M}_{i}\)</span> and the set <span class="math inline">\(\mathscr{F}\)</span> includes the processing centers as well as the machines in each center. Finally, let <span class="math inline">\(\mathscr{K}\)</span> be the set of jobs flowing through the ``supply chain,’’ the digital continuum in our case.</p>
+</section>
+<section id="state-variables" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="state-variables">State Variables</h3>
+<p>The state of the system, or supply chain, at a given time <span class="math inline">\(t,\)</span> is represented by state variables and coefficients:</p>
+<ul>
+<li>the available (open/used, or closed/unused) facilities:
+<ul>
+<li>compute centres <span class="math inline">\(x^{C}_{i}\in\left\{ 0,1\right\} ,\)</span> <span class="math inline">\(i=1,\ldots,N_{C}\)</span></li>
+<li>data centres <span class="math inline">\(x^{D}_{j}\in\left\{ 0,1\right\} ,\)</span> <span class="math inline">\(j=1,\ldots,N_{D}\)</span></li>
+</ul></li>
+<li>the quantity/number of jobs, or datasets, or volumes transferred
+<ul>
+<li><span class="math inline">\(y_{ji}\)</span> from instrument (data centre) <span class="math inline">\(j\)</span> to compute centre <span class="math inline">\(i,\)</span></li>
+<li><span class="math inline">\(y_{ij}\)</span> from compute centre <span class="math inline">\(i\)</span> to data centre <span class="math inline">\(j,\)</span></li>
+<li><span class="math inline">\(y_{ik}\)</span> from compute centre <span class="math inline">\(i\)</span> to user <span class="math inline">\(k,\)</span></li>
+<li><span class="math inline">\(y_{kj}\)</span> from user <span class="math inline">\(k\)</span> to data centre <span class="math inline">\(j,\)</span></li>
+</ul></li>
+<li>costs—both fixed and variable (eventually stochastic<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>)—are associated with each of the decision variables;</li>
+<li>resource supply/availability and demand/requests are specified for each facility, and eventually for each machine in a given facility—this can includes the ephemeral buffers <span class="citation" data-cites="MGG2025implementation">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Bodin, and Asch 2025</a>)</span>.</li>
+</ul>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;Either a discrete set or tabulated values drawn from a known probability distribution, or the PDF itself.</p></div></div></section>
+<section id="objective-function" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="objective-function">Objective Function</h3>
+<p>The overall objective is to combine location decisions—which centres to use—with allocation decisions—how to distribute the workloads and jobs among the chosen centres (data and compute).</p>
+<p>There can be a <em>single</em> objective such as minimizing (any function of) the total of fixed and variable costs, or minimizing the completion time (makespan). <em>Multiple</em> objective optimization<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> seeks a tradeoff between minimum cost and maximum sustainability (minimum environmental impact). Finally, <em>stochastic</em> optimization takes into account the uncertainties of resource availabilities and delays, maintenance and failures, resource allocations, variable energy costs, project costs (HR, budget).</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;MOO</p></div></div><p>The overall, deterministic cost function for total cost can be expressed as a sum (some terms can be ignored by setting the coefficients to zero, depending on the context) <span class="math display">\[\begin{gather*}
+\min_{x,y}\sum^{N_{C}}_{i=1}f^{C}_{i}x^{C}_{i}+\sum^{N_{D}}_{j=1}f^{D}_{j}x^{D}_{j}+\sum^{N_{C}}_{i=1}\sum^{N_{D}}_{j=1}c_{ji}y_{ji}+\\
+\sum^{N_{D}}_{j=1}\sum^{N_{C}}_{i=1}c_{ij}y_{ij}+\sum^{N_{C}}_{i=1}\sum^{N_{U}}_{k=1}c_{ik}y_{ik}+\sum^{N_{U}}_{k=1}\sum^{N_{D}}_{j=1}c_{kj}y_{kj}
+\end{gather*}\]</span></p>
+<ul>
+<li><span class="math inline">\(f^{C}_{i},\)</span> <span class="math inline">\(f^{D}_{j}\)</span> are the fixed costs of using compute centre <span class="math inline">\(i,\)</span> data centre <span class="math inline">\(j;\)</span></li>
+<li><span class="math inline">\(c_{ji},\)</span> <span class="math inline">\(c_{ij},\)</span> <span class="math inline">\(c_{ik},\)</span> <span class="math inline">\(c_{kj}\)</span> are the variable costs of the job “flow” from data centre <span class="math inline">\(j\)</span> to compute centre <span class="math inline">\(i,\)</span> etc. along the arc <span class="math inline">\((j,i)\in\mathscr{A}\)</span>, etc.</li>
+<li><span class="math inline">\(y_{ji},\)</span> <span class="math inline">\(y_{ij},\)</span> <span class="math inline">\(y_{ik},\)</span> <span class="math inline">\(y_{kj}\)</span> are the corresponding quantities “flowing” from data centre <span class="math inline">\(j\)</span> to compute centre <span class="math inline">\(i,\)</span> etc. along the arc <span class="math inline">\((j,i)\in\mathscr{A}\)</span>, etc.</li>
+<li><span class="math inline">\(x_{i},\)</span> <span class="math inline">\(x_{j}\)</span> are binary variables, indicating the choice/use of a particular compute or data centre;</li>
+<li><span class="math inline">\(N_U\)</span> is the number of end-users;</li>
+<li>weights, or priorities, can be attributed to each term, to either balance the contributions, or to give greater importance to certain terms.</li>
+</ul>
+<p><font color="red"> <strong>NOTE:</strong> </font></p>
+<p><font color="blue"></font></p><font color="blue">
+<ol type="1">
+<li>This formulation can be considerably simplified by grouping all transfer costs, and summing over the union of facilities/machines available.</li>
+<li>Rather express all this as a multi-mode RCPSP based on a DAG, as follows:</li>
+</ol>
+<p>The resource-constrained project scheduling problem is a classical well-known problem in operations research. A number of activities are to be scheduled. Each activity has a duration and cannot be interrupted. There are a set of precedence relations between pairs of activities which state that the second activity must start after the first has finished. The set of precedence relations are usually given as a directed acyclic graph (DAG), where the edge <span class="math inline">\((u,v)\)</span> represents a precedence relation where <span class="math inline">\(u\)</span> must finish before <span class="math inline">\(v\)</span> begins. The DAG contains two additional activities with duration 0, the source and sink, where the source is the first activity and sink is the last activity (these are dummy activities).</p>
+<p>There are a set of <em>renewable resources.</em> Each resource has a maximum capacity and at any given time slot no more than this amount can be in use. Each activity has a demand (possibly zero) on each resource. The dummy source and sink activities have zero demand on all resources.</p>
+<p>The problem is usually stated as an optimisation problem where the makespan (i.e.&nbsp;the completion time of the sink activity) is minimised.</p>
+<p><em>Multi-mode Variant</em> An extension of the basic RCPSP is the multi-mode variant where activities may have multiple modes. The mode dictates the duration and resource demands of the activity. In this variant, the schedule must give the mode of each activity as well as its starting time.</p>
+</font><p><font color="blue"><em>Non-Renewable Resources</em> Another extension concerns non-renewable resources. Each non-renewable resource has a capacity for the entire schedule. An example would be a financial budget that applies to the entire project. Modes of activities must be chosen to avoid exceeding the capacity of each of the non-renewable resources. </font></p>
+</section>
+<section id="configuration-decisions" class="level3">
+<h3 class="anchored" data-anchor-id="configuration-decisions">Configuration Decisions</h3>
+<p>We suppose that supply chain configuration decisions consist of deciding which of the processing centers to engage, and eventually which processing and storage machines to use within each center.</p>
+</section>
+<section id="dynamic-networks" class="level3">
+<h3 class="anchored" data-anchor-id="dynamic-networks">Dynamic Networks</h3>
+<p>We can generalize the supply chain by considering a multi-stage network with an added time dimension. This enables flow and carrying of data and jobs across time periods, in addition to flow among facilities. For example, if certain facilites become unavailable, or less available, as the project evolves over time. This is a kind of recourse, which will be considered below in Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</p>
+<div id="fig-wf3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    subgraph t1["t = 1"]
+    direction LR
+    a1((" "))--&gt;a2((" "))
+    a1--&gt;a3((" "))
+    a2--&gt;a4((" "))
+    a2-.-&gt;a5((" "))
+    end
+    subgraph t2["t = 2"]
+    direction LR
+    b1((" "))--&gt;b2((" "))
+    b1--&gt;b3((" "))
+    b2-.-&gt;b4((" "))
+    b2--&gt;b5((" "))
+    end
+    t1 --&gt; t2
+    style t1 fill: white
+    style t2 fill: white
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Multi-stage, dynamic network that evolves over time due to changing availability constraints.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="mathematical-formulation---deterministic-model" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="mathematical-formulation---deterministic-model">Mathematical Formulation - Deterministic Model</h3>
+<p>We begin with a deterministic formulation, and then introduce uncertainties to obtain a full stochastic model.</p>
+<p>Assign a binary variable <span class="math inline">\(x_{i}=1\)</span> if the processing facility <span class="math inline">\(i\)</span> is engaged or machine <span class="math inline">\(i\)</span> is used, and <span class="math inline">\(x_{i}=0\)</span> otherwise. Operational decisions then consist of routing the flow of all the jobs <span class="math inline">\(k\in\mathscr{K}\)</span> from the instrument—or primary data reposirory—to the end-user, in a cost-optimal way, still to be defined.</p>
+<p>Let <span class="math inline">\(y^{k}_{ij}\)</span> denote the flow of job <span class="math inline">\(k\)</span> from a node <span class="math inline">\(i\)</span> to a node <span class="math inline">\(j\)</span> of the network, where <span class="math inline">\((i,j)\in\mathscr{A}\)</span> is an arc of the network. The flow will normally be a voluminous data transfer, possibly by even physically tansporting disk drives from remote locations.</p>
+<p>The optimization problem—objective function and constraints—can be written as follows. It covers a very general case, with both optimal allocation and eventual resource constraints.</p>
+<p><span class="math display">\[\begin{align}
+\min_{x,y} &amp; \sum_{i\in\mathscr{F}}c_{i}x_{i}+\sum_{k\in\mathscr{K}}\sum_{(i,j)\in\mathscr{A}}q^{k}_{ij}y^{k}_{ij} \tag{1}\label{eq:sc1}\\
+\textrm{s.t.} &amp; \sum_{i\in\mathscr{N}}y^{k}_{ij}-\sum_{\ell\in\mathscr{N}}y^{k}_{j\ell}=0,\quad j\in\mathscr{F},\;k\in\mathscr{K}, \tag{2}\label{eq:sc2}\\
+&amp; \sum_{i\in\mathscr{N}}y^{k}_{ij}\ge d^{k}_{j},\quad j\in\mathscr{U},\;k\in\mathscr{K}, \tag{3}\label{eq:sc3}\\
+&amp; \sum_{i\in\mathscr{N}}y^{k}_{ij}\le s^{k}_{j},\quad j\in\mathscr{I},\;k\in\mathscr{K}, \tag{4}\label{eq:sc4}\\
+&amp; \sum_{k\in\mathscr{K}}r^{k}_{j}\sum_{i\in\mathscr{N}}y^{k}_{ij}\le m_{j}x_{j},\quad j\in\mathscr{F}, \tag{5}\label{eq:sc5}\\
+&amp; x\in\mathscr{X},\quad y\ge0, \tag{6}\label{eq:sc6}
+\end{align}\]</span></p>
+<ul>
+<li>in <span class="math inline">\(\eqref{eq:sc1}\)</span>, <span class="math inline">\(c_{i}\)</span> is the cost of engaging facility <span class="math inline">\(i\)</span> or using machine <span class="math inline">\(i,\)</span> and <span class="math inline">\(q^{k}_{ij}\)</span> is the per unit cost of processing job <span class="math inline">\(k\)</span> at facility <span class="math inline">\(i\)</span> and/or sending job <span class="math inline">\(k\)</span> on arc <span class="math inline">\((i,j)\in\mathscr{A},\)</span> (data transfer, transport and data storage costs)</li>
+<li>in <span class="math inline">\(\eqref{eq:sc3}\)</span>, <span class="math inline">\(d^{k}_{j}\)</span> is the “demand” of job <span class="math inline">\(k\)</span> at node <span class="math inline">\(j,\)</span> (eg. how many CPU’s or how much data storage capacity is required)</li>
+<li>in <span class="math inline">\(\eqref{eq:sc4}\)</span>, <span class="math inline">\(s^{k}_{j}\)</span> is the “supply” of job <span class="math inline">\(k\)</span> at node <span class="math inline">\(j,\)</span> (eg. how many CPU’s or how much data storage capacity is available)</li>
+<li>in <span class="math inline">\(\eqref{eq:sc5}\)</span>, <span class="math inline">\(r^{k}_{j}\)</span> is the per-unit processing requirement for job <span class="math inline">\(k\)</span> at node <span class="math inline">\(j,\)</span> and <span class="math inline">\(m_{j}\)</span> is the capacity of facility <span class="math inline">\(j,\)</span></li>
+<li>in <span class="math inline">\(\eqref{eq:sc6}\)</span>, <span class="math inline">\(\mathscr{X}\subset\left\{ 0,1\right\} ^{\left|\mathscr{F}\right|},\)</span> <span class="math inline">\(y\in\mathbb{R}^{\left|\mathscr{A}\right|\times\left|\mathscr{K}\right|}\)</span> is a vector with components <span class="math inline">\(y^{k}_{ij},\)</span></li>
+<li>all cost components are defined per given period (hour, day, week, month, etc.)</li>
+</ul>
+<p>The above equations have the following interpretations.</p>
+<ul>
+<li>Objective function (<span class="math inline">\(\ref{eq:sc1}\)</span>) minimizes the total of investment<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> plus operational<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> costs.</li>
+<li><span class="math inline">\(\mathscr{K}\)</span> represents logical dependencies and restrictions, such as <span class="math inline">\(x_{i}\le x_{j}\)</span> for all <span class="math inline">\(i\in\mathscr{M}_{j},\)</span> where <span class="math inline">\(j\in\left\{ \mathscr{H},\mathscr{D},\mathscr{P}\right\} ,\)</span> which means that machine <span class="math inline">\(i\)</span> should be used only if facility <span class="math inline">\(j\)</span> is engaged, and since the <span class="math inline">\(x\)</span>’s are binary the constraint <span class="math inline">\(x_{i}\le x_{j}\)</span> implies that <span class="math inline">\(x_{i}=0\)</span> if <span class="math inline">\(x_{j}=0.\)</span></li>
+<li>Constraints (<span class="math inline">\(\ref{eq:sc2}\)</span>) enforce the flow conservation of job <span class="math inline">\(k\)</span> across each processing node <span class="math inline">\(j.\)</span></li>
+<li>Constraints (<span class="math inline">\(\ref{eq:sc3}\)</span>) require that the total flow of job <span class="math inline">\(k\)</span> to a customer node <span class="math inline">\(j\)</span> should exceed the “demand” <span class="math inline">\(d^{k}_{j}\)</span> at that node.</li>
+<li>Constraints (<span class="math inline">\(\ref{eq:sc4}\)</span>) require that the total flow of job <span class="math inline">\(k\)</span> from an instrument node <span class="math inline">\(j\)</span> should be less than the “supply” <span class="math inline">\(s^{k}_{j}\)</span> at that node.</li>
+<li>Constraints (<span class="math inline">\(\ref{eq:sc5}\)</span>) enforce capacity constraints of the processing nodes.
+<ul>
+<li>Require that the total processing requirement of all jobs flowing into a processing node <span class="math inline">\(j\)</span> should be smaller than the capacity <span class="math inline">\(m_{j}\)</span> of facility<span class="math inline">\(j\)</span> if it is used (<span class="math inline">\(x_{j}=1\)</span>).</li>
+<li>If facility <span class="math inline">\(j\)</span> is not used (<span class="math inline">\(x_{j}=0\)</span>), the constraint will force all flow variables <span class="math inline">\(y^{k}_{ij}=0\)</span> for all <span class="math inline">\(i\in\mathscr{N}.\)</span></li>
+</ul></li>
+<li>Finally, constraint (<span class="math inline">\(\ref{eq:sc6}\)</span>) enforces the feasibility constraint <span class="math inline">\(x\in\mathscr{X}\)</span> and the non-negativity of the flow variables corresponding to an arc <span class="math inline">\((i,j)\in\mathscr{A},\)</span> and job <span class="math inline">\(k\in\mathscr{K}.\)</span></li>
+</ul>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;CAPEX</p></div><div id="fn7"><p><sup>7</sup>&nbsp;OPEX</p></div></div><p>We can rewrite the above in a very compact, matrix-vector form.</p>
+<p><span class="math display">\[\begin{align*}
+\min &amp; \,\,c^{\top}x+q^{\top}y\\
+\textrm{s.t.} &amp; \,\,Ny=0,\\
+&amp; Cy\ge d,\\
+&amp; Sy\le s,\\
+&amp; Ry\le Mx,
+\end{align*}\]</span> where</p>
+<ul>
+<li>vectors <span class="math inline">\(c,\)</span> <span class="math inline">\(q,\)</span> <span class="math inline">\(d,\)</span> and <span class="math inline">\(s\)</span> represent fixed costs, processing or transmission costs, demands, supplies, respectively;</li>
+<li>matrices <span class="math inline">\(N,\)</span> <span class="math inline">\(C,\)</span> and <span class="math inline">\(S\)</span> correspond to summations of the respective expressions, (nodes, demands, supplies);</li>
+<li><span class="math inline">\(R\)</span> is the matrix of <span class="math inline">\(r^{k}_{j}\)</span> (requirements);</li>
+<li><span class="math inline">\(M=\textrm{ diag }(m_{j})\)</span> (machine capacities).</li>
+</ul>
+</section>
+<section id="simplified-cases" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="simplified-cases">Simplified Cases</h3>
+<p>The above formulation covers both the cost-optimal streaming of jobs across the cyberinfrastructure as well as the respect of individual facilities’ constraints. The latter is a resource-constrained scheduling problem.</p>
+<p><strong>Unconstrained-Resource Problem</strong></p>
+<p>As a first simplification, we suppose that the facilites possess the necessary capacities to service the requirements of all the incoming data storage and processing jobs. Suppose that we still have fixed and variable costs, so the objective does not change. The “infinite-resource” problem simplifies to:</p>
+<p><span class="math display">\[\begin{align}
+\min_{x,y} &amp; \sum_{i\in\mathscr{F}}c_{i}x_{i}+\sum_{k\in\mathscr{K}}\sum_{(i,j)\in\mathscr{A}}q^{k}_{ij}y^{k}_{ij} \tag{1a}\label{eq:sc1a}\\
+\textrm{s.t.} &amp; \sum_{i\in\mathscr{N}}y^{k}_{ij}-\sum_{\ell\in\mathscr{N}}y^{k}_{j\ell}=0,\quad j\in\mathscr{F},\;k\in\mathscr{K}, \tag{2a}\label{eq:sc2a}\\        
+&amp; x\in\mathscr{X},\quad y\ge0, \tag{6a}\label{eq:sc6a}
+\end{align}\]</span></p>
+<p><strong>Resource-Constrained Project Scheduling Problem (RCPSP)</strong></p>
+<p>A second simplification is to consider the resource constraint problem, without facility or machine allocations. The Resource-Constrained Project Scheduling Problem (RCPSP) is a combinatorial optimization problem that consists of finding a feasible scheduling for a set of&nbsp;<span class="math inline">\(n\)</span>&nbsp;jobs subject to resource and precedence constraints. Each job has a processing time, a set of successor jobs and a required amount of different resources. Resources may be scarce but are renewable at each time period. Precedence constraints between jobs mean that no jobs may start before all its predecessors are completed. The jobs must be scheduled non-preemptively, i.e., once started, their processing cannot be interrupted.</p>
+<p>The RCPSP has the following input data:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{J}\)</span> set of jobs.</li>
+<li><span class="math inline">\(\mathcal{R}\)</span> set of renewable resources.</li>
+<li><span class="math inline">\(\mathcal{S}\)</span> set of precedences between jobs&nbsp;<span class="math inline">\((i,j)\in\mathcal{J}\times\mathcal{J}.\)</span></li>
+<li><span class="math inline">\(\mathcal{T}\)</span> planning horizon: set of possible processing times for jobs.</li>
+<li><span class="math inline">\(p_{j}\)</span> processing time of job&nbsp;<span class="math inline">\(j.\)</span></li>
+<li><span class="math inline">\(u_{(j,r)}\)</span> amount of resource&nbsp;<span class="math inline">\(r\)</span>&nbsp;required for processing job&nbsp;<span class="math inline">\(j.\)</span></li>
+<li><span class="math inline">\(c_{r}\)</span> capacity of renewable resource&nbsp;<span class="math inline">\(r.\)</span></li>
+</ul>
+<p>A binary programming formulation was proposed by Pritsker et al.&nbsp;in 1986. In this formulation, decision variables <span class="math inline">\(x_{jt}=1\)</span> if job <span class="math inline">\(j\)</span> is assigned to begin at time <span class="math inline">\(t\)</span>; otherwise, <span class="math inline">\(x_{jt}=0.\)</span> All jobs must finish in a single period of time without violating precedence constraints while respecting the amount of available resources. The model proposed by Pristker can be stated as follows:</p>
+<p><span class="math display">\[
+\begin{alignedat}{1}
+\textrm{Minimize} &amp; \sum_{t\in\mathcal{T}}t\cdot x_{(n+1,t)}\\
+\textrm{Subject to:} &amp; \sum_{t\in\mathcal{T}}x_{(j,t)}=1\,\,\,\forall j\in J,\\
+&amp; \sum_{j\in J}\sum^{t}_{t_{2}=t-p_{j}+1}u_{(j,r)}x_{(j,t_{2})}\leq c_{r}\,\,\,\forall t\in\mathcal{T},r\in R,\\
+&amp; \sum_{t\in\mathcal{T}}t\cdot x_{(s,t)}-\sum_{t\in\mathcal{T}}t\cdot x_{(j,t)}\geq p_{j}\,\,\,\forall(j,s)\in S,\\
+&amp; x_{(j,t)}\in\{0,1\}\,\,\,\forall j\in J,t\in\mathcal{T}.
+\end{alignedat}
+\]</span></p>
+<p><strong>Mutli-Project Multi-Mode RCPSP</strong></p>
+<p>Note that the above formulation is restricted to temporal scheduling on a <em>single</em> machine, and for a single project, or collection of jobs. This formulation has been generalized to deal with multiple machines and multiple projects. In this case, the formulation becomes very similar to that of a supply chain. It is referred to in the literature as the <em>multi-mode resource-constrained multi-project scheduling problem</em>, or MRCMPSP.</p>
+<p><strong>Multi-Mode</strong> The single-mode RCPSP assumed that each activity has only one way to be executed, whereas the multi-mode RCPSP considers multiple ways to execute an activity, which often have tradeoffs in duration, cost, or resource requirement.</p>
+<p><strong>Multi-Projec</strong> We can then perform simultaneous scheduling of a set of multiple projects taking into account the availability of local and global resources under different time and resource constraints. This has practical importance, at national and European levels, when cross-facility implies exploitation of cyberinfrastructure resources across different countries, for example, as would be the case for EuroHPC<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, at the European level, or GENCI<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> for France. Imagine being able to plan and pilot multiple exascale projects, on multiple sites, over multiple countries…<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp; <a href="https://www.eurohpc-ju.europa.eu/">https://www.eurohpc-ju.europa.eu/</a> </p></div><div id="fn9"><p><sup>9</sup>&nbsp; <a href="https://www.genci.fr/">https://www.genci.fr//</a> </p></div><div id="fn10"><p><sup>10</sup>&nbsp;These would be multiple states, in the USA context.</p></div></div><p><strong>Resources</strong> The resources can be either renewable at each time period—HPC machines and data centers—or non-renewable, such is the case for the project budget.</p>
+<p><strong>Objectives</strong> Various project performance metrics can be optimized, including task-based, resource-based, financial-based and user-based metrics. One can minimize makespan, tardiness, resource consumption, or maximize total NPV with respect to sustainability, for example.</p>
+<p><strong>Conclusion</strong> This general formulation of the RCPSP is then mathematically equivalent to the supply chain configuration problem<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> with resource constraints. The loop is closed.</p>
+<div class="no-row-height column-margin column-container"><div id="fn11"><p><sup>11</sup>&nbsp;SCCP</p></div></div></section>
+</section>
+<section id="optimization" class="level2">
+<h2 class="anchored" data-anchor-id="optimization">Optimization</h2>
+<p>In summary, this book has no content whatsoever. In summary, this book has no content whatsoever.</p>
+<section id="milp-formulations-for-rcpsp-and-scnd" class="level3">
+<h3 class="anchored" data-anchor-id="milp-formulations-for-rcpsp-and-scnd">MILP formulations for RCPSP and SCND</h3>
+<p>We consider single- and multi-mode resource-constrained project scheduling problems. In summary, this book has no content whatsoever.</p>
+</section>
+<section id="precedence-constraints" class="level3">
+<h3 class="anchored" data-anchor-id="precedence-constraints">Precedence Constraints</h3>
+<p>In summary, this book has no content whatsoever. In summary, this book has no content whatsoever.</p>
+</section>
+<section id="disjunctions" class="level3">
+<h3 class="anchored" data-anchor-id="disjunctions">Disjunctions</h3>
+<p>In summary, this book has no content whatsoever. In summary, this book has no content whatsoever.</p>
+</section>
+</section>
+<section id="sec-stoch" class="level2">
+<h2 class="anchored" data-anchor-id="sec-stoch">Uncertainty</h2>
+<p>In practice some of the scheduling parameters may be uncertain. The exact duration of an activity, for instance, might not be known at the beginning of the project. Similarly, the number of available resources is another parameter that may not be known before project execution. These uncertainties may be due to different sources, including estimation errors, unforeseen (weather) conditions, late “delivery” (unavailability) of some required resources, unpredictable incidents such as machine breakdown or worker accidents, etc.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-MGG2025implementation" class="csl-entry" role="listitem">
+Garénaux-Gruau, Marius, François Bodin, and Mark Asch. 2025. <span>“Continuum Digital Twin Implementation.”</span> <a href="https://arxiv.org/abs/25xx.xxxx">https://arxiv.org/abs/25xx.xxxx</a>.
+</div>
+</div>
+</section>
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation column-body">
+  <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./examples.html" class="pagination-link" aria-label="Examples">
+        <span class="nav-page-text">Examples</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

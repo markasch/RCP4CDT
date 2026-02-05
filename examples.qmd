@@ -1,0 +1,449 @@
+# Implementation {#sec-exam}
+
+::: {.unnumbered}
+:::
+
+This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.
+
+
+### Basic `pyomo` Linear Programming Example
+
+As an introduction we load the necessary `pyomo` packages and solve an ultra-simple linear programming example.
+$$
+\begin{array}{ll}
+  \min       & 2 x_1 + 3 x_2\\
+  \mathrm{s.t.} & 3 x_1 + 4 x_2 \geq 1\\
+             & x_1, x_2 \geq 0
+\end{array}
+$$
+
+- `pyomo.environ` provides the framework for building the model
+- `SolverFactory` allows to call the solver used to solve the optimization problem
+
+```{python}
+import pyomo.environ as pyo 
+from pyomo.opt import SolverFactory 
+
+model = pyo.ConcreteModel("Simple Linear")
+# Decision variables and domains
+model.x = pyo.Var([1,2], domain=pyo.NonNegativeReals)
+# Objective function
+model.OBJ = pyo.Objective(expr = 2*model.x[1] + 3*model.x[2])
+# Constraint(s)
+model.Constraint1 = pyo.Constraint(expr = 3*model.x[1] + 4*model.x[2] >= 1)
+
+solver = 'appsi_highs'
+SOLVER = pyo.SolverFactory(solver)
+assert SOLVER.available(), f"Solver {solver} is not available."
+
+# Solve and print solution
+SOLVER.solve(model)
+print(f"x = ({pyo.value(model.x[1]):.2f}, {pyo.value(model.x[2]):.2f})")
+print(f"optimal value = {pyo.value(model.OBJ):.2f}")
+```
+
+We can print out 
+
+- the complete model;
+- a full trace of the optimization process.
+
+(use collapsed display here - click to expand and view output)
+
+
+### Precedence Example
+
+We illustrate how to set up a _precedence table_, made up of job pairs that define pairwise precedences.
+
+### Disjunctions
+
+When faced with a choice among exclusive options, we resort to disjunctive programming, based on:
+
+- Big-M formulation.
+- Logical formulation.
+
+
+## CDT Implementation
+Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in @fig-imp.
+
+::: {#fig-imp}
+```{mermaid}
+flowchart LR
+    A[/Input/] --> B["Model 
+                      Function"]
+    B --> C["pyomo
+             Model"] 
+    C --> D[/Schedule /]
+```
+The implementation in 4 stages.
+:::
+
+1. Input description of jobs (json file), that is loaded into ...
+2. Model function, that generates ...
+3. `pyomo` model, which produces ...
+4. Output, an optimal schedule (csv file).
+
+### Input File
+
+This `json` file^[The actual file format is illustrated below in the examples.] contains a complete description of the CDT that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling on national or European levels.
+
+The input file contains all the information regarding the following characteristics of the CDT:
+
+- $\mathcal{P} = \{P_1, P_2, \ldots \}$ the list of projects;
+- $\mathcal{J}_i = \{J_1^i, J_2^i, \ldots \}$ the list of jobs per project^[These are of type data transfer, data storage, data processing, etc.];
+- $\mathcal{O}_j = \{O_1^j, O_2^j, \ldots \}$ the list of operations per job^[This is an optional sub-group--the operations can just be considered as additional jobs.];
+- $\mathcal{M}_k = \{M_1^k, M_2^k, \ldots \}$ the list of modes per job (operation)^[These are the facilities that can be exploited for each category of job: networks, data centers, HPC centers, etc.];
+- Resources:
+  - $\mathcal{R}_l^{\rho} = \{R_1^l, R_2^l, \ldots \}$ list of renewable resources per mode;
+  - $\mathcal{R}_l^{\nu} = \{R_1^l, R_2^l, \ldots \}$ list of non-renewable resources per project;
+- Job requirements per resource: $p_{ij}$
+- Costs per resource: $c_{ij}$
+- List of precedences^[Successors, predecessors, as defined by the workflow DAG]: $\mathcal{E} = \{(i,j) \mid i \prec j, \, i,j \in \mathcal{J} \}.$   
+
+---
+
+## Data Model Overview
+
+The input consists of four entities:
+
+| Entity | Description |
+|--------|-------------|
+| Resources | Available resources with capacities (renewable per period, non-renewable) |
+| Jobs | Units of work to be scheduled |
+| Modes | Alternative execution options for each job |
+| Precedences | Directed edges defining the execution order (DAG) |
+: {tbl-colwidths="[30,70]"}
+
+### 1. Resources
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `resource_id` | string | yes | Unique identifier for the resource |
+| `name` | string | no | Human-readable name |
+| `capacity` | integer ≥ 0 | yes | Maximum units available per time period^[For renewable resources. If resource is non-renewable, this is the total available.] |
+
+### 2. Jobs
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `job_id` | string | yes | Unique identifier for the job |
+| `name` | string | no | Human-readable name |
+| `release_time` | integer ≥ 0 | no | Earliest start time (default: 0) |
+| `deadline` | integer ≥ 0 | no | Latest finish time (default: none) |
+
+### 3. Modes
+
+Each job must have at least one mode. A mode specifies how a job can be executed.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `mode_id` | string | yes | Unique identifier for the mode |
+| `job_id` | string | yes | Reference to parent job |
+| `duration` | integer ≥ 0 | yes | Processing time in periods |
+| `cost` | float ≥ 0 | yes | Cost of selecting this mode |
+| `resource_requirements` | list | yes | Resources consumed during execution |
+
+#### Resource Requirement (nested within Mode)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `resource_id` | string | yes | Reference to a defined resource |
+| `demand` | integer ≥ 0 | yes | Units required per period while job executes |
+
+### 4. Precedences
+
+Defines the DAG structure. Each entry represents a directed edge.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `predecessor` | string | yes | `job_id` of the job that must finish first |
+| `successor` | string | yes | `job_id` of the job that must start after |
+| `lag` | integer ≥ 0 | no | Minimum time gap between finish and start (default: 0) |
+
+This gives the following `json` format.
+
+```json
+{
+  "problem_name": "string (optional)",
+  "horizon": "integer (optional, planning horizon)",
+  
+  "resources": [
+    {
+      "resource_id": "string",
+      "name": "string (optional)",
+      "capacity": "integer"
+    }
+  ],
+  
+  "jobs": [
+    {
+      "job_id": "string",
+      "name": "string (optional)",
+      "release_time": "integer (optional, default 0)",
+      "deadline": "integer (optional, default null)"
+    }
+  ],
+  
+  "modes": [
+    {
+      "mode_id": "string",
+      "job_id": "string",
+      "duration": "integer",
+      "cost": "number",
+      "resource_requirements": [
+        {
+          "resource_id": "string",
+          "demand": "integer"
+        }
+      ]
+    }
+  ],
+  
+  "precedences": [
+    {
+      "predecessor": "string (job_id)",
+      "successor": "string (job_id)",
+      "lag": "integer (optional, default 0)"
+    }
+  ]
+}
+```
+
+**Validation**
+
+We provide a [JSON schema](codes/DraftValidator.py) that the user can use for formal validation of their input files as follows.
+
+```{.python}
+import json
+import jsonschema
+from jsonschema import validate
+import DraftValidator
+
+# Load schema and data
+with open("workflow-schema.json") as f:
+    schema = json.load(f)
+
+with open("my-problem.json") as f:
+    data = json.load(f)
+
+# Validate
+try:
+    validate(instance=data, schema=schema)
+    print("Input is valid.")
+except jsonschema.ValidationError as e:
+    print(f"Validation error: {e.message}")
+    print(f"Path: {list(e.absolute_path)}")
+```
+
+
+### Model Function
+
+All the above are necessary and sufficient for the mathematical formulation presented in the section @sec-math. We define a `pyomo` function that takes a dictionary of tasks as input^[See below for examples.], and returns a `pyomo` model.
+
+```{.python}
+# Model function generator
+def MRCPSP_model(TASKS):
+    model = pyo.ConcreteModel()
+    # tasks is a two dimensional set of (j,m) constructed from the dictionary keys
+    model.TASKS = pyo.Set(initialize=TASKS.keys(), dimen=2)
+    # the set of jobs is constructed from a python set
+    model.JOBS = pyo.Set(initialize=list(set([j for (j, m) in model.TASKS])))
+    # set of machines is constructed from a python set
+    model.MACHINES = pyo.Set(initialize=list(set([m for (j, m) in model.TASKS])))
+    # the order of tasks is constructed as a cross-product of tasks and filtering
+    model.TASKORDER = pyo.Set(
+        initialize = model.TASKS * model.TASKS,
+        dimen      = 4,
+        filter     = lambda model, j, m, k, n: (k, n) == TASKS[(j, m)]["prec"],
+    )
+    # the set of disjunctions is cross-product of jobs, jobs, and machines
+    model.DISJUNCTIONS = pyo.Set(
+        initialize = model.JOBS * model.JOBS * model.MACHINES,
+        dimen      = 3,
+        filter     = lambda model, j, k, m: j < k
+                     and (j, m) in model.TASKS
+                     and (k, m) in model.TASKS,
+    )
+    # load duration data into a model parameter for later access
+    @model.Param(model.TASKS)
+    def dur(model, j, m):
+        return TASKS[(j, m)]["dur"]
+    # establish an upper bound on makespan
+    ub = sum([model.dur[j, m] for (j, m) in model.TASKS])
+    # create decision variables
+    model.makespan = pyo.Var(bounds=(0, ub))
+    model.start = pyo.Var(model.TASKS, bounds=(0, ub))
+    
+    @model.Objective(sense=pyo.minimize)
+    def minimize_makespan(model):
+        return model.makespan
+    
+    @model.Constraint(model.TASKS)
+    def finish_tasks(model, j, m):
+        return model.start[j, m] + model.dur[j, m] <= model.makespan
+
+    @model.Constraint(model.TASKORDER)
+    def preceding(model, j, m, k, n):
+        return model.start[k, n] + model.dur[k, n] <= model.start[j, m]
+
+    @model.Disjunction(model.DISJUNCTIONS)
+    def no_overlap(model, j, k, m):
+        return [
+            model.start[j, m] + model.dur[j, m] <= model.start[k, m],
+            model.start[k, m] + model.dur[k, m] <= model.start[j, m],
+        ]
+
+    pyo.TransformationFactory("gdp.bigm").apply_to(model)
+    return model
+# Generate the model
+MRCPSP_model(TASKS)
+```
+
+### Optimization
+
+The optimization can be performed by calling one of the built-in solvers of `pyomo`, or by using one of the more efficient commercial^[Free academic versions are available.] solvers, from CPLEX or `gurobi`.
+
+```{.python}
+# model optimization
+def MRCPSP_solve(model):
+    SOLVER.solve(model)
+    results = [
+        {
+            "Job": j,
+            "Machine": m,
+            "Start": model.start[j, m](),
+            "Duration": model.dur[j, m],
+            "Finish": model.start[(j, m)]() + model.dur[j, m],
+        }
+        for j, m in model.TASKS
+    ]
+    return results
+# Solve the optimization problem
+results = MRCPSP_solve(MRCPSP_model(TASKS))
+```
+
+### Output
+
+Finally, we extract the schedule from the results, store them in a suitable dataframe, and output a CSV file with start and finish times of each job, as well as the optimal mode selected for each job. This can also be output in the form of a GANTT chart. Other outputs can include resource usage, energy consumption, machine utilization statistics and costs.
+
+## Simplified Supply Chain Example
+
+Putting together:
+
+- precedence
+- TBC
+
+
+## Simplified RCPSP Example
+
+Putting together:
+
+- precedence
+- time-indexed
+- disjunctive
+
+## Simplified MRCPSP Example
+
+In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
+
+::: {#fig-mrcp}
+```{mermaid}
+graph LR
+    A["$$J_0$$"] --> B("$$J_1$$")
+    A --> C("$$J_2$$")
+    B --> D("$$J_3$$")
+    C --> E("$$J_4$$")
+    D --> F["$$J_5$$"]
+    E --> F
+
+```
+A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs $J_1,\cdots, J_4.$ The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
+:::
+
+The project instance, shown above, is detailed in Table 1, where $S_j$ is the successor list of job $j,$ $m$ is the mode, $d_{jm}$ is the job duration, $k^{\rho}_{jm1}$ is the renewable resource requirement, $R^{\rho}$ is the renewable resource list, $K^{\rho}$ is the renewable resource limit, and $R^{\nu}$ is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
+
+$$\begin{aligned}
+& \text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\
+&\begin{array}{cccccccc}
+%\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+j & S_{j}& m & d_{jm} & k^{\rho}_{jm1} & R^{\rho} & K^{\rho}_{1} & R^{\nu}\\
+\hline 
+0 & \left\{ 1,2\right\}  & 1 & 0 & 0 & \left\{ 1\right\}  & 3 & \emptyset \\
+1 & \left\{ 3\right\}  & 1 & 2 & 2  &  &  & \\
+2 & \left\{ 4\right\}  & 1 & 2 & 2 &  &  & \\
+ &  & 2 & 3 & 1 &  &  & \\
+3 & \left\{ 5\right\}  & 1 & 1 & 3 &  &  & \\
+ &  & 2 & 2 & 1 &  &  & \\
+4 & \left\{ 5\right\}  & 1 & 2 & 3 &  &  & \\
+5 & \emptyset & 1 & 0 & 0 &  &  & \\
+\hline 
+%\end{tabular}
+\end{array}
+\end{aligned}$$
+
+**Input File**
+
+The input file is a direct transcription of the table of variables.
+
+```{json}
+{
+  "0":{"suc":("1","2"),"mod":"A","drt":0,    "rsc":0},
+  "1":{"suc":"3","mod":"A",      "drt":2,    "rsc":2},
+  "2":{"suc":"4","mod":("A","B"),"drt":[2,3],"rsc":[2, 1]},
+  "3":{"suc":"5","mod":("A","B"),"drt":[1,2],"rsc":[3, 1]},
+  "4":{"suc":"5","mod":"A",      "drt":2,    "rsc":3},
+  "5": {"suc":"","mod":"A",      "drt":0,    "rsc":0 }
+}
+```
+
+```{.python}
+import json
+
+with open("input.json", "r") as jsonfile: 
+    TASKS = json.load(jsonfile)
+```
+
+
+## Use-Cases 
+
+### DDFACET
+
+TBC
+
+TBC
+
+TBC
+
+### NSBAS
+
+TBC
+
+TBC
+
+TBC
+
+## Silly Examples
+
+In summary, this book has no content whatsoever.
+
+```{python}
+#| label: fig-line-plot
+#| fig-cap: "A line plot "
+
+import matplotlib.pyplot as plt
+plt.plot([1,23,2,4])
+plt.show()
+```
+
+We observe in @fig-line-plot that there is a clear trend, up and down.
+
+To only have code displayed, but not executed...
+
+```{.python}
+#| label: fig-line-plot
+#| fig-cap: "A line plot "
+
+import matplotlib.pyplot as plt
+plt.plot([1,23,2,4])
+plt.show()
+```

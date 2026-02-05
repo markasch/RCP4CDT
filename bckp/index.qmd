@@ -1,0 +1,21 @@
+# Preface {.unnumbered}
+
+This is a Quarto book.
+
+To learn more about Quarto books visit <https://quarto.org/docs/books>. [This is a span that has the class `aside` which places it in the margin without a footnote number.]{.aside}
+
+Here is a footnote reference[^index-1], and another[^index-2].
+
+[^index-1]: Here is the footnote.
+
+[^index-2]: Here's one with multiple blocks.
+
+![](/graphics/gutemberg_press){.column-margin}
+
+## Math in the margin
+
+More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin? More text, just in case it is needed for correct spacing of the image in the margin?
+
+::: column-margin
+We know from *the first fundamental theorem of calculus* that for $x$ in $[a, b]$: $$\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x).$$
+:::

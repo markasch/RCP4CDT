@@ -1,0 +1,52 @@
+# Welcome {.unnumbered}
+
+This (online) user-guide contains a complete presentation of _optimal scheduling_ applied to Exascale and post-Exascale workflows. These workflows combine data acquisition, data storage, data transfer and data analysis. The HPC components of such workflows can incorporate a diverse range of models, including partial differential equation solvers, algebraic solvers, AI/ML-based models, and data analytics components, all integrated into a single process [@Badia2024], [@Unat2025]. 
+
+The objective here is to address the inherent cross-facility, multi-domain character of these workflows. This requires a very carefully-crafted theoretical foundation that can be readily generalized and extended to these contexts. The material covers both the theory and its application to practical use-cases, including real contexts with uncertainties emanating from different causes.  To understand these well, numerous examples are provided in the form of python code snippets and jupyter notebooks. All of these are intgerated in a _digital twin_^[Known as the CDT] of the underlying cyberinfrastructure, the so-called _digital continuum_.
+
+The Continuum Digital Twin (CDT) is defined and described in the series of forthcoming papers [@MGG2025implementation; @MGG2025usecases; @MGG2025math]. For optimization and scheduling, there are numerous excellent references. Among these we point out particularly [@birgelouveaux2011], [@Pinedo2022], and [@powell2022]. Most of the codes are based on the wonderful `pyomo` framework [@bynum2021pyomo], [@hart2011pyomo] and [@PZGK2025book]. General background on exascale workflows can be found in [@asch2018pathways].
+
+
+Finally, in [@Asch2022] there are basic explanations of optimization, uncertainty 
+quantification, inverse problems and their use for digital twins. [This book explains **all** the tools needed for formulating and implementing digital twins.]{.column-margin} 
+
+
+## Author {.unnumbered}
+
+Mark Asch is Emeritus Professor of the Université de Picardie Jules Verne, Mathematics department.
+
+![](graphics/icon_homepage.svg){width=15pt}  <https://markasch.github.io/DT-tbx-v1/>
+
+![](graphics/icon_github.svg){width=15pt}  <https://github.com/markasch/>
+
+![](graphics/icon_homepage.svg){width=15pt} <http://masch.perso.math.cnrs.fr/>
+
+![](graphics/icon_maildotru.svg){width=15pt} <mark.asch@u-picardie.fr>
+
+## Citation {.unnumbered}
+
+Asch, Mark. Optimal Scheduling for Cross-Facility Workflows. Online (2026)
+<https://markasch.github.io/RCP4CDT/>
+
+```tex
+@book{Asch2026
+    title = {Optimal {S}cheduling for {C}ross-{F}acility {W}orkflows},
+	author = {Asch, Mark},
+    url = {https://markasch.github.io/RCP4CDT/},
+    year = {2026},
+    publisher = {Online}
+}
+```
+
+## License {.unnumbered}
+
+This online book is frequently updated and edited. It's content is free to use, licensed under a [Creative Commons licence](https://creativecommons.org/licenses/by-nc-sa/4.0/), and the code can be found on [GitHub](https://github.com/markasch/RCPSP4CDT). A physical copy of the book will be available at a later date.
+
+**License:**  <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
+
+## References  {.unnumbered}
+
+::: {#refs}
+:::
