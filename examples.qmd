@@ -53,10 +53,77 @@ We illustrate how to set up a _precedence table_, made up of job pairs that defi
 
 ### Disjunctions
 
-When faced with a choice among exclusive options, we resort to disjunctive programming, based on:
+The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:
+
+- Sequencing decisions, where $A$ ends before $B,$ or $B$ ends before $A.$ 
+- Switching decisions, where a facility is used or not.
+- Alternative selection among a set of pricing policies, for example for alternative energy sources.
+
+The general disjunctive problem is formulated as
+
+$$
+\begin{align}
+\min \quad &  z=f(x) + \sum_{k \in K} c_k & \text{objective}\\
+\text{s.t.} \quad &   r(x) \le 0 & \text{global constraint} \\
+                  &  \underset{j\in J_{k}}{\vee}\left[\begin{array}{c}
+                          Y_{jk}\\
+                          g_{jk}(x)\le 0\\
+                          c_{k}=\gamma_{jk}
+                             \end{array}\right]  & \text{disjunctions} \\
+                  & \underset{j\in J_{k}}{\veebar} Y_{jk} & \text{disjunctions} \\
+                  & 0\le x \le U, \; c_k \in \mathbb{R}, \;  Y_{jk} = \{\text{True, False}\}
+\end{align}$$
+If the Boolean variable is True both the inequalities and the cost equation are enforced; if the Boolean variable is False they are both ignored. 
+
+For sequencing decisions, between two tasks $i$ and $j,$ the disjuction is written as
+$$
+\left[\begin{array}{c}
+            Y_{k}\\
+            s_i + d_i \le s_j\\
+\end{array}\right] \vee
+\left[\begin{array}{c}
+            \neg Y_{k}\\
+            s_j + d_j \le s_i\\
+\end{array}\right] ,
+$$
+where $s_i,$ $d_i$ are the start and duration of task $i.$
+
+The `pyomo` code for the disjunction is written as,
+
+```{.python}
+@model.Disjunction(model.I, model.J) 
+def SequenceIJ(m, i, j):
+    return [ m.start[i] + duration[i] <= m.start[j], 
+             m.start[j] + duration[j] <= m.start[i] ]
+```
+
+
+When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we resort to disjunctive programming based on:
 
 - Big-M formulation.
-- Logical XOR formulation.
+- Convex hull formulation.
+
+Consider the disjunction $A \veebar B \veebar C,$ as depicted below. The two possible formulations are:
+
++------------------------+-------------------------+
+| Big-M                  | Convex Hull             |
++========================+=========================+
+| ![](graphics/bigM.svg) | ![](graphics/cvxh.svg)  |
++------------------------+-------------------------+
+| - Looser relaxation    | - Tighter relaxation    |
+| - Smaller problems     | - Bigger problems       |
++------------------------+-------------------------+
+
+The respective code lines in the `pyomo` generalized disjunctive programming `gdp` module, are
+
+```{.python}
+# Big-M
+TransformationFactory('gdp.bigm')
+# Convex Hull
+TransformationFactory('gdp.chull')
+```
+
+
 
 ### Time-Windows - EF, LF, etc.
 
@@ -65,7 +132,7 @@ To reduce the number of variables in the MILP optimization, we define subsets of
 The _forward pass_ to compute earliest start and finishing times is defined as follows:
 
 ```{.python}
-EST[0], EFT[0] = 0 # initilisation
+EST[0], EFT[0] = 0 # initialization
 for j in range(2, n):
   EST[j] = max(EFT[i] for i in P[j])
   EFT[j] = EST[j] + d[j]
@@ -74,7 +141,7 @@ for j in range(2, n):
 The _backward pass_ to compute latest start and finishing times is defined as follows:
 
 ```{.python}
-LFT[0], LST[0] = T # initilisation
+LFT[0], LST[0] = T # initialization
 for j in range(n-1, 1, -1):
   LFT[j] = min(LST[i] for i in S[j])
   LST[j] = LFT[j] - d[j]
