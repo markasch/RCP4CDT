@@ -475,15 +475,19 @@ Figure&nbsp;5: Multi-stage, dynamic network that evolves over time due to changi
 <h3 class="anchored" data-anchor-id="stochastic-multistage-programming">Stochastic, multistage programming</h3>
 <p><strong>Background</strong></p>
 <p>Stochastic programming/optimization (optimal decision-making under uncertainty) is the part of mathematical programming and operations research that studies how to incorporate uncertainty into decision problems. Stochastic programs are primarily about transient decision making.</p>
-<div class="warning" style="background-color:#E9D8FD; color: #69337A; border-left: solid #b199e4 4px; border-radius: 4px; padding:0.7em;">
-<span>
-<p style="margin-top:1em; text-align:center">
-<b>Information:</b>
-</p>
-<p style="margin-left:1em;">
-Some decisions must be made today, but important information will not be available until after the decision is made.
-</p>
-</span></div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some decisions must be made today, but important information will not be available until after the decision is made.</p>
+</div>
+</div>
 <p>An <em>information stage</em> (normally simply called “stage”) is the most important concept that distinguishes stochastic programming. A stage is a point in time where decisions are made within a model. Stages define the boundaries of time intervals. Stages sometimes follow naturally from the problem setting and sometimes are modeling approximations.</p>
 <p>The starting point of a stochastic program is the present situation. The model is intended to tell us what to do in light of our goals, constraints, and resources. We then ask what we should do. We are not asking what to do in all possible situations, just what to do based on our present state.</p>
 <ul>
@@ -491,19 +495,19 @@ Some decisions must be made today, but important information will not be availab
 <li>In inherently <em>multistage models</em>, all stages are of the same type. We face random resource availability, energy prices, unexpected maintenance, etc. We should not confuse information stages with time periods. Stages model the flow of information; time periods represent the ticking of the clock in a model. Stages, on the other hand, are points in time where we make decisions in the model after having learned something new.</li>
 </ul>
 <p>Finding a good trade-off between time periods and stages is often crucial when modeling, as it has consequences for model quality, data collection, and solvability of the model.</p>
-<div class="warning" style="background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;">
-<span>
-<p style="margin-top:1em; text-align:center">
-<b>Warning/Fact:</b>
-</p>
-<p style="margin-left:1em;">
-In the long run we are all dead.
-</p>
-<p style="margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia">
-<b>- John Maynard Keynes</b> <i>(A Tract on Monetary Reform, 1923)</i>
-</p>
-<p></p>
-</span></div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the long run we are all dead. (J.M. Keynes)</p>
+</div>
+</div>
 <p>In other words, one should not wait too long before taking a decision.</p>
 <p><strong>Mathematical Formulation</strong></p>
 <div id="fig-sdp" class="quarto-float quarto-figure quarto-figure-center anchored">
