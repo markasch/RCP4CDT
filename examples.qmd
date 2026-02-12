@@ -47,9 +47,6 @@ We can print out
 - the complete model;
 - a full trace of the optimization process.
 
-(use collapsed display here - click to expand and view output)
-
-
 ### Precedence Example
 
 We illustrate how to set up a _precedence table_, made up of job pairs that define pairwise precedences.
@@ -59,8 +56,29 @@ We illustrate how to set up a _precedence table_, made up of job pairs that defi
 When faced with a choice among exclusive options, we resort to disjunctive programming, based on:
 
 - Big-M formulation.
-- Logical formulation.
+- Logical XOR formulation.
 
+### Time-Windows - EF, LF, etc.
+
+To reduce the number of variables in the MILP optimization, we define subsets of the time variable. Recall: the timespan $[0,T]$ is discretized into $T$ time periods of length one. Period $t$ refers to the time slot/interval $[t-1,t],$ where $t=1, \ldots, T.$ The processing time (duration) of job $j$ is denoted $d_j,$ the set of immediate predecessor activities of activity $j$ is denoted $\mathcal{P}_j$ and  the set of immediate successor activities of activity $j$ is denoted $\mathcal{S}_j.$
+
+The _forward pass_ to compute earliest start and finishing times is defined as follows:
+
+```{.python}
+EST[0], EFT[0] = 0 # initilisation
+for j in range(2, n):
+  EST[j] = max(EFT[i] for i in P[j])
+  EFT[j] = EST[j] + d[j]
+```
+
+The _backward pass_ to compute latest start and finishing times is defined as follows:
+
+```{.python}
+LFT[0], LST[0] = T # initilisation
+for j in range(n-1, 1, -1):
+  LFT[j] = min(LST[i] for i in S[j])
+  LST[j] = LFT[j] - d[j]
+```
 
 ## CDT Implementation
 Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in @fig-imp.
@@ -317,6 +335,10 @@ def MRCPSP_solve(model):
         for j, m in model.TASKS
     ]
     return results
+# select a suitable solver
+solver = 'appsi_highs' #'gurobi' 'glpk','cbc','cplex'
+SOLVER = pyo.SolverFactory(solver)
+assert SOLVER.available(), f"Solver {solver} is not available."
 # Solve the optimization problem
 results = MRCPSP_solve(MRCPSP_model(TASKS))
 ```

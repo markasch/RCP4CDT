@@ -156,13 +156,13 @@ The RCPSP has the following input data:
 - $\mathcal{J} = \{J_1, J_2, \ldots, J_n \}$ set of jobs.
 - $\mathcal{R}$ set of renewable resources. 
 - $\mathcal{S}$ set of precedences^[These can be rigorously defined using an order relation, $i \prec j$.] between jobs $(i,j)\in\mathcal{J}\times\mathcal{J}.$
-- $\mathcal{T}$ planning horizon: set of possible processing times
-for jobs.
+- $\mathcal{T}$ planning horizon: set of possible processing times for jobs.
 - $p_{j}$ processing time of job $j.$
 - $u_{jr}$ amount of (renewable) resource $r$ required for processing job $j.$
 - $c_{r}$ capacity of renewable resource $r.$
 
-There are many different Mixed Integer Linear Programming (MILP) formulations for the RCPSP. We choose the most suitable, discrete-time (DT) formulation^[An alternative formulation, based on _disjunctions_ will be presenetd in the Examples---see @sec-exam.]. This is a binary formulation where we have a binary variable $x_{i,t}$ for each activity $i$ and starting time/date $t,$  $$ x_{i,t} = \begin{cases} 1, \quad \text{if activity $i$ starts on day/time $t,$} \\ 0, \quad  \text{otherwise.}  \end{cases} $$ 
+There are many different Mixed Integer Linear Programming (MILP) formulations for the RCPSP. We choose the most suitable, discrete-time (DT) formulation^[An alternative formulation, based on _disjunctions_ will be presenetd in the Examples---see @sec-exam.]. This is a binary formulation where we have a binary variable $x_{i,t}$ for each activity $i$ and starting time/date $t,$  
+$$ x_{i,t} = \begin{cases} 1, \quad \text{if activity $i$ starts on day/time $t,$} \\ 0, \quad  \text{otherwise.}  \end{cases} $$ 
 
 The binary programming formulation, proposed by Pritsker et al. in
 1986 can be written as follows.

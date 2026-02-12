@@ -1,0 +1,69 @@
+---
+title: "Optimal Scheduling for Cross-Facility Workflows"
+author: Mark Asch
+date: 2026-02-09
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+    logo: images/xwf_logo_straddle.svg
+    css: styles.css
+    footer: 'Exa-AtoW Project'
+    theme: night
+    highlight-style: tango
+---
+
+## Plan {background="#e6e9ed"}
+
+-   Background and setting.
+-   OS formulation for the CDT.
+-   Implementation.
+-   Examples.
+
+For details, see the online [user-guide](https://markasch.github.io/RCP4CDT/).
+
+
+## Background and Setting
+
+Cross-facility workflows are complex beasts made up of:
+
+- projects,
+- jobs,
+- facilities,
+- limited resources:
+  - renewable,
+  - non-renewable.
+
+## What is optimal scheduling? {.smaller}
+
+We want to find an optimal schedule 
+ 
+ - for a collection of jobs 
+ - to be executed on a set of facilities 
+ - subject to constraints on resources, availability, precedences (DAG). 
+ 
+The optimization can be performed for various objectives, or combinations of these, such as 
+
+::: {.column}
+- cost, 
+ - project duration, 
+:::
+::: {.column}
+- facility availability, 
+ - environmental impact. 
+:::
+
+The presence of uncertainty plays a central role and is included in the optimization process.
+
+
+## Formulation for the CDT.
+
+## Implementation
+
+## Examples
+
+- See Marius' presentation.
+- See the online [user-guide](https://markasch.github.io/RCP4CDT/).
+

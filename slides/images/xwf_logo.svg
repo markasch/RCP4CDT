@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 120 90"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="xwf_logo_straddle.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="7.9768786"
+     inkscape:cx="59.98587"
+     inkscape:cy="45.005072"
+     inkscape:window-width="1600"
+     inkscape:window-height="909"
+     inkscape:window-x="0"
+     inkscape:window-y="43"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8" />
+  <!-- X - straddling across W and F, legs extending down -->
+  <g
+     id="g2"
+     transform="matrix(0.93726328,0,0,0.93834571,7.427106,0.1624358)">
+    <!-- Left leg of X - connects down to W area -->
+    <line
+       x1="20"
+       y1="8"
+       x2="52"
+       y2="48"
+       stroke="#4f46e5"
+       stroke-width="7"
+       stroke-linecap="round"
+       id="line1" />
+    <!-- Right leg of X - connects down to F area -->
+    <line
+       x1="100"
+       y1="8"
+       x2="68"
+       y2="48"
+       stroke="#4f46e5"
+       stroke-width="7"
+       stroke-linecap="round"
+       id="line2" />
+    <!-- Center node at X intersection -->
+    <circle
+       cx="60"
+       cy="28"
+       r="5"
+       fill="#818cf8"
+       id="circle2" />
+  </g>
+  <g
+     id="g2-3"
+     transform="matrix(0.93724512,0.00584184,0.0058351,-0.93832753,6.992467,90.027237)">
+    <!-- Left leg of X - connects down to W area -->
+    <line
+       x1="20"
+       y1="8"
+       x2="52"
+       y2="48"
+       stroke="#4f46e5"
+       stroke-width="7"
+       stroke-linecap="round"
+       id="line1-8" />
+    <!-- Right leg of X - connects down to F area -->
+    <line
+       x1="100"
+       y1="8"
+       x2="68"
+       y2="48"
+       stroke="#4f46e5"
+       stroke-width="7"
+       stroke-linecap="round"
+       id="line2-0" />
+    <!-- Center node at X intersection -->
+    <circle
+       cx="60"
+       cy="28"
+       r="5"
+       fill="#818cf8"
+       id="circle2-2" />
+  </g>
+  <!-- W - bottom left, tucked under left leg of X -->
+  <g
+     transform="matrix(0.93726328,0,0,0.93834571,5.0608556,26.745498)"
+     id="g3">
+    <polyline
+       points="0,6 10,38 22,14 34,38 44,6"
+       stroke="#0d9488"
+       stroke-width="6"
+       fill="none"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       id="polyline2" />
+    <circle
+       cx="22"
+       cy="14"
+       r="4"
+       fill="#5eead4"
+       id="circle3" />
+  </g>
+  <!-- F - bottom right, tucked under right leg of X -->
+  <g
+     transform="matrix(0.93726328,0,0,0.93834571,79.038774,25.098633)"
+     id="g5">
+    <line
+       x1="8"
+       y1="6"
+       x2="8"
+       y2="38"
+       stroke="#2563eb"
+       stroke-width="6"
+       stroke-linecap="round"
+       id="line3" />
+    <line
+       x1="8"
+       y1="6"
+       x2="38"
+       y2="6"
+       stroke="#2563eb"
+       stroke-width="6"
+       stroke-linecap="round"
+       id="line4" />
+    <line
+       x1="8"
+       y1="20"
+       x2="30"
+       y2="20"
+       stroke="#60a5fa"
+       stroke-width="5"
+       stroke-linecap="round"
+       id="line5" />
+    <circle
+       cx="38"
+       cy="6"
+       r="4"
+       fill="#93c5fd"
+       id="circle5" />
+  </g>
+  <!-- Bottom connecting arc between W and F (orange) -->
+  <path
+     d="m 37.309322,65.810598 q 23.533641,7.991214 47.067282,0"
+     stroke="#f97316"
+     stroke-width="2.5713"
+     fill="none"
+     stroke-linecap="round"
+     id="path5" />
+  <ellipse
+     cx="36.607914"
+     cy="65.225838"
+     fill="#fb923c"
+     id="circle6"
+     rx="2.8117898"
+     ry="2.8150373"
+     style="stroke-width:0.937804" />
+  <ellipse
+     cx="86.13549"
+     cy="64.049492"
+     fill="#fb923c"
+     id="circle8"
+     rx="2.8117898"
+     ry="2.8150373"
+     style="stroke-width:0.937804" />
+</svg>
