@@ -6,7 +6,7 @@
 This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.
 
 
-### Basic `pyomo` Linear Programming Example
+## Basic `pyomo` Linear Programming Example
 
 As an introduction we load the necessary `pyomo` packages and solve an ultra-simple linear programming example.
 $$
@@ -47,11 +47,8 @@ We can print out
 - the complete model;
 - a full trace of the optimization process.
 
-### Precedence Example
 
-We illustrate how to set up a _precedence table_, made up of job pairs that define pairwise precedences.
-
-### Disjunctions
+## Disjunctions
 
 The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:
 
@@ -123,9 +120,12 @@ TransformationFactory('gdp.bigm')
 TransformationFactory('gdp.chull')
 ```
 
+::: {.callout-caution}
+The disjunctive formulations will always _increase_ the number of variables and constraints of the optimization problem. Thus, they are usually only profitable for long time horizon problems.
+:::
 
 
-### Time-Windows - EF, LF, etc.
+## Time-Windows - EF, LF, etc.
 
 To reduce the number of variables in the MILP optimization, we define subsets of the time variable. Recall: the timespan $[0,T]$ is discretized into $T$ time periods of length one. Period $t$ refers to the time slot/interval $[t-1,t],$ where $t=1, \ldots, T.$ The processing time (duration) of job $j$ is denoted $d_j,$ the set of immediate predecessor activities of activity $j$ is denoted $\mathcal{P}_j$ and  the set of immediate successor activities of activity $j$ is denoted $\mathcal{S}_j.$
 
@@ -169,7 +169,7 @@ The implementation in 4 stages.
 
 ### Input File
 
-This `json` file^[The actual file format is illustrated below in the examples.] contains a complete description of the CDT that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling on national or European levels.
+This `json` input file contains a _complete_ description of the CDT that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling at national or European levels.
 
 The input file contains all the information regarding the following characteristics of the CDT:
 
@@ -181,8 +181,8 @@ The input file contains all the information regarding the following characterist
   - $\mathcal{R}_l^{\rho} = \{R_1^l, R_2^l, \ldots \}$ list of renewable resources per mode;
   - $\mathcal{R}_l^{\nu} = \{R_1^l, R_2^l, \ldots \}$ list of non-renewable resources per project;
 - Job requirements per resource: $p_{ij}$
-- Costs per resource: $c_{ij}$
-- List of precedences^[Successors, predecessors, as defined by the workflow DAG]: $\mathcal{E} = \{(i,j) \mid i \prec j, \, i,j \in \mathcal{J} \}.$   
+- Costs per resource: $c_{ij,l}$
+- List of precedences^[Successors and/or predecessors, as defined by the workflow DAG.]: $\mathcal{E} = \{(i,j) \mid i \prec j, \, i,j \in \mathcal{J} \}.$   
 
 ---
 
@@ -246,6 +246,9 @@ Defines the DAG structure. Each entry represents a directed edge.
 
 This gives the following `json` format.
 
+<details>
+<summary>Show Input File Code</summary>
+
 ```json
 {
   "problem_name": "string (optional)",
@@ -292,6 +295,8 @@ This gives the following `json` format.
   ]
 }
 ```
+</details>
+
 
 **Validation**
 
@@ -320,7 +325,7 @@ except jsonschema.ValidationError as e:
 ```
 
 
-### Model Function
+## Model Function
 
 All the above are necessary and sufficient for the mathematical formulation presented in the section @sec-math. We define a `pyomo` function that takes a dictionary of tasks as input^[See below for examples.], and returns a `pyomo` model.
 
@@ -383,7 +388,7 @@ def MRCPSP_model(TASKS):
 MRCPSP_model(TASKS)
 ```
 
-### Optimization
+## Optimization
 
 The optimization can be performed by calling one of the built-in solvers of `pyomo`, or by using one of the more efficient commercial^[Free academic versions are available.] solvers, from CPLEX or `gurobi`.
 
@@ -410,11 +415,14 @@ assert SOLVER.available(), f"Solver {solver} is not available."
 results = MRCPSP_solve(MRCPSP_model(TASKS))
 ```
 
-### Output
+## Output
 
 Finally, we extract the schedule from the results, store them in a suitable dataframe, and output a CSV file with start and finish times of each job, as well as the optimal mode selected for each job. This can also be output in the form of a GANTT chart. Other outputs can include resource usage, energy consumption, machine utilization statistics and costs.
 
-## Simplified Supply Chain Example
+
+## Examples
+
+### Simplified Supply Chain Example
 
 Putting together:
 
@@ -422,7 +430,7 @@ Putting together:
 - TBC
 
 
-## Simplified RCPSP Example
+### Simplified RCPSP Example
 
 Putting together:
 
@@ -430,7 +438,7 @@ Putting together:
 - time-indexed
 - disjunctive
 
-## Simplified MRCPSP Example
+### Simplified MRCPSP Example
 
 In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
 
@@ -472,7 +480,7 @@ j & S_{j}& m & d_{jm} & k^{\rho}_{jm1} & R^{\rho} & K^{\rho}_{1} & R^{\nu}\\
 
 **Input File**
 
-The input file is a direct transcription of the table of variables.
+The simplest input file is a direct transcription of the table of variables.
 
 ```{json}
 {
@@ -492,10 +500,15 @@ with open("input.json", "r") as jsonfile:
     TASKS = json.load(jsonfile)
 ```
 
+Though, for interoperability, we should privilege the data model format, described before. 
 
 ## Use-Cases 
 
 ### DDFACET
+
+The workflow is quite simple, with choice of HPC centers, data centers and network connections. The batch size is large and so are the data volumes. For these reasons, optimal scheduling that takes into account facility availability and reliability, is very important.
+
+![](graphics/v2.scenario-hpc.jpg){width=80% fig-align="center"}
 
 TBC
 

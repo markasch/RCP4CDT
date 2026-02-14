@@ -11,9 +11,18 @@ book:
     logo: graphics/xwf_logo.svg
   chapters:
     - index.qmd
-    - intro.qmd
-    - theory.qmd
-    - examples.qmd
+    - part: Introduction
+      chapters:
+        - intro.qmd
+    - part: Theory
+      chapters:
+        - theory.qmd
+        - th-stochastic.qmd
+    - part: Implementation
+      chapters:
+        - examples.qmd
+        - examples/disjunct-BigM.ipynb
+        - examples/disjunct-GDP.ipynb    
 
 bibliography: references.bib
 

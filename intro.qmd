@@ -1,4 +1,4 @@
-# Introduction {.unnumbered}
+# Background and Setting {.unnumbered}
 
 A wide-scale, cross-facility workflow is a complex beast. It reunites users, jobs, and facilities, each with its resources and constraints. In the workflows that interest us, the facilites include data centres, HPC^[High Performance Computing] centres, and the network connections between these.
 

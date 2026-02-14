@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Theory – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>Theoretical Framework – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,7 +30,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./examples.html" rel="next">
+<link href="./th-stochastic.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -136,7 +116,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./theory.html">Theoretical Framework</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -171,23 +151,71 @@ window.Quarto = {
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Theory</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./theory.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Theory</span></a>
+ <span class="menu-text">Theoretical Framework</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./th-stochastic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Uncertainty</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Implementation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./examples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Implementation</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/disjunct-BigM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 1: Disjunction - Big-M formulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/disjunct-GDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: Disjunction - GDP formulation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
     <nav id="TOC" role="doc-toc" class="toc-active">
@@ -204,10 +232,6 @@ window.Quarto = {
   <li><a href="#sec-math" id="toc-sec-math" class="nav-link" data-scroll-target="#sec-math">Mathematical Formulation - Deterministic Model</a></li>
   </ul></li>
   <li><a href="#dynamic-networks" id="toc-dynamic-networks" class="nav-link" data-scroll-target="#dynamic-networks">Dynamic Networks</a></li>
-  <li><a href="#sec-stoch" id="toc-sec-stoch" class="nav-link" data-scroll-target="#sec-stoch">Uncertainty</a>
-  <ul class="collapse">
-  <li><a href="#stochastic-multistage-programming" id="toc-stochastic-multistage-programming" class="nav-link" data-scroll-target="#stochastic-multistage-programming">Stochastic, multistage programming</a></li>
-  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -218,9 +242,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content page-columns page-full column-body" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./theory.html">Theoretical Framework</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Theory</h1>
+<h1 class="title">Theoretical Framework</h1>
 </div>
 
 
@@ -274,7 +298,7 @@ Figure&nbsp;1: Two different viewponts of the CDT: a supply chain model (left) a
 <p>These two models are complementary:</p>
 <ul>
 <li>the SCND can be used for global, over a <em>fixed period</em>, modelling—for example over an entire project duration, or annualized;</li>
-<li>the RCPSP can be used for time-dependent models, especially when uncertainty is introduced, as in a two-stage, or multi-stage, model—see below Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</li>
+<li>the RCPSP can be used for time-dependent models, especially when uncertainty is introduced, as in a two-stage, or multi-stage, model—see below Section <a href="th-stochastic.html" class="quarto-xref"><span>Uncertainty</span></a>.</li>
 </ul>
 <p>In <a href="#fig-wf" class="quarto-xref">Figure&nbsp;<span>2</span></a> and <a href="#fig-wf2" class="quarto-xref">Figure&nbsp;<span>3</span></a> below, we show the two alternative viewpoints of a simple 4-job, 4-machine scheduling problem. The global mathematical formulation will effectively include and <em>combine</em> these two viewpoints, as depicted in <a href="#fig-CDT_RCP_SC" class="quarto-xref">Figure&nbsp;<span>4</span></a> and formulated below.</p>
 <div id="fig-wf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -404,7 +428,7 @@ Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
 \end{align}\]</span></p>
 <p>The objective function (1) represents the sum of all possible start dates for the final sink job (dummy variable) <span class="math inline">\(x_{n+1,t}.\)</span> We know that only one of these variables will equal 1 for a specific <span class="math inline">\(t.\)</span> Therefore, by minimizing the sum of the product <span class="math inline">\(t \cdot x_{n+1,t},\)</span> we are effectively minimizing the total project duration. Constraint (2) ensures that each activity <span class="math inline">\(i\)</span> has exactly one start date, i.e.&nbsp;a single execution. Constraint (3) guarantees that for any time period <span class="math inline">\(t,\)</span> the schedule does not exceed the capacity <span class="math inline">\(R_k\)</span> for any resource <span class="math inline">\(k.\)</span> Finally, constraint (4) ensures that if an activity <span class="math inline">\(j\)</span> follows another activity <span class="math inline">\(i,\)</span> then activity <span class="math inline">\(j\)</span> must start after the finish time of activity <span class="math inline">\(i,\)</span> which is equal to the start time of activity <span class="math inline">\(i\)</span> plus its duration <span class="math inline">\(p_i.\)</span></p>
 <p><strong>Time-indexed vs.&nbsp;Disjunctive approaches</strong></p>
-<p>Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times which respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the <a href="examples.html" class="quarto-xref"><span>Implementation</span></a> section.</p>
+<p>Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times which respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models can become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the <a href="examples.html" class="quarto-xref"><span>Implementation</span></a> section.</p>
 <p><strong>Mutli-Project Multi-Mode RCPSP</strong></p>
 <p>Note that the above formulation is restricted to temporal scheduling on a <em>single</em> machine, and for a single project—a collection of jobs. This formulation can be generalized to deal with multiple machines and multiple projects. In this case, the formulation becomes very similar to that of a supply chain. It is referred to in the literature as the <em>multi-mode resource-constrained multi-project scheduling problem</em>, or MRCMPSP.</p>
 <p><strong>Multi-Mode</strong> The single-mode RCPSP assumed that each activity has only one way to be executed, whereas the multi-mode RCPSP considers multiple ways to execute an activity, which often have tradeoffs in duration, cost, or resource requirement.</p>
@@ -423,14 +447,14 @@ Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
 <div class="no-row-height column-margin column-container"><div id="fn11"><p><sup>11</sup>&nbsp;To which we can add any cost function of the duration.</p></div><div id="fn12"><p><sup>12</sup>&nbsp;This produces what is known as a <em>tighter</em> formulation.</p></div><div id="fn13"><p><sup>13</sup>&nbsp;Or terms, if other costs are to be taken into account, e.g.&nbsp;related to sustainability</p></div></div><p><strong>Multi-Objective</strong> To include infrastructure costs in the objective function, we just add a term<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> <span class="math display">\[\begin{align}
 \min \quad &amp;  \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J} t\cdot x_{J1,t}
                   + \sum_{j,m} c_{jm} x_{jm} &amp; (1')\\
-\end{align}\]</span> where <span class="math inline">\(c_m\)</span> is the cost associated with the use of facility <span class="math inline">\(m\)</span> for task <span class="math inline">\(j.\)</span></p>
+\end{align}\]</span> where <span class="math inline">\(c_{jm}\)</span> is the cost associated with the use of facility <span class="math inline">\(m\)</span> for task <span class="math inline">\(j.\)</span></p>
 <p><strong>Multi-Project</strong> We can also perform simultaneous scheduling of a set of multiple projects taking into account the availability of local and global resources under different time and resource constraints. This has practical importance, at national and European levels, when cross-facility implies exploitation of cyberinfrastructure resources across different countries, for example, as would be the case for EuroHPC<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>, at the European level, or GENCI<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> for France. Imagine being able to plan and pilot multiple exascale projects, on multiple sites, over multiple countries…<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
 <div class="no-row-height column-margin column-container"><div id="fn14"><p><sup>14</sup>&nbsp; <a href="https://www.eurohpc-ju.europa.eu/">https://www.eurohpc-ju.europa.eu/</a> </p></div><div id="fn15"><p><sup>15</sup>&nbsp; <a href="https://www.genci.fr/">https://www.genci.fr//</a> </p></div><div id="fn16"><p><sup>16</sup>&nbsp;These would be multiple states, in the USA context.</p></div><div id="fn17"><p><sup>17</sup>&nbsp;SCCP</p></div></div><p><strong>Conclusion</strong> This general formulation of the RCPSP is then mathematically equivalent to the supply chain configuration problem<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> with the addition of resource constraints. The loop is closed.</p>
 </section>
 </section>
 <section id="dynamic-networks" class="level2">
 <h2 class="anchored" data-anchor-id="dynamic-networks">Dynamic Networks</h2>
-<p>We can generalize the supply chain by considering a multi-stage network with an added time dimension. This enables flow and carrying of data and jobs across time periods, in addition to flow among facilities. For example, if certain facilites become unavailable, or less available, as the project evolves over time. This is a kind of recourse, which will be considered below in Section <a href="#sec-stoch" class="quarto-xref"><span>Uncertainty</span></a>.</p>
+<p>We can generalize the supply chain by considering a multi-stage network with an added time dimension. This enables flow and carrying of data and jobs across time periods, in addition to flow among facilities. For example, if certain facilites become unavailable, or less available, as the project evolves over time. This is a kind of recourse, which will be considered below in Section <a href="th-stochastic.html" class="quarto-xref"><span>Uncertainty</span></a>.</p>
 <div id="fig-wf3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -469,103 +493,8 @@ Figure&nbsp;5: Multi-stage, dynamic network that evolves over time due to changi
 </figcaption>
 </figure>
 </div>
-</section>
-<section id="sec-stoch" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="sec-stoch">Uncertainty</h2>
-<p>In practice some of the scheduling parameters may be uncertain. The exact duration of an activity, for instance, might not be known at the beginning of the project. Similarly, the number of available resources is another parameter that may not be known before project execution. These uncertainties may be due to different sources, including estimation errors, unforeseen (weather) conditions, late “delivery” (unavailability) of some required resources, unpredictable incidents such as machine breakdown or worker accidents, etc.</p>
-<section id="stochastic-multistage-programming" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="stochastic-multistage-programming">Stochastic, multistage programming</h3>
-<p><strong>Background</strong></p>
-<p>Stochastic programming/optimization (optimal decision-making under uncertainty) is the part of mathematical programming and operations research that studies how to incorporate uncertainty into decision problems. Stochastic programs are primarily about transient decision making.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Some decisions must be made today, but important information will not be available until after the decision is made.</p>
-</div>
-</div>
-<p>An <em>information stage</em> (normally simply called “stage”) is the most important concept that distinguishes stochastic programming. A stage is a point in time where decisions are made within a model. Stages define the boundaries of time intervals. Stages sometimes follow naturally from the problem setting and sometimes are modeling approximations.</p>
-<p>The starting point of a stochastic program is the present situation. The model is intended to tell us what to do in light of our goals, constraints, and resources. We then ask what we should do. We are not asking what to do in all possible situations, just what to do based on our present state.</p>
-<ul>
-<li>An inherently <em>two-stage model</em> is a model where the first decision is a major long-term decision, whereas the remaining stages represent the use of this investment. In these cases, mathematically speaking, the first stage will look totally different from the remaining stages, which will all look more or less the same. This is a very important class of models, possibly the most important one for stochastic programming.</li>
-<li>In inherently <em>multistage models</em>, all stages are of the same type. We face random resource availability, energy prices, unexpected maintenance, etc. We should not confuse information stages with time periods. Stages model the flow of information; time periods represent the ticking of the clock in a model. Stages, on the other hand, are points in time where we make decisions in the model after having learned something new.</li>
-</ul>
-<p>Finding a good trade-off between time periods and stages is often crucial when modeling, as it has consequences for model quality, data collection, and solvability of the model.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Caution
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In the long run we are all dead. (J.M. Keynes)</p>
-</div>
-</div>
-<p>In other words, one should not wait too long before taking a decision.</p>
-<p><strong>Mathematical Formulation</strong></p>
-<div id="fig-sdp" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-sdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="graphics/sdp.png" class="img-fluid figure-img" style="width:80.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: A multistage decision process with uncertainty. Uncertain, exogenous inputs <span class="math inline">\(\xi_t\)</span> arrive, starting from stage <span class="math inline">\(t=2,\)</span> and trigger subsequent recourse actions.
-</figcaption>
-</figure>
-</div>
-<p>In the Figure we depict a generic multistage decision process with state <span class="math inline">\(\mathbf{x}_t\)</span> that evolves over time, starting at stage <span class="math inline">\(t=1,\)</span> and then receives uncertain, exogenous inputs, <span class="math inline">\(\xi_2, \xi_3, \ldots, \xi_T,\)</span> at given stages <span class="math inline">\(t = 2,3,\ldots, T.\)</span> At stage 1, a here-and-now (deterministic) decision is taken. The subsequent sequence of wait-and-see decision functions <span class="math inline">\({\mathbf{x}_t(\xi_t)}_{t\in [T]}\)</span> constitutes a <em>policy</em>, <span class="math inline">\(\pi.\)</span> The policy thus obtained, provides a decision rule for all stages <span class="math inline">\(t \in [T].\)</span> The aim of the decision process (stochastic multistage optimization) is then to compute an <em>optimal policy</em> for a given objective and subject to constraints.</p>
-<p>We will describe in detail the two-stage problem, since the multistage is a straightforward generalisation. In the stochastic setting, we can naturally classify <span class="math inline">\(x\in\mathscr{X}\)</span> as the <em>first-stage</em> decision variables, since the initial facilities<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> are fixed and <span class="math inline">\(y\in\mathbb{R}^{\left|\mathscr{A}\right|\times\left|\mathscr{K}\right|}\)</span> as the <em>second-stage</em> decision variables, since the job-flow operating conditions are uncertain over time.</p>
-<div class="no-row-height column-margin column-container"><div id="fn18"><p><sup>18</sup>&nbsp;Data centers, HPC centers, networks. </p></div></div><p>The two-stage stochastic linear program <span class="citation" data-cites="birgelouveaux2011">(<a href="index.html#ref-birgelouveaux2011" role="doc-biblioref">Birge and Louveaux 2011</a>)</span>, <span class="citation" data-cites="shapiro_lectures_2009">(<a href="index.html#ref-shapiro_lectures_2009" role="doc-biblioref">Shapiro, Dentcheva, and Ruszczyński 2009</a>)</span> is then</p>
-<p><span class="math display">\[\begin{align} \label{eq:2stage}
-\min_{x\in\mathscr{X}} &amp; \,\,c^{\top}x + \mathrm{E}\left[Q(x;\xi)\right],
-\end{align}\]</span> where <span class="math inline">\(Q(x;\xi)\)</span> is the optimal value of the second-stage problem <span class="math display">\[\begin{align*}
-\min_{y\ge0} &amp; \,\,q^{\top}y\\
-\textrm{s.t.} &amp; \,\,Ny=0,\\
-&amp; Cy\ge d,\\
-&amp; Sy\le s,\\
-&amp; Ry\le Mx,
-\end{align*}\]</span> where <span class="math inline">\(d\)</span> is the (uncertain) resource demand, <span class="math inline">\(s\)</span> is the (uncertain) resource supply, the random vector <span class="math inline">\(\xi=(q,d,s,R,M)\)</span> and <span class="math inline">\(y=y(\xi).\)</span> The expectation is taken with respect to the joint probability distribution function<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> of <span class="math inline">\(\xi.\)</span> In the terminology of state-space, we can consider <span class="math inline">\(x\)</span> as the <em>state</em> variable, and <span class="math inline">\(y\)</span> as the <em>control</em> variable.</p>
-<div class="no-row-height column-margin column-container"><div id="fn19"><p><sup>19</sup>&nbsp;Either continuous or discrete, it is derived either from theory or observations, or both.</p></div></div><p>To treat the occurrence of infeasibility, where the first-stage solution does not satisfy the second-stage constraints, e.g.&nbsp;<span class="math inline">\(Cy\nleqslant d,\)</span> we introduce a <em>recourse</em> action <span class="math inline">\(z\)</span> that supplies the deficit <span class="math inline">\(d-Cy\)</span> at some penalty cost. Then the second-stage problem becomes <span class="math display">\[\begin{align*}
-\min_{y\ge0} &amp; \,\,q^{\top}y+h^{\top}z\\
-\textrm{s.t.} &amp; \,\,Ny=0,\\
-&amp; Cy+z\ge d,\\
-&amp; Sy\le s,\\
-&amp; Ry\le Mx,
-\end{align*}\]</span> where <span class="math inline">\(h\)</span> represents the vector of (positive) recourse costs.</p>
-<p>In the multistage case, we will have a succession of recourse stages, yielding the multistage program <span class="citation" data-cites="powell2022">(<a href="index.html#ref-powell2022" role="doc-biblioref">Powell 2022</a>)</span>,</p>
-<p><span class="math display">\[
-    \min_{\pi \in \Pi} \mathrm{E} \left[ \sum^{T}_{t=1} \gamma^{t-1} f_t(x_t;\xi_t) \right],
-\]</span> subject to <span class="math display">\[
-     x_t \in \mathcal{X}_t(x_{t-1};\xi_{t-1}), \quad t=1 \ldots, T,
-\]</span> where <span class="math inline">\(\pi\)</span> is a policy, <span class="math inline">\(\gamma\)</span> is a discount factor, <span class="math inline">\(f_t\)</span> is a cost function, <span class="math inline">\(x_t\)</span> is a decision and <span class="math inline">\(\mathcal{X}_t\)</span> are the constraints. A policy is, by definition, a method that optimizes the objective. For example, in Google maps, the policy is to decide whether to turn left or right by optimizing over the time required to transverse the next link in the network plus the remaining time to get to the destination.</p>
-<p>Note that there are various forms of minimization in stochastic scheduling. Whenever an objective function has to be minimized, it has to be specified in what sense the objective has to be minimized.</p>
-<ul>
-<li><em>Expectation</em> sense is the crudest form of optimization, e.g., one wishes to minimize (a function of) the expected makespan, that is <span class="math inline">\(\mathrm{E}\left[f\left(C_{\mathrm{max}}\right)\right],\)</span> and find a policy under which the expected makespan is smaller than the expected makespan under any other policy.</li>
-<li><em>Stochastic</em> sense is a stronger form of optimization. If a schedule or policy minimizes <span class="math inline">\(f\left(C_{\mathrm{max}}\right)\)</span> stochastically, then the makespan under the optimal schedule or policy is stochastically (in probability, or in law) less than the makespan under any other schedule or policy.</li>
-</ul>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-birgelouveaux2011" class="csl-entry" role="listitem">
-Birge, John R., and François Louveaux. 2011. <em>Introduction to Stochastic Programming</em>. <span>Second edition</span>. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-4614-0237-4">https://doi.org/10.1007/978-1-4614-0237-4</a>.
-</div>
-<div id="ref-powell2022" class="csl-entry" role="listitem">
-Powell, Warren B. 2022. <em>Reinforcement Learning and Stochastic Optimization: A Unified Framework for Sequential Decisions</em>. John Wiley &amp; Sons.
-</div>
-<div id="ref-shapiro_lectures_2009" class="csl-entry" role="listitem">
-Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009. <em>Lectures on <span>Stochastic</span> <span>Programming</span></em>. SIAM, Society for Industrial; Applied Mathematics. <a href="https://doi.org/10.1137/1.9780898718751">https://doi.org/10.1137/1.9780898718751</a>.
-</div>
-</div>
-</section>
 </section>
 
 
@@ -977,8 +906,8 @@ Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009. <em>Lectu
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./examples.html" class="pagination-link" aria-label="Implementation">
-        <span class="nav-page-text"><span class="chapter-title">Implementation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./th-stochastic.html" class="pagination-link" aria-label="Uncertainty">
+        <span class="nav-page-text"><span class="chapter-title">Uncertainty</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
