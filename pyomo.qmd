@@ -125,3 +125,25 @@ The disjunctive formulations will always _increase_ the number of variables and 
 :::
 
 
+::: {.callout-note}
+For the CDT, in addition to sequencing constraints, the resource constraints must also be satisfied. This is important for jobs that can in theory be executed in parallel, but might in practice have a resource conflict and will need to be executed sequentially. 
+:::
+
+
+### Big-M Method
+
+The big-M method converts the logical disjunction "$i$ before $j$" OR "$j$ before $i$" into a system of linear inequalities with binary variables. The formulation is
+
+$$
+\begin{align}
+   S_j  & \geq S_i + d_i - M(1 - y_{ij}), \\
+   S_i  & \geq S_j + d_j - My_{ij},
+\end{align}$$
+where $S_i$ is the starting time, $d_i$ the duration and $M$ is a large enough positive constant, usually set to the upper bound on the makespan. When activity $i$ precedes $j,$  then $y_{ij} =1$ and the first inequality ensures that $j$ starts after $i$ has finished, whereas the second inequality is trivially satisfied and has no effect. On the other hand, if activity $j$ precedes $i,$  then $y_{ij} =0$ and the first inequality is inoperant, whereas the second ensures that $i$ starts after $j$ has finished.
+
+
+
+### GDP OPT 
+
+PYOMO includes a generalized disjunctive programming pack, `GDP.opt`, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. 
+

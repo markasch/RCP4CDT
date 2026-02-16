@@ -255,7 +255,9 @@ window.Quarto = {
    
   <ul>
   <li><a href="#stochastic-multistage-programming" id="toc-stochastic-multistage-programming" class="nav-link active" data-scroll-target="#stochastic-multistage-programming">Stochastic, multistage programming</a></li>
-  <li><a href="#value-at-risk" id="toc-value-at-risk" class="nav-link" data-scroll-target="#value-at-risk">Value at Risk</a></li>
+  <li><a href="#chance-constraints" id="toc-chance-constraints" class="nav-link" data-scroll-target="#chance-constraints">Chance Constraints</a></li>
+  <li><a href="#risk-measures" id="toc-risk-measures" class="nav-link" data-scroll-target="#risk-measures">Risk Measures</a></li>
+  <li><a href="#robust-optimization" id="toc-robust-optimization" class="nav-link" data-scroll-target="#robust-optimization">Robust Optimization</a></li>
   </ul>
 </nav>
 </nav>
@@ -366,9 +368,49 @@ Figure&nbsp;1.1: A multistage decision process with uncertainty. Uncertain, exog
 <li><em>Stochastic</em> sense is a stronger form of optimization. If a schedule or policy minimizes <span class="math inline">\(f\left(C_{\mathrm{max}}\right)\)</span> stochastically, then the makespan under the optimal schedule or policy is stochastically (in probability, or in law) less than the makespan under any other schedule or policy.</li>
 </ul>
 </section>
-<section id="value-at-risk" class="level2">
-<h2 class="anchored" data-anchor-id="value-at-risk">Value at Risk</h2>
-<p>TBC</p>
+<section id="chance-constraints" class="level2">
+<h2 class="anchored" data-anchor-id="chance-constraints">Chance Constraints</h2>
+<p>When the uncertainty is in the constraints, we can ensure that they hold with a certain probability. Suppose the constraints are of the form <span class="math display">\[ A(z) x - b(z) \le 0 ,
+\]</span> where <span class="math inline">\(x\)</span> is the decision variable and <span class="math inline">\(z\)</span> is the random variable. Then the <em>chance constraint</em> can be <span class="math display">\[ \mathrm{P} \left( a_i(z)^{\top} x - b_i(z) \le 0, \; \forall \; i=1,\ldots, m \right) \ge 1 - \epsilon
+\]</span> for some <span class="math inline">\(\epsilon \in (0,1).\)</span></p>
+</section>
+<section id="risk-measures" class="level2">
+<h2 class="anchored" data-anchor-id="risk-measures">Risk Measures</h2>
+<p>Risk measures attempt to combine the two previous ones: expectations, and probabilities of constraint violations. One example is given by <span class="math display">\[
+\max_{x\ge 0} \mathrm{E}_z f(x,z) - \kappa \mathrm{Var} \left( f(x,z) \right),
+\]</span> where <span class="math inline">\(\kappa\)</span> is a <em>risk aversion</em> parameter. The larger the value of <span class="math inline">\(\kappa,\)</span> the more the optimization problem tries to find a solution with minimal variance, or less risk.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Risk Measure">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Risk Measure
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A risk measure <span class="math inline">\(\rho\)</span> combines the expected value <span class="math inline">\(\mathrm{E}_z f(x,z)\)</span> with another scalar term, called dispersion measure, which measures the uncertainty of the outcome.</p>
+</div>
+</div>
+<p>The most common risk measures are:</p>
+<ol type="1">
+<li>The mean-variance model, <span class="math display">\[ \rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{Var} (Z) . \]</span></li>
+<li>The value-at-risk (VaR), <span class="math display">\[\rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .\]</span></li>
+<li>The conditional value-at-risk (CVaR), <span class="math display">\[\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .\]</span></li>
+<li>Exponential risk aversion, <span class="math display">\[\rho(Z) = \inf_{\gamma &gt; 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). \]</span></li>
+</ol>
+<p>Note that <span class="math inline">\(\mathrm{VaR}_{\alpha} (Z)\)</span> can be rewritten as <span class="math inline">\(\mathrm{P} (Z \le \epsilon ) \ge \alpha.\)</span> Finally, selecting the “right” function <span class="math inline">\(\rho\)</span> depends on the modeling and optimization goals one has in mind.</p>
+</section>
+<section id="robust-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="robust-optimization">Robust Optimization</h2>
+<p>In addition to the above two approaches—stochastic optimization and risk measures—there is a third approach, robust optimization, which is based on a worst-case analysis. we want the optimal solution to perform “the best possible,” assuming that the unknown problem parameters can always turn out to be “the worst possible.”</p>
+<p><span class="math display">\[\begin{align*}
+\min &amp; \sup_{z \in Z} \left[(c+Cz)^{\top} x \right] \\
+\textrm{s.t.} &amp; \quad (a_i + A_i z)^{\top} x \le b_i +b_i^{\top} Z,  \, i=1,\ldots,m, \, \forall z \in Z,\\
+&amp; \quad x\in \mathbb{R}^n ,
+\end{align*}\]</span> where <span class="math inline">\(Z\)</span> is the uncertainty set, and any single element <span class="math inline">\(z \in Z\)</span> is a scenario.</p>
+<p>A typical pattern emerges when comparing the solution between average-case stochastic optimization and robust optimization. The robust solution’s “range” of values is narrower, both in the best- and worst-situation sense, and it gives stabler profit relations. This comes, however, at the expense of having worse performance in an “average” scenario.</p>
+<p>You can expect to observe this kind of phenomenon very often whenever you need to solve a problem under uncertainty and are unsure whether the worst-case or average-case performance should be optimized. The degree of trade-off can help you make the right decision.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">

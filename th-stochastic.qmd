@@ -117,6 +117,51 @@ is stochastically (in probability, or in law) less than the makespan under any o
 or policy. 
 
 
-## Value at Risk
+## Chance Constraints
 
-TBC
+When the uncertainty is in the constraints, we can ensure that they hold with a certain probability. Suppose the constraints are of the form
+$$ A(z) x - b(z) \le 0 ,
+$$
+where $x$ is the decision variable and $z$ is the random variable. Then the _chance constraint_ can be
+$$ \mathrm{P} \left( a_i(z)^{\top} x - b_i(z) \le 0, \; \forall \; i=1,\ldots, m \right) \ge 1 - \epsilon
+$$
+for some $\epsilon \in (0,1).$
+
+## Risk Measures
+
+Risk measures attempt to combine the two previous ones: expectations, and probabilities of constraint violations. One example is given by
+$$
+ \max_{x\ge 0} \mathrm{E}_z f(x,z) - \kappa \mathrm{Var} \left( f(x,z) \right),
+$$
+where $\kappa$ is a _risk aversion_ parameter. The larger the value of $\kappa,$  the more the optimization problem tries to find a solution with minimal variance, or less risk. 
+
+::: {.callout-note title="Risk Measure"}
+A risk measure $\rho$ combines the expected value $\mathrm{E}_z f(x,z)$ with another scalar term, called dispersion measure, which measures the uncertainty of the outcome.
+:::
+
+The most common risk measures are:
+
+1. The mean-variance model, $$ \rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{Var} (Z) . $$
+2. The value-at-risk (VaR),   $$\rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),$$ where $$\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .$$
+3. The conditional value-at-risk (CVaR),  $$\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),$$ where $$\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .$$
+4. Exponential risk aversion, $$\rho(Z) = \inf_{\gamma > 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). $$
+
+Note that  $\mathrm{VaR}_{\alpha} (Z)$ can be rewritten as  $\mathrm{P} (Z \le \epsilon ) \ge \alpha.$ Finally, selecting the "right" function $\rho$ depends on the modeling and optimization goals one has in mind.
+
+
+## Robust Optimization
+
+In addition to the above two approaches---stochastic optimization and risk measures---there is a third approach, robust optimization, which is  based on a worst-case analysis. we want the optimal solution to perform "the best possible," assuming that the unknown problem parameters can always turn out to be "the worst possible."
+
+$$\begin{align*}
+\min & \sup_{z \in Z} \left[(c+Cz)^{\top} x \right] \\
+\textrm{s.t.} & \quad (a_i + A_i z)^{\top} x \le b_i +b_i^{\top} Z,  \, i=1,\ldots,m, \, \forall z \in Z,\\
+ & \quad x\in \mathbb{R}^n ,
+\end{align*}$$
+where $Z$ is the uncertainty set, and any single element $z \in Z$ is a scenario.
+
+
+A typical pattern emerges when comparing the solution between average-case stochastic optimization and robust optimization. The robust solution's "range" of values is narrower, both in the best- and worst-situation sense, and it gives stabler profit relations. This comes, however, at the expense of having worse performance in an "average" scenario.
+
+You can expect to observe this kind of phenomenon very often whenever you need to solve a problem under uncertainty and are unsure whether the worst-case or average-case performance should be optimized. The degree of trade-off can help you make the right decision.
+

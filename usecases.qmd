@@ -4,7 +4,7 @@
 
 The workflow is quite simple, with choice of HPC centers, data centers and network connections. The batch size is large and so are the data volumes. For these reasons, optimal scheduling that takes into account facility availability and reliability, is very important.
 
-![](graphics/v2.scenario-hpc.jpg){width=80% fig-align="center"}
+![](graphics/v2.scenario-hpc.jpg){width=60% fig-align="center"}
 
 TBC
 
