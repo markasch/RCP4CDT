@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./examples.html" rel="next">
+<link href="./pyomo.html" rel="next">
 <link href="./theory.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -218,7 +218,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Implementation</span></a>
+  <a href="./pyomo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Using PYOMO</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -231,6 +231,21 @@ window.Quarto = {
   <a href="./examples/disjunct-GDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: Disjunction - GDP formulation</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./usecases.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Use-Cases</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -240,6 +255,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#stochastic-multistage-programming" id="toc-stochastic-multistage-programming" class="nav-link active" data-scroll-target="#stochastic-multistage-programming">Stochastic, multistage programming</a></li>
+  <li><a href="#value-at-risk" id="toc-value-at-risk" class="nav-link" data-scroll-target="#value-at-risk">Value at Risk</a></li>
   </ul>
 </nav>
 </nav>
@@ -349,6 +365,10 @@ Figure&nbsp;1.1: A multistage decision process with uncertainty. Uncertain, exog
 <li><em>Expectation</em> sense is the crudest form of optimization, e.g., one wishes to minimize (a function of) the expected makespan, that is <span class="math inline">\(\mathrm{E}\left[f\left(C_{\mathrm{max}}\right)\right],\)</span> and find a policy under which the expected makespan is smaller than the expected makespan under any other policy.</li>
 <li><em>Stochastic</em> sense is a stronger form of optimization. If a schedule or policy minimizes <span class="math inline">\(f\left(C_{\mathrm{max}}\right)\)</span> stochastically, then the makespan under the optimal schedule or policy is stochastically (in probability, or in law) less than the makespan under any other schedule or policy.</li>
 </ul>
+</section>
+<section id="value-at-risk" class="level2">
+<h2 class="anchored" data-anchor-id="value-at-risk">Value at Risk</h2>
+<p>TBC</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -773,8 +793,8 @@ Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009. <em>Lectu
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./examples.html" class="pagination-link" aria-label="Implementation">
-        <span class="nav-page-text"><span class="chapter-title">Implementation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./pyomo.html" class="pagination-link" aria-label="Using PYOMO">
+        <span class="nav-page-text"><span class="chapter-title">Using PYOMO</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

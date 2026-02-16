@@ -20,9 +20,12 @@ book:
         - th-stochastic.qmd
     - part: Implementation
       chapters:
-        - examples.qmd
+        - pyomo.qmd
         - examples/disjunct-BigM.ipynb
         - examples/disjunct-GDP.ipynb    
+        - CDT.qmd
+        - RCPSP.qmd
+        - usecases.qmd
 
 bibliography: references.bib
 

@@ -1,0 +1,109 @@
+# Examples
+
+## Simplified Supply Chain Example
+
+Putting together:
+
+- precedence
+- TBC
+
+
+## Simplified RCPSP Example
+
+Putting together:
+
+- precedence
+- time-indexed
+- disjunctive
+
+## Simplified MRCPSP Example
+
+In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
+
+::: {#fig-mrcp}
+```{mermaid}
+graph LR
+    A["$$J_0$$"] --> B("$$J_1$$")
+    A --> C("$$J_2$$")
+    B --> D("$$J_3$$")
+    C --> E("$$J_4$$")
+    D --> F["$$J_5$$"]
+    E --> F
+
+```
+A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs $J_1,\cdots, J_4.$ The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
+:::
+
+The project instance, shown above, is detailed in Table 1, where $S_j$ is the successor list of job $j,$ $m$ is the mode, $d_{jm}$ is the job duration, $k^{\rho}_{jm1}$ is the renewable resource requirement, $R^{\rho}$ is the renewable resource list, $K^{\rho}$ is the renewable resource limit, and $R^{\nu}$ is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
+
+$$\begin{aligned}
+& \text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\
+&\begin{array}{cccccccc}
+%\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+j & S_{j}& m & d_{jm} & k^{\rho}_{jm1} & R^{\rho} & K^{\rho}_{1} & R^{\nu}\\
+\hline 
+0 & \left\{ 1,2\right\}  & 1 & 0 & 0 & \left\{ 1\right\}  & 3 & \emptyset \\
+1 & \left\{ 3\right\}  & 1 & 2 & 2  &  &  & \\
+2 & \left\{ 4\right\}  & 1 & 2 & 2 &  &  & \\
+ &  & 2 & 3 & 1 &  &  & \\
+3 & \left\{ 5\right\}  & 1 & 1 & 3 &  &  & \\
+ &  & 2 & 2 & 1 &  &  & \\
+4 & \left\{ 5\right\}  & 1 & 2 & 3 &  &  & \\
+5 & \emptyset & 1 & 0 & 0 &  &  & \\
+\hline 
+%\end{tabular}
+\end{array}
+\end{aligned}$$
+
+**Input File**
+
+The simplest input file is a direct transcription of the table of variables.
+
+```{json}
+{
+  "0":{"suc":("1","2"),"mod":"A","drt":0,    "rsc":0},
+  "1":{"suc":"3","mod":"A",      "drt":2,    "rsc":2},
+  "2":{"suc":"4","mod":("A","B"),"drt":[2,3],"rsc":[2, 1]},
+  "3":{"suc":"5","mod":("A","B"),"drt":[1,2],"rsc":[3, 1]},
+  "4":{"suc":"5","mod":"A",      "drt":2,    "rsc":3},
+  "5": {"suc":"","mod":"A",      "drt":0,    "rsc":0 }
+}
+```
+
+```{.python}
+import json
+
+with open("input.json", "r") as jsonfile: 
+    TASKS = json.load(jsonfile)
+```
+
+Though, for interoperability, we should privilege the data model format, described before. 
+
+
+
+## Silly Examples
+
+In summary, this book has no content whatsoever.
+
+```{python}
+#| label: fig-line-plot
+#| fig-cap: "A line plot "
+
+import matplotlib.pyplot as plt
+plt.plot([1,23,2,4])
+plt.show()
+```
+
+We observe in @fig-line-plot that there is a clear trend, up and down.
+
+To only have code displayed, but not executed...
+
+```{.python}
+#| label: fig-line-plot
+#| fig-cap: "A line plot "
+
+import matplotlib.pyplot as plt
+plt.plot([1,23,2,4])
+plt.show()
+```

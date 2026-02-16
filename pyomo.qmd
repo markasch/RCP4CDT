@@ -1,0 +1,127 @@
+# Using PYOMO {#sec-exam}
+
+::: {.unnumbered}
+:::
+
+This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.
+
+
+## Basic `pyomo` Linear Programming Example
+
+As an introduction we load the necessary `pyomo` packages and solve an ultra-simple linear programming example.
+$$
+\begin{array}{ll}
+  \min       & 2 x_1 + 3 x_2\\
+  \mathrm{s.t.} & 3 x_1 + 4 x_2 \geq 1\\
+             & x_1, x_2 \geq 0
+\end{array}
+$$
+
+- `pyomo.environ` provides the framework for building the model
+- `SolverFactory` allows to call the solver used to solve the optimization problem
+
+```{python}
+import pyomo.environ as pyo 
+from pyomo.opt import SolverFactory 
+
+model = pyo.ConcreteModel("Simple Linear")
+# Decision variables and domains
+model.x = pyo.Var([1,2], domain=pyo.NonNegativeReals)
+# Objective function
+model.OBJ = pyo.Objective(expr = 2*model.x[1] + 3*model.x[2])
+# Constraint(s)
+model.Constraint1 = pyo.Constraint(expr = 3*model.x[1] + 4*model.x[2] >= 1)
+
+solver = 'appsi_highs'
+SOLVER = pyo.SolverFactory(solver)
+assert SOLVER.available(), f"Solver {solver} is not available."
+
+# Solve and print solution
+SOLVER.solve(model)
+print(f"x = ({pyo.value(model.x[1]):.2f}, {pyo.value(model.x[2]):.2f})")
+print(f"optimal value = {pyo.value(model.OBJ):.2f}")
+```
+
+We can print out 
+
+- the complete model;
+- a full trace of the optimization process.
+
+
+## Disjunctions
+
+The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:
+
+- Sequencing decisions, where $A$ ends before $B,$ or $B$ ends before $A.$ 
+- Switching decisions, where a facility is used or not.
+- Alternative selection among a set of pricing policies, for example for alternative energy sources.
+
+The general disjunctive problem is formulated as
+
+$$
+\begin{align}
+\min \quad &  z=f(x) + \sum_{k \in K} c_k & \text{objective}\\
+\text{s.t.} \quad &   r(x) \le 0 & \text{global constraint} \\
+                  &  \underset{j\in J_{k}}{\vee}\left[\begin{array}{c}
+                          Y_{jk}\\
+                          g_{jk}(x)\le 0\\
+                          c_{k}=\gamma_{jk}
+                             \end{array}\right]  & \text{disjunctions} \\
+                  & \underset{j\in J_{k}}{\veebar} Y_{jk} & \text{disjunctions} \\
+                  & 0\le x \le U, \; c_k \in \mathbb{R}, \;  Y_{jk} = \{\text{True, False}\}
+\end{align}$$
+If the Boolean variable is True both the inequalities and the cost equation are enforced; if the Boolean variable is False they are both ignored. 
+
+For sequencing decisions, between two tasks $i$ and $j,$ the disjuction is written as
+$$
+\left[\begin{array}{c}
+            Y_{k}\\
+            s_i + d_i \le s_j\\
+\end{array}\right] \vee
+\left[\begin{array}{c}
+            \neg Y_{k}\\
+            s_j + d_j \le s_i\\
+\end{array}\right] ,
+$$
+where $s_i,$ $d_i$ are the start and duration of task $i.$
+
+The `pyomo` code for the disjunction is written as,
+
+```{.python}
+@model.Disjunction(model.I, model.J) 
+def SequenceIJ(m, i, j):
+    return [ m.start[i] + duration[i] <= m.start[j], 
+             m.start[j] + duration[j] <= m.start[i] ]
+```
+
+
+When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we resort to disjunctive programming based on:
+
+- Big-M formulation.
+- Convex hull formulation.
+
+Consider the disjunction $A \veebar B \veebar C,$ as depicted below. The two possible formulations are:
+
++------------------------+-------------------------+
+| Big-M                  | Convex Hull             |
++========================+=========================+
+| ![](graphics/bigM.svg) | ![](graphics/cvxh.svg)  |
++------------------------+-------------------------+
+| - Looser relaxation    | - Tighter relaxation    |
+| - Smaller problems     | - Bigger problems       |
++------------------------+-------------------------+
+
+The respective code lines in the `pyomo` generalized disjunctive programming `gdp` module, are
+
+```{.python}
+# Big-M
+TransformationFactory('gdp.bigm')
+# Convex Hull
+TransformationFactory('gdp.chull')
+```
+
+::: {.callout-caution}
+The disjunctive formulations will always _increase_ the number of variables and constraints of the optimization problem. Thus, they are usually only profitable for long time horizon problems.
+:::
+
+
