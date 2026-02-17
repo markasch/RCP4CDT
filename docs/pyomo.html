@@ -272,8 +272,10 @@ window.Quarto = {
   <li><a href="#basic-pyomo-linear-programming-example" id="toc-basic-pyomo-linear-programming-example" class="nav-link active" data-scroll-target="#basic-pyomo-linear-programming-example">Basic <code>pyomo</code> Linear Programming Example</a></li>
   <li><a href="#disjunctions" id="toc-disjunctions" class="nav-link" data-scroll-target="#disjunctions">Disjunctions</a>
   <ul class="collapse">
+  <li><a href="#disjunctive-programming-in-pyomo" id="toc-disjunctive-programming-in-pyomo" class="nav-link" data-scroll-target="#disjunctive-programming-in-pyomo">Disjunctive Programming in <code>pyomo</code></a></li>
   <li><a href="#big-m-method" id="toc-big-m-method" class="nav-link" data-scroll-target="#big-m-method">Big-M Method</a></li>
   <li><a href="#gdp-opt" id="toc-gdp-opt" class="nav-link" data-scroll-target="#gdp-opt">GDP OPT</a></li>
+  <li><a href="#tight-formulations" id="toc-tight-formulations" class="nav-link" data-scroll-target="#tight-formulations">Tight Formulations</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -321,7 +323,7 @@ window.Quarto = {
 <li><code>pyomo.environ</code> provides the framework for building the model</li>
 <li><code>SolverFactory</code> allows to call the solver used to solve the optimization problem</li>
 </ul>
-<div id="146589e8" class="cell" data-execution_count="1">
+<div id="a0222cd7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.opt <span class="im">import</span> SolverFactory </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -383,12 +385,14 @@ optimal value = 0.67</code></pre>
             s_j + d_j \le s_i\\
 \end{array}\right] ,
 \]</span> where <span class="math inline">\(s_i,\)</span> <span class="math inline">\(d_i\)</span> are the start and duration of task <span class="math inline">\(i.\)</span></p>
+<section id="disjunctive-programming-in-pyomo" class="level3">
+<h3 class="anchored" data-anchor-id="disjunctive-programming-in-pyomo">Disjunctive Programming in <code>pyomo</code></h3>
 <p>The <code>pyomo</code> code for the disjunction is written as,</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@model.Disjunction</span>(model.I, model.J) </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SequenceIJ(m, i, j):</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [ m.start[i] <span class="op">+</span> duration[i] <span class="op">&lt;=</span> m.start[j], </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>             m.start[j] <span class="op">+</span> duration[j] <span class="op">&lt;=</span> m.start[i] ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we resort to disjunctive programming based on:</p>
+<p>When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we can resort to disjunctive programming based on:</p>
 <ul>
 <li>Big-M formulation.</li>
 <li>Convex hull formulation.</li>
@@ -453,6 +457,7 @@ Note
 <p>For the CDT, in addition to sequencing constraints, the resource constraints must also be satisfied. This is important for jobs that can in theory be executed in parallel, but might in practice have a resource conflict and will need to be executed sequentially.</p>
 </div>
 </div>
+</section>
 <section id="big-m-method" class="level3">
 <h3 class="anchored" data-anchor-id="big-m-method">Big-M Method</h3>
 <p>The big-M method converts the logical disjunction “<span class="math inline">\(i\)</span> before <span class="math inline">\(j\)</span>” OR “<span class="math inline">\(j\)</span> before <span class="math inline">\(i\)</span>” into a system of linear inequalities with binary variables. The formulation is</p>
@@ -464,7 +469,18 @@ Note
 </section>
 <section id="gdp-opt" class="level3">
 <h3 class="anchored" data-anchor-id="gdp-opt">GDP OPT</h3>
-<p>PYOMO includes a generalized disjunctive programming pack, <code>GDP.opt</code>, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above.</p>
+<p><em>Disjunctive programming</em> is useful in certain situations since it is better than “forcing” a given constraint into a MI(N)LP form through complicated tricks.</p>
+<p>PYOMO includes a generalized disjunctive programming pack, <code>GDP.opt</code>, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. The benefit of using a disjunctive programming formulation lies in its ability to preserve and leverage the intrinsic logical framework of the problem at hand, thereby mitigating its combinatorial complexity.</p>
+</section>
+<section id="tight-formulations" class="level3">
+<h3 class="anchored" data-anchor-id="tight-formulations">Tight Formulations</h3>
+<p>Basically all MILP problems are solved by branch-and-bound methods. The performance of a branch-and-bound method can greatly improve by having a <em>tight</em> problem formulation, that is, one where the gap between the feasible region of the original problem and its linear relaxation is small. Such a tight formulation typically leads to better bounds and, therefore, more pruning of subproblems, speeding up computation. The extreme case is to use the convex hull for the formulation.</p>
+<p>Finding a tight formulation for a specific problem is an art that requires experience with mathematical modeling. Some “rules of thumb” here are to</p>
+<ol type="1">
+<li>have as few as possible big-M constraints with the large constants <span class="math inline">\(M,\)</span></li>
+<li>avoid having superfluous decision variables, and</li>
+<li>avoid formulating as inequality a relation that should hold with equality for the optimal solution.</li>
+</ol>
 
 
 </section>

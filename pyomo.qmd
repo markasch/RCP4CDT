@@ -85,6 +85,8 @@ $$
 $$
 where $s_i,$ $d_i$ are the start and duration of task $i.$
 
+### Disjunctive Programming in `pyomo`
+
 The `pyomo` code for the disjunction is written as,
 
 ```{.python}
@@ -95,7 +97,7 @@ def SequenceIJ(m, i, j):
 ```
 
 
-When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we resort to disjunctive programming based on:
+When faced with such a choice among exclusive options, to convert the problem to a MILP formulation we can resort to disjunctive programming based on:
 
 - Big-M formulation.
 - Convex hull formulation.
@@ -145,5 +147,18 @@ where $S_i$ is the starting time, $d_i$ the duration and $M$ is a large enough p
 
 ### GDP OPT 
 
-PYOMO includes a generalized disjunctive programming pack, `GDP.opt`, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. 
+_Disjunctive programming_ is useful in certain situations since it is better than "forcing" a given constraint into a MI(N)LP form through complicated tricks.
 
+PYOMO includes a generalized disjunctive programming pack, `GDP.opt`, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. The benefit of using a disjunctive programming formulation lies in its ability to preserve
+and leverage the intrinsic logical framework of the problem at hand, thereby mitigating its combinatorial complexity.
+
+
+### Tight Formulations
+
+Basically all MILP problems are solved by branch-and-bound methods. The performance of a branch-and-bound method can greatly improve by having a _tight_ problem formulation, that is, one where the gap between the feasible region of the original problem and its linear relaxation is small. Such a tight formulation typically leads to better bounds and, therefore, more pruning of subproblems, speeding up computation. The extreme case is to use the convex hull for the formulation.
+
+Finding a tight formulation for a specific problem is an art that requires experience with mathematical modeling. Some "rules of thumb" here are to 
+
+1. have as few as possible big-M constraints with the large constants $M,$ 
+2. avoid having superfluous decision variables, and 
+3. avoid formulating as inequality a relation that should hold with equality for the optimal solution.
