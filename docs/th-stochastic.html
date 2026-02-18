@@ -223,12 +223,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/disjunct-BigM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 1: Disjunction - Big-M formulation</span></a>
+  <a href="./examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/disjunct-GDP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: Disjunction - GDP formulation</span></a>
+  <a href="./examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: GDPopt Test</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -394,8 +394,8 @@ Figure&nbsp;1.1: A multistage decision process with uncertainty. Uncertain, exog
 </div>
 <p>The most common risk measures are:</p>
 <ol type="1">
-<li>The mean-variance model, <span class="math display">\[ \rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{Var} (Z) . \]</span></li>
-<li>The value-at-risk (VaR), <span class="math display">\[\rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .\]</span></li>
+<li>The mean-variance model, <span class="math display">\[ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . \]</span></li>
+<li>The value-at-risk (VaR), <span class="math display">\[\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .\]</span></li>
 <li>The conditional value-at-risk (CVaR), <span class="math display">\[\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .\]</span></li>
 <li>Exponential risk aversion, <span class="math display">\[\rho(Z) = \inf_{\gamma &gt; 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). \]</span></li>
 </ol>

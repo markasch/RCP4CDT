@@ -141,8 +141,8 @@ A risk measure $\rho$ combines the expected value $\mathrm{E}_z f(x,z)$ with ano
 
 The most common risk measures are:
 
-1. The mean-variance model, $$ \rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{Var} (Z) . $$
-2. The value-at-risk (VaR),   $$\rho(Z) = \mathrm{E}_(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),$$ where $$\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .$$
+1. The mean-variance model, $$ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . $$
+2. The value-at-risk (VaR),   $$\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),$$ where $$\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .$$
 3. The conditional value-at-risk (CVaR),  $$\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),$$ where $$\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .$$
 4. Exponential risk aversion, $$\rho(Z) = \inf_{\gamma > 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). $$
 

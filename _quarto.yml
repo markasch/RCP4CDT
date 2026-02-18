@@ -23,6 +23,7 @@ book:
         - pyomo.qmd
         - examples/01-Disjunctions.ipynb
         - examples/02-Disjunctions-GDPopt.ipynb    
+        - examples/03-OPF_risk.ipynb    
         - CDT.qmd
         - RCPSP.qmd
         - usecases.qmd
