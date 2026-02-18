@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Example 1: Disjunctions - Theory, Examples – Optimal Scheduling for Cross-Facility Workflows</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../examples/02-Disjunctions-GDPopt.html" rel="next">
+<link href="../pyomo.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-68c8bffd90dad8f2b55c52d7b6410dc0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-d661fd49052cdedcb9ca2693aa63deef.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="../examples/01-Disjunctions.html"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../graphics/xwf_logo.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../graphics/xwf_logo.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Optimal Scheduling for Cross-Facility Workflows</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Background and Setting</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Theory</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Theoretical Framework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../th-stochastic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Uncertainty</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Implementation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pyomo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Using PYOMO</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: GDPopt Test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../usecases.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Use-Cases</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#explanation" id="toc-explanation" class="nav-link active" data-scroll-target="#explanation">Explanation</a></li>
+  <li><a href="#disjunction-formulation" id="toc-disjunction-formulation" class="nav-link" data-scroll-target="#disjunction-formulation">Disjunction Formulation</a></li>
+  <li><a href="#disjunctive-problem-formulation" id="toc-disjunctive-problem-formulation" class="nav-link" data-scroll-target="#disjunctive-problem-formulation">Disjunctive Problem Formulation</a></li>
+  <li><a href="#example-1-facility-choice" id="toc-example-1-facility-choice" class="nav-link" data-scroll-target="#example-1-facility-choice">Example 1: Facility choice</a>
+  <ul class="collapse">
+  <li><a href="#define-model-in-pyomo-with-gdp" id="toc-define-model-in-pyomo-with-gdp" class="nav-link" data-scroll-target="#define-model-in-pyomo-with-gdp">Define Model in <code>pyomo</code> with GDP</a></li>
+  <li><a href="#big-m-relaxation-approach" id="toc-big-m-relaxation-approach" class="nav-link" data-scroll-target="#big-m-relaxation-approach">Big-M Relaxation Approach</a></li>
+  <li><a href="#big-m-implementation-in-pyomo" id="toc-big-m-implementation-in-pyomo" class="nav-link" data-scroll-target="#big-m-implementation-in-pyomo">Big-M Implementation in Pyomo</a></li>
+  <li><a href="#convex-hull-approach" id="toc-convex-hull-approach" class="nav-link" data-scroll-target="#convex-hull-approach">Convex hull approach</a></li>
+  </ul></li>
+  <li><a href="#example-2-production-technology-choice" id="toc-example-2-production-technology-choice" class="nav-link" data-scroll-target="#example-2-production-technology-choice">Example 2: Production Technology Choice</a></li>
+  <li><a href="#multi-product-factory-optimization" id="toc-multi-product-factory-optimization" class="nav-link" data-scroll-target="#multi-product-factory-optimization">Multi-product factory optimization</a>
+  <ul class="collapse">
+  <li><a href="#disjunction-technology-choice" id="toc-disjunction-technology-choice" class="nav-link" data-scroll-target="#disjunction-technology-choice">Disjunction: technology choice</a></li>
+  </ul></li>
+  <li><a href="#big-m-implementation" id="toc-big-m-implementation" class="nav-link" data-scroll-target="#big-m-implementation">Big-M implementation</a></li>
+  <li><a href="#disjunctive-programming-implementation" id="toc-disjunctive-programming-implementation" class="nav-link" data-scroll-target="#disjunctive-programming-implementation">Disjunctive programming implementation</a>
+  <ul class="collapse">
+  <li><a href="#alternative-solver" id="toc-alternative-solver" class="nav-link" data-scroll-target="#alternative-solver">Alternative solver</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="../examples/01-Disjunctions.html"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This is an illustrative notebook for disjunctive constraints in <code>pyomo</code>. We cover</p>
+<ul>
+<li>basics of disjunctive logic</li>
+<li>different implementations of disjuctions
+<ul>
+<li>big-M formulation (penalty)</li>
+<li>use of <code>pyomo</code> disjunctive constraint formulation</li>
+</ul></li>
+</ul>
+<hr>
+<section id="explanation" class="level2">
+<h2 class="anchored" data-anchor-id="explanation">Explanation</h2>
+<p>Disjunctions selectively enforce differing sets of constraints, for</p>
+<ul>
+<li>sequencing: <span class="math inline">\(x\)</span> ends before <span class="math inline">\(y,\)</span> or <span class="math inline">\(y\)</span> ends before <span class="math inline">\(x\)</span></li>
+<li>switching: a unit is built/used or not</li>
+<li>alternative selection: select from a set of pricing policies (or cost vs.&nbsp;performance)</li>
+</ul>
+</section>
+<section id="disjunction-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="disjunction-formulation">Disjunction Formulation</h2>
+<p>Following [Grossmann, 2021], the generalized disjunctive program (GDP) has the following formulation.</p>
+<p><span class="math display">\[\begin{equation}
+\lor_{i \in D_{k}}
+\begin{bmatrix}
+Y_{ik}\\
+n_{ik}(x)\leq0\\
+c_{k} = \mu_{ik}
+\end{bmatrix} \ \ \ , \ \ \ \Omega(Y)= \text{True}
+\end{equation}\]</span> where,</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Notation</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\lor\)</span></td>
+<td>The <strong>OR</strong> operator that connects a finite collection of disjunctive clauses</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_{k}\)</span></td>
+<td>The set of disjunctive terms</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Y_{ik}\)</span></td>
+<td>Boolean “indicator variable”</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(h_{ik}(x)\leq 0\)</span></td>
+<td>Constraint enforced when <span class="math inline">\(Y_{ik}\)</span> is true</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_k = \mu_{ik}\)</span></td>
+<td>Parameter values set when indicator variable is true</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\Omega(Y)\)</span></td>
+<td>Additional logical constraints on indicator variables (ensures XOR)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="disjunctive-problem-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="disjunctive-problem-formulation">Disjunctive Problem Formulation</h2>
+<p><span class="math display">\[\begin{equation*}  \tag {01}
+\begin{array}{llr}
+\textrm{min} &amp; f(x)                      &amp; \textrm{Objective Function}    \\
+\textrm{s.t.} &amp;       g(x) \, \leq \, 0  &amp; \textrm{Algebraic Constraints}  \\
+&amp; \bigvee_{i \in D_k} \begin{bmatrix}
+  Y_{ik}  \\
+  r_{ik}(x) \leq 0
+\end{bmatrix}, \, k \in K &amp; \textrm{Disjunctions}
+\\
+&amp; \Omega (Y) = \textrm{True} &amp; \textrm{Logic Propositions} \\
+&amp; L \leq x \leq U, \, x  \in \mathbb R^n,   &amp; \textrm{Continuous Variables} \\
+&amp; Y_{ik}   \in  \{\textrm{True, False} \}   &amp; \textrm{Boolean Variables}
+\end{array}
+\end{equation*}\]</span></p>
+<p>where,</p>
+<ul>
+<li><span class="math inline">\(f : \mathbb R^n \rightarrow \mathbb R\)</span> is a function, <span class="math inline">\(x\)</span> is a vector of continuous variables with bounds <span class="math inline">\(L\)</span> and <span class="math inline">\(U\)</span></li>
+<li><span class="math inline">\(g : \mathbb R^n \rightarrow \mathbb R^l\)</span> represents the set of global constraints.</li>
+<li>Each disjunction <span class="math inline">\(k \in K\)</span> is composed of a number of terms <span class="math inline">\(i \in D_k\)</span> that are connected by the Boolean operator OR (<span class="math inline">\(\vee\)</span> ).</li>
+<li>Each term <span class="math inline">\(i \in D_k\)</span> consists of a Boolean variable <span class="math inline">\(Y_{ik}\)</span> and a set of inequalities <span class="math inline">\(r_{ik}(x) \leq 0,\)</span> where <span class="math inline">\(r_{ik} : \mathbb R^n \rightarrow \mathbb R^j.\)</span> If <span class="math inline">\(Y_{ik}\)</span> is true, then <span class="math inline">\(r_{ik}(x) \leq 0\)</span> is enforced, otherwise these constraints are ignored.</li>
+<li><span class="math inline">\(\Omega (Y) = \textrm{True}\)</span> are logic propositions for the Boolean variables <span class="math inline">\(Y_{ik},\)</span> where for each clause <span class="math inline">\(t \in {1, \dots, T},\)</span> the set <span class="math inline">\(R_t\)</span> is the subset of Boolean variables that are non-negated and <span class="math inline">\(Q_t\)</span> is the subset of Boolean variables that are negated.</li>
+</ul>
+<p>N.B.: we assume that each disjunction is an exclusive-or, so that for each <span class="math inline">\(k\)</span> exactly one variable <span class="math inline">\(Y_{ik}\)</span> is true. Put another way, we assume the logic constraints <span class="math inline">\(\underline{\vee}_{i \in D_k} Y_{ik}\)</span> are contained in <span class="math inline">\(\Omega (Y) = \textrm{True}.\)</span></p>
+</section>
+<section id="example-1-facility-choice" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-facility-choice">Example 1: Facility choice</h2>
+<p>This (trivial) disjunction example involves selecting between two facilities to minimize the power <span class="math inline">\(P:\)</span></p>
+<ul>
+<li>If facility 1 is selected, then power <span class="math inline">\(P\)</span> is between <span class="math inline">\(5\)</span> and <span class="math inline">\(10\)</span> units.</li>
+<li>If facility 2 is selected, then power <span class="math inline">\(P\)</span> is between <span class="math inline">\(20\)</span> and <span class="math inline">\(30\)</span> units.</li>
+</ul>
+<p><strong>Linear Disjunction Form:</strong> <span class="math display">\[
+\begin{equation}
+\lor_{i \in D}
+\begin{bmatrix}
+A_{i}x \leq b_{i}(x)
+\end{bmatrix}
+\end{equation}\]</span></p>
+<p><strong>Applied to the Facility-choice Problem:</strong> <span class="math display">\[
+\begin{equation}
+  \begin{bmatrix}
+    y_1\\
+    P \leq 10\\
+    -P \leq -5
+  \end{bmatrix} \lor
+  \begin{bmatrix}
+    y_2\\
+    P \leq 30\\
+    -P \leq -20
+  \end{bmatrix}
+\end{equation}\]</span></p>
+<p>where the Boolean (binary) variable <span class="math inline">\(y_{1}\)</span> represents facility 1 and <span class="math inline">\(y_{2}\)</span> represents facility 2.</p>
+<section id="define-model-in-pyomo-with-gdp" class="level3">
+<h3 class="anchored" data-anchor-id="define-model-in-pyomo-with-gdp">Define Model in <code>pyomo</code> with GDP</h3>
+<p>Use the <code>disjunction</code>constuct of <code>pyomo</code> to define the facility-choice problem.</p>
+<div id="dfe35828-0bd9-47e2-83b3-506eddf2d0d0" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_model():</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Build the facility problem model.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Return:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    model: Pyomo model</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Model</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel(name<span class="op">=</span><span class="st">"Selecting a facility"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Sets</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialized for facility 1 (1) and facility 2 (2)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    model.facilities <span class="op">=</span> pyo.Set(initialize<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>])</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Parameters</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialized with a dictionary where the keys are 1 and 2 (the facilities)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># for the minimum and maximum power values</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    model.min_power <span class="op">=</span> pyo.Param(model.facilities,initialize<span class="op">=</span>{<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">2</span>:<span class="dv">20</span>}) </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    model.max_power <span class="op">=</span> pyo.Param(model.facilities,initialize<span class="op">=</span>{<span class="dv">1</span>:<span class="dv">10</span>,<span class="dv">2</span>:<span class="dv">30</span>})</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Variables</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Facility power bounded between the lower bound (5) and upper bound (30)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    model.P <span class="op">=</span> pyo.Var(bounds<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">30</span>),doc<span class="op">=</span><span class="st">'Facilty power'</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Adding an objective for the example</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">@model.Objective</span>()</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> objective(model):</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> model.P </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Disjunctions</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Objective is bounded by the maximum and minimum power values</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">@model.Disjunction</span>(<span class="co">#xor=True,</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        model.facilities,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        doc<span class="op">=</span><span class="st">"Power bounds for different facility selections"</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> power_bounds(m, r):</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>            m.P <span class="op">&lt;=</span> m.max_power[r],</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>            m.P <span class="op">&gt;=</span> m.min_power[r],</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="big-m-relaxation-approach" class="level3">
+<h3 class="anchored" data-anchor-id="big-m-relaxation-approach">Big-M Relaxation Approach</h3>
+<p>We use “Big-M” constraints to convert the linear disjunctions into mixed-integer constraints to represent logic with <em>continuous</em> variables. The Big-M reformulation results in a smaller transformed model, avoiding the need to add extra variables; however, it yields a looser continuous relaxation. By default, the Big-M transformation will estimate reasonably tight M values if variables are bounded.</p>
+<p>The basic idea in the big-M constraints is that for <span class="math inline">\(y_j = 1,\)</span> the inequality holds true, i.e., <span class="math inline">\(A_j x \le  b_j.\)</span> In contrast, when <span class="math inline">\(y_j = 0,\)</span> the inequality becomes redundant for a sufficiently large parameter because then <span class="math inline">\(A_j x \le b_j + M_j.\)</span> Clearly the value of <span class="math inline">\(M_j\)</span> has to be carefully chosen. A large value will help to render the linear inequality to be redundant. On the other hand, a large value will also cause the LP relaxation to be weak.</p>
+<p><strong>General Notation:</strong></p>
+<p><span class="math display">\[\begin{equation}
+A_{i}(x) \leq b_{i} + M_{i}(1-y_{i})  \ , \  \forall i \in D
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+\sum_{i \in D} y_{i} = 1
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+y_{i} \in \{0,1\} \ , \  \forall i \in D
+\end{equation}\]</span></p>
+<p><strong>Applied to the Facility Problem:</strong> <span class="math display">\[
+\begin{align}
+  P &amp;\leq 10 + M_{1}(1-y_{1})\\
+  -P &amp;\leq -5 + M_{1}(1-y_{1})\\
+  P &amp;\leq 30 + M_{2}(1-y_{2})\\
+  -P &amp;\leq -20 + M_{2}(1-y_{2})\\
+  &amp;y_{1} + y_{2} = 1
+\end{align}\]</span></p>
+<p>When the <span class="math inline">\(y\)</span>’s are considered continuous variables, weak bounds for the objective function are formed for large values such as: <span class="math display">\[
+M_{1} = 100 \ \ \text{and} \ \ M_{2} = 100\]</span></p>
+<p><strong>Main Idea:</strong> <br> Considering the special case where <span class="math inline">\(h_{i}(x) = A_{i}x - b_{i} \leq 0,\)</span> <span class="math inline">\(M_{i}\)</span> is sufficiently large to relax <span class="math inline">\(h_{i}(x) \leq 0\)</span> when <span class="math inline">\(y_{i}=0\)</span></p>
+<p><strong>Key Takeaways:</strong></p>
+<ul>
+<li>If <span class="math inline">\(M\)</span> is too large, we can get a “weak relaxation” because integer programming algorithms need more iterations.</li>
+<li>If <span class="math inline">\(M\)</span> is too small, we can get unintended bounds.</li>
+</ul>
+<p>Big-M is best to use if the problem size is small.</p>
+</section>
+<section id="big-m-implementation-in-pyomo" class="level3">
+<h3 class="anchored" data-anchor-id="big-m-implementation-in-pyomo">Big-M Implementation in Pyomo</h3>
+<p>First create and print the model.</p>
+<div id="a4012b2e-b2d0-4748-942f-4f5708422eae" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the model</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> create_model()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing the model</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>model.pprint()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 Set Declarations
+    facilities : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {1, 2}
+
+2 Param Declarations
+    max_power : Size=2, Index=facilities, Domain=Any, Default=None, Mutable=False
+        Key : Value
+          1 :    10
+          2 :    30
+    min_power : Size=2, Index=facilities, Domain=Any, Default=None, Mutable=False
+        Key : Value
+          1 :     5
+          2 :    20
+
+1 Var Declarations
+    P : Facilty power
+        Size=1, Index=None
+        Key  : Lower : Value : Upper : Fixed : Stale : Domain
+        None :     5 :  None :    30 : False :  True :  Reals
+
+1 Objective Declarations
+    objective : Size=1, Index=None, Active=True
+        Key  : Active : Sense    : Expression
+        None :   True : minimize :          P
+
+1 Disjunct Declarations
+    power_bounds_disjuncts : Size=4, Index=Any, Active=True
+        power_bounds_disjuncts[0] : Active=True
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  -Inf :    P :  10.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=True
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[1] : Active=True
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :   5.0 :    P :  +Inf :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=True
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[2] : Active=True
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  -Inf :    P :  30.0 :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=True
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[3] : Active=True
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  20.0 :    P :  +Inf :   True
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=True
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+
+1 Disjunction Declarations
+    power_bounds : Power bounds for different facility selections
+        Size=2, Index=facilities, Active=True
+        Key : Disjuncts                                                  : Active : XOR
+          1 : ['power_bounds_disjuncts[0]', 'power_bounds_disjuncts[1]'] :   True : True
+          2 : ['power_bounds_disjuncts[2]', 'power_bounds_disjuncts[3]'] :   True : True
+
+7 Declarations: facilities min_power max_power P objective power_bounds power_bounds_disjuncts</code></pre>
+</div>
+</div>
+<div id="7c1185c3-0e2f-4f2a-9544-e107fe7fcfbe" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying Big-M relaxation to the model</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pyo.TransformationFactory(<span class="st">'gdp.bigm'</span>).apply_to(model)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>model.pprint()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 Set Declarations
+    facilities : Size=1, Index=None, Ordered=Insertion
+        Key  : Dimen : Domain : Size : Members
+        None :     1 :    Any :    2 : {1, 2}
+
+2 Param Declarations
+    max_power : Size=2, Index=facilities, Domain=Any, Default=None, Mutable=False
+        Key : Value
+          1 :    10
+          2 :    30
+    min_power : Size=2, Index=facilities, Domain=Any, Default=None, Mutable=False
+        Key : Value
+          1 :     5
+          2 :    20
+
+1 Var Declarations
+    P : Facilty power
+        Size=1, Index=None
+        Key  : Lower : Value : Upper : Fixed : Stale : Domain
+        None :     5 :  None :    30 : False :  True :  Reals
+
+1 Objective Declarations
+    objective : Size=1, Index=None, Active=True
+        Key  : Active : Sense    : Expression
+        None :   True : minimize :          P
+
+1 Block Declarations
+    _pyomo_gdp_bigm_reformulation : Size=1, Index=None, Active=True
+        1 Constraint Declarations
+            power_bounds_xor : Size=2, Index=Any, Active=True
+                Key : Lower : Body                                                                                            : Upper : Active
+                  1 :   1.0 : power_bounds_disjuncts[0].binary_indicator_var + power_bounds_disjuncts[1].binary_indicator_var :   1.0 :   True
+                  2 :   1.0 : power_bounds_disjuncts[2].binary_indicator_var + power_bounds_disjuncts[3].binary_indicator_var :   1.0 :   True
+
+        1 Block Declarations
+            relaxedDisjuncts : Size=4, Index=NonNegativeIntegers, Active=True
+                _pyomo_gdp_bigm_reformulation.relaxedDisjuncts[0] : Active=True
+                    1 Constraint Declarations
+                        transformedConstraints : Size=1, Index=Any, Active=True
+                            Key                          : Lower : Body                                                          : Upper : Active
+                            ('constraint[1]_0', 1, 'ub') :  -Inf : P - 20.0*(1 - power_bounds_disjuncts[0].binary_indicator_var) :  10.0 :   True
+
+                    1 Block Declarations
+                        localVarReferences : Size=1, Index=None, Active=True
+                            1 Var Declarations
+                                binary_indicator_var : Size=1, Index=UnindexedComponent_ReferenceSet, ReferenceTo=power_bounds_disjuncts[0].binary_indicator_var
+                                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                                    None :     0 :  None :     1 : False :  True : Binary
+
+                            1 Declarations: binary_indicator_var
+
+                    2 Declarations: transformedConstraints localVarReferences
+                _pyomo_gdp_bigm_reformulation.relaxedDisjuncts[1] : Active=True
+                    1 Constraint Declarations
+                        transformedConstraints : Size=1, Index=Any, Active=True
+                            Key                          : Lower : Body                                                         : Upper : Active
+                            ('constraint[1]_0', 1, 'lb') :   5.0 : P - 0.0*(1 - power_bounds_disjuncts[1].binary_indicator_var) :  +Inf :   True
+
+                    1 Block Declarations
+                        localVarReferences : Size=1, Index=None, Active=True
+                            1 Var Declarations
+                                binary_indicator_var : Size=1, Index=UnindexedComponent_ReferenceSet, ReferenceTo=power_bounds_disjuncts[1].binary_indicator_var
+                                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                                    None :     0 :  None :     1 : False :  True : Binary
+
+                            1 Declarations: binary_indicator_var
+
+                    2 Declarations: transformedConstraints localVarReferences
+                _pyomo_gdp_bigm_reformulation.relaxedDisjuncts[2] : Active=True
+                    1 Constraint Declarations
+                        transformedConstraints : Size=1, Index=Any, Active=True
+                            Key                          : Lower : Body                                                         : Upper : Active
+                            ('constraint[1]_0', 1, 'ub') :  -Inf : P - 0.0*(1 - power_bounds_disjuncts[2].binary_indicator_var) :  30.0 :   True
+
+                    1 Block Declarations
+                        localVarReferences : Size=1, Index=None, Active=True
+                            1 Var Declarations
+                                binary_indicator_var : Size=1, Index=UnindexedComponent_ReferenceSet, ReferenceTo=power_bounds_disjuncts[2].binary_indicator_var
+                                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                                    None :     0 :  None :     1 : False :  True : Binary
+
+                            1 Declarations: binary_indicator_var
+
+                    2 Declarations: transformedConstraints localVarReferences
+                _pyomo_gdp_bigm_reformulation.relaxedDisjuncts[3] : Active=True
+                    1 Constraint Declarations
+                        transformedConstraints : Size=1, Index=Any, Active=True
+                            Key                          : Lower : Body                                                          : Upper : Active
+                            ('constraint[1]_0', 1, 'lb') :  20.0 : P + 15.0*(1 - power_bounds_disjuncts[3].binary_indicator_var) :  +Inf :   True
+
+                    1 Block Declarations
+                        localVarReferences : Size=1, Index=None, Active=True
+                            1 Var Declarations
+                                binary_indicator_var : Size=1, Index=UnindexedComponent_ReferenceSet, ReferenceTo=power_bounds_disjuncts[3].binary_indicator_var
+                                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                                    None :     0 :  None :     1 : False :  True : Binary
+
+                            1 Declarations: binary_indicator_var
+
+                    2 Declarations: transformedConstraints localVarReferences
+
+        2 Declarations: relaxedDisjuncts power_bounds_xor
+
+1 Disjunct Declarations
+    power_bounds_disjuncts : Size=4, Index=Any, Active=False
+        power_bounds_disjuncts[0] : Active=False
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  -Inf :    P :  10.0 :  False
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=False
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[1] : Active=False
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :   5.0 :    P :  +Inf :  False
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=False
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[2] : Active=False
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  -Inf :    P :  30.0 :  False
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=False
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+        power_bounds_disjuncts[3] : Active=False
+            1 Var Declarations
+                binary_indicator_var : Size=1, Index=None
+                    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+                    None :     0 :  None :     1 : False :  True : Binary
+
+            1 Constraint Declarations
+                constraint : Size=1, Index={1}, Active=True
+                    Key : Lower : Body : Upper : Active
+                      1 :  20.0 :    P :  +Inf :  False
+
+            1 BooleanVar Declarations
+                indicator_var : Size=1, Index=None
+                    Key  : Value : Fixed : Stale
+                    None :  None : False :  True
+
+            1 LogicalConstraint Declarations
+                propositions : Size=0, Index={}, Active=False
+                    Key : Body : Active
+
+            4 Declarations: indicator_var binary_indicator_var constraint propositions
+
+1 Disjunction Declarations
+    power_bounds : Power bounds for different facility selections
+        Size=2, Index=facilities, Active=False
+        Key : Disjuncts                                                  : Active : XOR
+          1 : ['power_bounds_disjuncts[0]', 'power_bounds_disjuncts[1]'] :  False : True
+          2 : ['power_bounds_disjuncts[2]', 'power_bounds_disjuncts[3]'] :  False : True
+
+8 Declarations: facilities min_power max_power P objective power_bounds power_bounds_disjuncts _pyomo_gdp_bigm_reformulation</code></pre>
+</div>
+</div>
+<div id="38ffaf90-165e-4de1-8067-40816f442a58" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve and print the solution</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pyo.SolverFactory(<span class="st">'cbc'</span>).solve(model, tee<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>model.P.display()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Welcome to the CBC MILP Solver 
+Version: 2.10.12 
+Build Date: Mar  5 2025 
+
+command line - /opt/miniconda3/envs/exa-atow/bin/cbc -printingOptions all -import /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmpu2hntyxq.pyomo.lp -stat=1 -solve -solu /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmpu2hntyxq.pyomo.soln (default strategy 1)
+Option for printingOptions changed from normal to all
+Presolve 0 (-6) rows, 0 (-5) columns and 0 (-10) elements
+Statistics for presolved model
+Original problem has 4 integers (4 of which binary)
+
+
+Problem has 0 rows, 0 columns (0 with objective) and 0 elements
+Column breakdown:
+0 of type 0.0-&gt;inf, 0 of type 0.0-&gt;up, 0 of type lo-&gt;inf, 
+0 of type lo-&gt;up, 0 of type free, 0 of type fixed, 
+0 of type -inf-&gt;0.0, 0 of type -inf-&gt;up, 0 of type 0.0-&gt;1.0 
+Row breakdown:
+0 of type E 0.0, 0 of type E 1.0, 0 of type E -1.0, 
+0 of type E other, 0 of type G 0.0, 0 of type G 1.0, 
+0 of type G other, 0 of type L 0.0, 0 of type L 1.0, 
+0 of type L other, 0 of type Range 0.0-&gt;1.0, 0 of type Range other, 
+0 of type Free 
+Continuous objective value is 5 - 0.00 seconds
+Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
+Cbc3007W No integer variables - nothing to do
+Cuts at root node changed objective from 5 to -1.79769e+308
+Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                5.00000000
+Enumerated nodes:               0
+Total iterations:               0
+Time (CPU seconds):             0.00
+Time (Wallclock seconds):       0.00
+
+Total time (CPU seconds):       0.00   (Wallclock seconds):       0.01
+
+P : Facilty power
+    Size=1, Index=None
+    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+    None :     5 :   5.0 :    30 : False : False :  Reals</code></pre>
+</div>
+</div>
+</section>
+<section id="convex-hull-approach" class="level3">
+<h3 class="anchored" data-anchor-id="convex-hull-approach">Convex hull approach</h3>
+<p>Convex hull can be used if we do not want to implement Big-M parameters. This approach requires separating the continuous variables into its components.</p>
+<p><strong>General Notation:</strong></p>
+<p><span class="math display">\[
+\begin{equation}
+x = \sum_{i \in D} z_{i}
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation}
+A_{i} z_{i} \leq b_{i}y_{i}  \ , \ \forall i \in D
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation}
+\sum_{i \in D} y_{i} = 1
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation}
+0 \leq z_{i} \leq Uy_{i}  \ , \ \forall i \in D
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation}
+y_{i} = \{0,1\} \ , \ \forall i \in D
+\end{equation}
+\]</span></p>
+<p>where <span class="math inline">\(z_{i}\)</span> are continuous variables separated into as many new variables as there are terms for the disjunctions.</p>
+<p><strong>Applied to the Facility Problem:</strong></p>
+<p><span class="math display">\[
+\begin{align}
+  P &amp;= P_{1} + P_{2} \\
+  P_{1} &amp;\leq 10y_{1}\\
+  P_{2} &amp;\leq 30y_{2} \\
+  -P_{1} &amp;\leq -5y_{1}\\
+  -P_{2} &amp;\leq -20y_{2}\\
+  &amp;y_{1} + y_{2} = 1
+\end{align}\]</span></p>
+<p><strong>Key Takeaways:</strong></p>
+<p>(+) Constraints do not require Big-M parameters which produce a tight linear programming relaxation. <br> (–) A larger number of variables and constraints is required.</p>
+<p>Convex hull is better to use than Big-M if the problem is large.</p>
+<div id="f7a30400-4ecb-4302-be55-ab97c09d92c1" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the model</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> create_model()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply convex hull relaxation to the model</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pyo.TransformationFactory(<span class="st">'gdp.hull'</span>).apply_to(model)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve and print the solution</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>pyo.SolverFactory(<span class="st">'cbc'</span>).solve(model, tee<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>model.P.display()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Welcome to the CBC MILP Solver 
+Version: 2.10.12 
+Build Date: Mar  5 2025 
+
+command line - /opt/miniconda3/envs/exa-atow/bin/cbc -printingOptions all -import /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmp1bjx2j8r.pyomo.lp -stat=1 -solve -solu /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmp1bjx2j8r.pyomo.soln (default strategy 1)
+Option for printingOptions changed from normal to all
+Presolve 10 (-6) rows, 5 (-4) columns and 24 (-10) elements
+Statistics for presolved model
+Original problem has 4 integers (4 of which binary)
+Presolved problem has 2 integers (2 of which binary)
+==== 4 zero objective 2 different
+4 variables have objective of 0
+1 variables have objective of 1
+==== absolute objective values 2 different
+4 variables have objective of 0
+1 variables have objective of 1
+==== for integers 2 zero objective 1 different
+2 variables have objective of 0
+==== for integers absolute objective values 1 different
+2 variables have objective of 0
+===== end objective counts
+
+
+Problem has 10 rows, 5 columns (1 with objective) and 24 elements
+Column breakdown:
+0 of type 0.0-&gt;inf, 2 of type 0.0-&gt;up, 0 of type lo-&gt;inf, 
+1 of type lo-&gt;up, 0 of type free, 0 of type fixed, 
+0 of type -inf-&gt;0.0, 0 of type -inf-&gt;up, 2 of type 0.0-&gt;1.0 
+Row breakdown:
+0 of type E 0.0, 0 of type E 1.0, 0 of type E -1.0, 
+0 of type E other, 0 of type G 0.0, 0 of type G 1.0, 
+0 of type G other, 5 of type L 0.0, 0 of type L 1.0, 
+5 of type L other, 0 of type Range 0.0-&gt;1.0, 0 of type Range other, 
+0 of type Free 
+Continuous objective value is 5 - 0.00 seconds
+Cgl0003I 0 fixed, 0 tightened bounds, 1 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 1 strengthened rows, 0 substitutions
+Cgl0004I processed model has 8 rows, 5 columns (2 integer (2 of which binary)) and 21 elements
+Cbc0038I Initial state - 0 integers unsatisfied sum - 0
+Cbc0038I Solution found of 5
+Cbc0038I Relaxing continuous gives 5
+Cbc0038I Before mini branch and bound, 2 integers at bound fixed and 3 continuous
+Cbc0038I Mini branch and bound did not improve solution (0.00 seconds)
+Cbc0038I After 0.00 seconds - Feasibility pump exiting with objective of 5 - took 0.00 seconds
+Cbc0012I Integer solution of 5 found by feasibility pump after 0 iterations and 0 nodes (0.00 seconds)
+Cbc0001I Search completed - best objective 5, took 0 iterations and 0 nodes (0.00 seconds)
+Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
+Cuts at root node changed objective from 5 to 5
+Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                5.00000000
+Enumerated nodes:               0
+Total iterations:               0
+Time (CPU seconds):             0.00
+Time (Wallclock seconds):       0.00
+
+Total time (CPU seconds):       0.00   (Wallclock seconds):       0.01
+
+P : Facilty power
+    Size=1, Index=None
+    Key  : Lower : Value : Upper : Fixed : Stale : Domain
+    None :     5 :   5.0 :    30 : False : False :  Reals</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="example-2-production-technology-choice" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-production-technology-choice">Example 2: Production Technology Choice</h2>
+<p>Suppose we have a choice between 2 technologies for production:</p>
+<ul>
+<li>Technology 1: more time, less expensive.</li>
+<li>Technology 2: less time, more expensive.</li>
+</ul>
+</section>
+<section id="multi-product-factory-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="multi-product-factory-optimization">Multi-product factory optimization</h2>
+<p>A small production facility produces two products, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. With current technology <span class="math inline">\(\alpha\)</span>, the facility is subject to the following conditions and constraints:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Product</th>
+<th>labor A</th>
+<th>labor B</th>
+<th>material</th>
+<th>sales price</th>
+<th>profit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>X</td>
+<td>1h</td>
+<td>2h</td>
+<td>100€</td>
+<td>270€</td>
+<td>40€</td>
+</tr>
+<tr class="even">
+<td>Y</td>
+<td>1h</td>
+<td>1h</td>
+<td>90€</td>
+<td>210€</td>
+<td>30€</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>Product <span class="math inline">\(X\)</span> requires 1 hour of labor A, 2 hours of labor B, and 100€ of raw material. Product <span class="math inline">\(X\)</span> sells for 270€ per unit. The daily demand is limited to 40 units.</p></li>
+<li><p>Product <span class="math inline">\(Y\)</span> requires 1 hour of labor A, 1 hour of labor B, and 90€ of raw material. Product <span class="math inline">\(Y\)</span> sells for 210€ per unit with unlimited demand.</p></li>
+<li><p>There are 80 hours per day of labor A available at a cost of 50 €/hour, and there are 100 hours per day of labor B available at a cost of 40 €/hour.</p></li>
+</ul>
+<p>Using the given data we see that the net profit for each unit of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is <span class="math display">\[
+P_X = 270 - (1 \cdot 50 + 2 \cdot 40) - 100  = 40\]</span> and <span class="math display">\[
+P_Y = 210 - (1 \cdot 50 + 1 \cdot 40 )- 90  = 30\]</span> respectively. The optimal product strategy is the solution of a linear optimization problem,</p>
+<p><span class="math display">\[
+\begin{align*}
+\max \quad &amp; 40 x + 30 y\\
+\text{s.t.} \quad
+&amp; x  \leq 40 &amp; \text{(demand)}\\
+&amp; x + y  \leq 80 &amp; \text{(labor A)} \\
+&amp; 2 x + y  \leq 100 &amp; \text{(labor B)}\\
+&amp; x, y \geq 0.
+\end{align*}
+\]</span></p>
+<div id="a5003689-98e1-4046-a936-9bc4e775c6ee" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> <span class="st">'appsi_highs'</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>SOLVER <span class="op">=</span> pyo.SolverFactory(solver)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Multi-Product Factory"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>m.production_x <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>m.production_y <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Objective</span>(sense<span class="op">=</span>pyo.maximize)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maximize_profit(m):</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">40</span> <span class="op">*</span> m.production_x <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> m.production_y</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand(m):</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.production_x <span class="op">&lt;=</span> <span class="dv">40</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborA(m):</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.production_x <span class="op">+</span> m.production_y <span class="op">&lt;=</span> <span class="dv">80</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborB(m):</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> m.production_x <span class="op">+</span> m.production_y <span class="op">&lt;=</span> <span class="dv">100</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>SOLVER.solve(m)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Profit = $</span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.maximize_profit)<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production X = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.production_x)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production Y = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.production_y)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Profit = $2600.00
+Production X = 20.0
+Production Y = 60.0</code></pre>
+</div>
+</div>
+<section id="disjunction-technology-choice" class="level3">
+<h3 class="anchored" data-anchor-id="disjunction-technology-choice">Disjunction: technology choice</h3>
+<p>Suppose a new technology <span class="math inline">\(\beta\)</span> has been developed for labor B, with the potential to cut costs by reducing the time required to finish product <span class="math inline">\(X\)</span> from <span class="math inline">\(2.0\)</span> to <span class="math inline">\(1.5\)</span> hours, but requires more highly skilled labor with a higher unit cost of <span class="math inline">\(50\)</span>€ per hour.</p>
+<p>The net profit for unit of product <span class="math inline">\(X\)</span></p>
+<ul>
+<li>with technology <span class="math inline">\(\alpha\)</span> is <span class="math inline">\(270 - 100 - 50 - 2 \cdot 40 = 40\)</span>€,</li>
+<li>while with technology <span class="math inline">\(\beta\)</span> is equal to <span class="math inline">\(270 - 100 - 50 - 1.5 \cdot 50 = 45\)</span>€.</li>
+</ul>
+<p>We need to assess whether the new technology is beneficial, that is, whether adopting it would lead to higher profits. The decision here is whether to use technology <span class="math inline">\(\alpha\)</span> or <span class="math inline">\(\beta\)</span>.</p>
+<p>In this situation we have an `either-or’ structure for both the objective and for Labor B constraint:</p>
+<p><span class="math display">\[
+\underbrace{p = 40x + 30y, \ 2 x + y \leq 100}_{\text{$\alpha$ technology}} \quad \text{ or }  \quad \underbrace{p = 50x + 30y, \ 1.5 x + y \leq 100}_{\text{$\beta$ technology}}.
+\]</span></p>
+<p>We use two techniques for embedding disjunctions into mixed-integer linear optimization problems:</p>
+<ol type="1">
+<li>Big-M</li>
+<li>Convex hull</li>
+</ol>
+</section>
+</section>
+<section id="big-m-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="big-m-implementation">Big-M implementation</h2>
+<p>The first approach is using the “big-M” technique introduces a single <em>binary</em> decision variable <span class="math inline">\(z\)</span> associated with choosing technology <span class="math inline">\(\alpha\)</span> (<span class="math inline">\(z=0\)</span>) or technology <span class="math inline">\(\beta\)</span> (<span class="math inline">\(z=1\)</span>). Using MILP, we can formulate this problem as follows:</p>
+<p><span class="math display">\[
+\begin{align*}
+    \max \quad &amp; \text{profit}\\
+    \text{s.t.} \quad
+    &amp; x  \leq 40 &amp; \text{(demand)}\\
+    &amp; x + y  \leq 80 &amp; \text{(labor A)} \\
+    &amp; \text{profit} \leq 40x + 30y + M z &amp; \text{(profit with technology $\alpha$)} \\
+    &amp; \text{profit} \leq 45x + 30y + M (1 - z) &amp; \text{(profit with technology $\beta$)}\\
+    &amp; 2 x + y \leq 100  + M z &amp; \text{(labor B with technology $\alpha$)} \\
+    &amp; 1.5 x + y \leq 100 + M (1 - z) &amp; \text{(labor B with technology $\beta$)} \\
+    &amp; z \in \mathbb{B} \\
+    &amp; x, y \geq 0.
+\end{align*}
+\]</span></p>
+<p>where the variable <span class="math inline">\(z \in \{ 0, 1\}\)</span> “activates” the constraints related to the old or new technology, respectively, and <span class="math inline">\(M\)</span> is a large enough constant. It can be implemented in Pyomo as follows.</p>
+<div id="d66a6668-ec31-48d3-b45d-485133997364" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Multi-Product Factory - MILP formulation"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>m.profit <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>m.production_x <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>m.production_y <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>m.z <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.Binary)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Objective</span>(sense<span class="op">=</span>pyo.maximize)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maximize_profit(m):</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.profit</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> profit_constr_1(m):</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.profit <span class="op">&lt;=</span> <span class="dv">40</span> <span class="op">*</span> m.production_x <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> m.production_y <span class="op">+</span> M <span class="op">*</span> m.z</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> profit_constr_2(m):</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.profit <span class="op">&lt;=</span> <span class="dv">45</span> <span class="op">*</span> m.production_x <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> m.production_y <span class="op">+</span> M <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> m.z)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#return m.profit &lt;= 30 * m.production_x + 30 * m.production_y + M * (1 - m.z)</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand(m):</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.production_x <span class="op">&lt;=</span> <span class="dv">40</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborA(m):</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.production_x <span class="op">+</span> m.production_y <span class="op">&lt;=</span> <span class="dv">80</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborB_1(m):</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> m.production_x <span class="op">+</span> m.production_y <span class="op">&lt;=</span> <span class="dv">100</span> <span class="op">+</span> M <span class="op">*</span> m.z</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborB_2(m):</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1.5</span> <span class="op">*</span> m.production_x <span class="op">+</span> m.production_y <span class="op">&lt;=</span> <span class="dv">100</span> <span class="op">+</span> M <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> m.z)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>SOLVER.solve(m, tee<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Profit = $</span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.maximize_profit)<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production X = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.production_x)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production Y = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.production_y)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running HiGHS 1.10.0 (git hash: fd86653): Copyright (c) 2025 HiGHS under MIT licence terms
+MIP  has 6 rows; 4 cols; 17 nonzeros; 1 integer variables (1 binary)
+Coefficient ranges:
+  Matrix [1e+00, 1e+04]
+  Cost   [1e+00, 1e+00]
+  Bound  [1e+00, 1e+00]
+  RHS    [4e+01, 1e+04]
+Presolving model
+5 rows, 4 cols, 16 nonzeros  0s
+5 rows, 4 cols, 16 nonzeros  0s
+
+Solving MIP model with:
+   5 rows
+   4 cols (1 binary, 0 integer, 0 implied int., 3 continuous)
+   16 nonzeros
+
+Src: B =&gt; Branching; C =&gt; Central rounding; F =&gt; Feasibility pump; H =&gt; Heuristic; L =&gt; Sub-MIP;
+     P =&gt; Empty MIP; R =&gt; Randomized rounding; S =&gt; Solve LP; T =&gt; Evaluate node; U =&gt; Unbounded;
+     z =&gt; Trivial zero; l =&gt; Trivial lower; u =&gt; Trivial upper; p =&gt; Trivial point; X =&gt; User solution
+
+        Nodes      |    B&amp;B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
+Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
+
+         0       0         0   0.00%   4200            -inf                 inf        0      0      0         0     0.0s
+ R       0       0         0   0.00%   4200            2600              61.54%        0      0      0         2     0.0s
+ C       0       0         0   0.00%   3000            3000               0.00%        6      2      0         8     0.0s
+ T       0       0         0   0.00%   3000            3000               0.00%        6      2      0         8     0.0s
+         1       0         1 100.00%   3000            3000               0.00%        6      2      0         8     0.0s
+
+Solving report
+  Status            Optimal
+  Primal bound      3000
+  Dual bound        3000
+  Gap               0% (tolerance: 0.01%)
+  P-D integral      0.000290254989245
+  Solution status   feasible
+                    3000 (objective)
+                    0 (bound viol.)
+                    8.881784197e-16 (int. viol.)
+                    0 (row viol.)
+  Timing            0.00 (total)
+                    0.00 (presolve)
+                    0.00 (solve)
+                    0.00 (postsolve)
+  Max sub-MIP depth 0
+  Nodes             1
+  Repair LPs        0 (0 feasible; 0 iterations)
+  LP iterations     8 (total)
+                    0 (strong br.)
+                    6 (separation)
+                    0 (heuristics)
+Profit = $3000.00
+Production X = 40.0
+Production Y = 40.0</code></pre>
+</div>
+</div>
+</section>
+<section id="disjunctive-programming-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="disjunctive-programming-implementation">Disjunctive programming implementation</h2>
+<p>Alternatively, we can formulate our problem using a disjunction, preserving the logical structure, as follows:</p>
+<p><span class="math display">\[
+\begin{align*}
+\max \quad &amp; \text{profit}\\
+\text{s.t.} \quad
+&amp; x  \leq 40 &amp; \text{(demand)}\\
+&amp; x + y  \leq 80 &amp; \text{(labor A)} \\
+&amp; \begin{bmatrix}
+    \text{profit} = 40x + 30y\\
+    2 x + y \leq 100
+\end{bmatrix}
+\veebar
+\begin{bmatrix}
+    \text{profit} = 45x + 30y\\
+    1.5 x + y \leq 100
+    \end{bmatrix}\\
+&amp; x, y \geq 0.
+\end{align*}
+\]</span></p>
+<p>This formulation has the benefit that the solver can intelligently partition the problem’s solution into various sub-cases, based on the given disjunction. Pyomo natively supports disjunctions, as illustrated in the following implementation.</p>
+<div id="adcd8462-155a-44fe-a124-043957bc2387" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Multi-Product Factory - Disjunctive Programming"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>m.profit <span class="op">=</span> pyo.Var(bounds<span class="op">=</span>(<span class="op">-</span><span class="dv">1000</span>, <span class="dv">10000</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>m.x <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals, bounds<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1000</span>))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>m.y <span class="op">=</span> pyo.Var(domain<span class="op">=</span>pyo.NonNegativeReals, bounds<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1000</span>))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Objective</span>(sense<span class="op">=</span>pyo.maximize)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maximize_profit(m):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.profit</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand(m):</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.x <span class="op">&lt;=</span> <span class="dv">40</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Constraint</span>()</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laborA(m):</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m.x <span class="op">+</span> m.y <span class="op">&lt;=</span> <span class="dv">80</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a disjunction using Pyomo's Disjunction component</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co"># The 'xor=True' indicates that only one of the disjuncts must be true</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="at">@m.Disjunction</span>(xor<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> technologies(m):</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The function returns a list of two disjuncts</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># each containing a profit and a constraint</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        [m.profit <span class="op">==</span> <span class="dv">40</span> <span class="op">*</span> m.x <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> m.y, <span class="dv">2</span> <span class="op">*</span> m.x <span class="op">+</span> m.y <span class="op">&lt;=</span> <span class="dv">100</span>],</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        [m.profit <span class="op">==</span> <span class="dv">45</span> <span class="op">*</span> m.x <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> m.y, <span class="fl">1.5</span> <span class="op">*</span> m.x <span class="op">+</span> m.y <span class="op">&lt;=</span> <span class="dv">100</span>],</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the Generalized Disjunctive Programming (GDP) model using</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"># the big-M method into a MILP problem and solve it</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>pyo.TransformationFactory(<span class="st">"gdp.bigm"</span>).apply_to(m)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>SOLVER.solve(m, tee<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Profit = $</span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.maximize_profit)<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production X = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.x)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production Y = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.y)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running HiGHS 1.10.0 (git hash: fd86653): Copyright (c) 2025 HiGHS under MIT licence terms
+MIP  has 9 rows; 5 cols; 27 nonzeros; 2 integer variables (2 binary)
+Coefficient ranges:
+  Matrix [1e+00, 8e+04]
+  Cost   [1e+00, 1e+00]
+  Bound  [1e+00, 1e+04]
+  RHS    [1e+00, 8e+04]
+Presolving model
+7 rows, 4 cols, 24 nonzeros  0s
+7 rows, 4 cols, 24 nonzeros  0s
+
+Solving MIP model with:
+   7 rows
+   4 cols (1 binary, 0 integer, 0 implied int., 3 continuous)
+   24 nonzeros
+
+Src: B =&gt; Branching; C =&gt; Central rounding; F =&gt; Feasibility pump; H =&gt; Heuristic; L =&gt; Sub-MIP;
+     P =&gt; Empty MIP; R =&gt; Randomized rounding; S =&gt; Solve LP; T =&gt; Evaluate node; U =&gt; Unbounded;
+     z =&gt; Trivial zero; l =&gt; Trivial lower; u =&gt; Trivial upper; p =&gt; Trivial point; X =&gt; User solution
+
+        Nodes      |    B&amp;B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
+Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
+
+         0       0         0   0.00%   4200            -inf                 inf        0      0      0         0     0.0s
+ R       0       0         0   0.00%   4200            2600              61.54%        0      0      0         2     0.0s
+ C       0       0         0   0.00%   3000            3000               0.00%        6      2      0         8     0.0s
+         1       0         1 100.00%   3000            3000               0.00%        6      2      0         8     0.0s
+
+Solving report
+  Status            Optimal
+  Primal bound      3000
+  Dual bound        3000
+  Gap               0% (tolerance: 0.01%)
+  P-D integral      0.00028999664704
+  Solution status   feasible
+                    3000 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.00 (total)
+                    0.00 (presolve)
+                    0.00 (solve)
+                    0.00 (postsolve)
+  Max sub-MIP depth 0
+  Nodes             1
+  Repair LPs        0 (0 feasible; 0 iterations)
+  LP iterations     8 (total)
+                    0 (strong br.)
+                    6 (separation)
+                    0 (heuristics)
+Profit = $3000.00
+Production X = 40.0
+Production Y = 40.0</code></pre>
+</div>
+</div>
+<section id="alternative-solver" class="level3">
+<h3 class="anchored" data-anchor-id="alternative-solver">Alternative solver</h3>
+<p>Try with the <code>cbc</code> solver…</p>
+<div id="328df26a-f37e-4d57-b4f5-5c7f0e9307c1" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> <span class="st">'cbc'</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>SOLVER <span class="op">=</span> pyo.SolverFactory(solver)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>SOLVER.solve(m, tee<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Profit = $</span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.maximize_profit)<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production X = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.x)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Production Y = </span><span class="sc">{</span>pyo<span class="sc">.</span>value(m.y)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Welcome to the CBC MILP Solver 
+Version: 2.10.12 
+Build Date: Mar  5 2025 
+
+command line - /opt/miniconda3/envs/exa-atow/bin/cbc -printingOptions all -import /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmpt98ljm9h.pyomo.lp -stat=1 -solve -solu /var/folders/kx/_1g1vzv51nq1yv81c377flsr0000gn/T/tmpt98ljm9h.pyomo.soln (default strategy 1)
+Option for printingOptions changed from normal to all
+ CoinLpIO::readLp(): Maximization problem reformulated as minimization
+Coin0009I Switching back to maximization to get correct duals etc
+Presolve 7 (-2) rows, 4 (-1) columns and 24 (-3) elements
+Statistics for presolved model
+Original problem has 2 integers (2 of which binary)
+Presolved problem has 1 integers (1 of which binary)
+==== 3 zero objective 2 different
+3 variables have objective of -0
+1 variables have objective of 1
+==== absolute objective values 2 different
+3 variables have objective of 0
+1 variables have objective of 1
+==== for integers 1 zero objective 1 different
+1 variables have objective of -0
+==== for integers absolute objective values 1 different
+1 variables have objective of 0
+===== end objective counts
+
+
+Problem has 7 rows, 4 columns (1 with objective) and 24 elements
+Column breakdown:
+0 of type 0.0-&gt;inf, 2 of type 0.0-&gt;up, 0 of type lo-&gt;inf, 
+1 of type lo-&gt;up, 0 of type free, 0 of type fixed, 
+0 of type -inf-&gt;0.0, 0 of type -inf-&gt;up, 1 of type 0.0-&gt;1.0 
+Row breakdown:
+0 of type E 0.0, 0 of type E 1.0, 0 of type E -1.0, 
+0 of type E other, 1 of type G 0.0, 0 of type G 1.0, 
+1 of type G other, 1 of type L 0.0, 0 of type L 1.0, 
+4 of type L other, 0 of type Range 0.0-&gt;1.0, 0 of type Range other, 
+0 of type Free 
+Continuous objective value is 7900 - 0.00 seconds
+Cgl0003I 0 fixed, 0 tightened bounds, 1 strengthened rows, 0 substitutions
+Cgl0004I processed model has 7 rows, 4 columns (1 integer (1 of which binary)) and 24 elements
+Cbc0038I Initial state - 1 integers unsatisfied sum - 0.49
+Cbc0038I Pass   1: suminf.    0.00000 (0) obj. 3000 iterations 1
+Cbc0038I Solution found of 3000
+Cbc0038I Relaxing continuous gives 3000
+Cbc0038I Before mini branch and bound, 0 integers at bound fixed and 1 continuous
+Cbc0038I Full problem 7 rows 4 columns, reduced to 5 rows 3 columns
+Cbc0038I Mini branch and bound improved solution from 3000 to 3000 (0.00 seconds)
+Cbc0038I Round again with cutoff of 3490
+Cbc0038I Pass   2: suminf.    0.04900 (1) obj. 3490 iterations 1
+Cbc0038I Pass   3: suminf.    0.06900 (1) obj. 3490 iterations 6
+Cbc0038I Pass   4: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass   5: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass   6: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass   7: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass   8: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass   9: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  10: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  11: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  12: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  13: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  14: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  15: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  16: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  17: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  18: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  19: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  20: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  21: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  22: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  23: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  24: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  25: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  26: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  27: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  28: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  29: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  30: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I Pass  31: suminf.    0.06900 (1) obj. 3490 iterations 0
+Cbc0038I No solution found this major pass
+Cbc0038I Before mini branch and bound, 0 integers at bound fixed and 1 continuous
+Cbc0038I Full problem 7 rows 4 columns, reduced to 5 rows 3 columns
+Cbc0038I Mini branch and bound did not improve solution (0.00 seconds)
+Cbc0038I After 0.00 seconds - Feasibility pump exiting with objective of 3000 - took 0.00 seconds
+Cbc0012I Integer solution of 3000 found by feasibility pump after 0 iterations and 0 nodes (0.00 seconds)
+Cbc0031I 2 added rows had average density of 3
+Cbc0013I At root node, 10 cuts changed objective from 7900 to 3000 in 1 passes
+Cbc0014I Cut generator 0 (Probing) - 5 row cuts average 2.8 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is 1
+Cbc0014I Cut generator 1 (Gomory) - 1 row cuts average 4.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is 1
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 2 row cuts average 2.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is 1
+Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 2 row cuts average 2.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0001I Search completed - best objective 3000, took 0 iterations and 0 nodes (0.00 seconds)
+Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
+Cuts at root node changed objective from 7900 to 3000
+Probing was tried 1 times and created 5 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 1 times and created 1 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Knapsack was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 1 times and created 2 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 1 times and created 2 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                3000.00000000
+Enumerated nodes:               0
+Total iterations:               0
+Time (CPU seconds):             0.00
+Time (Wallclock seconds):       0.01
+
+Total time (CPU seconds):       0.00   (Wallclock seconds):       0.01
+
+Profit = $3000.00
+Production X = 40.0
+Production Y = 40.0</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation column-page-right">
+  <div class="nav-page nav-page-previous">
+      <a href="../pyomo.html" class="pagination-link" aria-label="Using PYOMO">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Using PYOMO</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../examples/02-Disjunctions-GDPopt.html" class="pagination-link" aria-label="Example 3: GDPopt Test">
+        <span class="nav-page-text"><span class="chapter-title">Example 3: GDPopt Test</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

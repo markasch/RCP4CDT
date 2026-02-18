@@ -21,8 +21,8 @@ book:
     - part: Implementation
       chapters:
         - pyomo.qmd
-        - examples/disjunct-BigM.ipynb
-        - examples/disjunct-GDP.ipynb    
+        - examples/01-Disjunctions.ipynb
+        - examples/02-Disjunctions-GDPopt.ipynb    
         - CDT.qmd
         - RCPSP.qmd
         - usecases.qmd
