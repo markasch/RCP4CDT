@@ -13,10 +13,10 @@ flowchart LR
 The implementation in 4 stages.
 :::
 
-1. Input description of jobs (json file), that is loaded into ...
+1. Input description of jobs (`json` file), that is loaded into ...
 2. Model function, that generates ...
 3. `pyomo` model, which produces ...
-4. Output, an optimal schedule (csv file).
+4. Output, an optimal schedule (`csv` or `json` file).
 
 ## Input File
 
@@ -184,19 +184,19 @@ All the above are necessary and sufficient for the mathematical formulation pres
 # Model function generator
 def MRCPSP_model(TASKS):
     model = pyo.ConcreteModel()
-    # tasks is a two dimensional set of (j,m) constructed from the dictionary keys
+    # TASKS is a two dimensional set of (j,m) constructed from the dictionary keys
     model.TASKS = pyo.Set(initialize=TASKS.keys(), dimen=2)
-    # the set of jobs is constructed from a python set
+    # Set of JOBS is constructed from a python set
     model.JOBS = pyo.Set(initialize=list(set([j for (j, m) in model.TASKS])))
-    # set of machines is constructed from a python set
+    # Set of MACHINES is constructed from a python set
     model.MACHINES = pyo.Set(initialize=list(set([m for (j, m) in model.TASKS])))
-    # the order of tasks is constructed as a cross-product of tasks and filtering
+    # ORDER of tasks is constructed as a cross-product of tasks and filtering
     model.TASKORDER = pyo.Set(
         initialize = model.TASKS * model.TASKS,
         dimen      = 4,
         filter     = lambda model, j, m, k, n: (k, n) == TASKS[(j, m)]["prec"],
     )
-    # the set of disjunctions is cross-product of jobs, jobs, and machines
+    # Set of DISJUNCTIONS is cross-product of jobs, jobs, and machines
     model.DISJUNCTIONS = pyo.Set(
         initialize = model.JOBS * model.JOBS * model.MACHINES,
         dimen      = 3,
@@ -204,35 +204,33 @@ def MRCPSP_model(TASKS):
                      and (j, m) in model.TASKS
                      and (k, m) in model.TASKS,
     )
-    # load duration data into a model parameter for later access
+    # Load DURATION data into a model parameter for later access
     @model.Param(model.TASKS)
     def dur(model, j, m):
         return TASKS[(j, m)]["dur"]
-    # establish an upper bound on makespan
+    # Upper bound on MAKESPAN
     ub = sum([model.dur[j, m] for (j, m) in model.TASKS])
-    # create decision variables
+    # Create DECISION variables
     model.makespan = pyo.Var(bounds=(0, ub))
     model.start = pyo.Var(model.TASKS, bounds=(0, ub))
-    
+    # OBJECTIVE function 
     @model.Objective(sense=pyo.minimize)
     def minimize_makespan(model):
         return model.makespan
-    
+    # CONSTRAINTS:
     @model.Constraint(model.TASKS)
     def finish_tasks(model, j, m):
         return model.start[j, m] + model.dur[j, m] <= model.makespan
-
     @model.Constraint(model.TASKORDER)
     def preceding(model, j, m, k, n):
         return model.start[k, n] + model.dur[k, n] <= model.start[j, m]
-
     @model.Disjunction(model.DISJUNCTIONS)
     def no_overlap(model, j, k, m):
         return [
             model.start[j, m] + model.dur[j, m] <= model.start[k, m],
             model.start[k, m] + model.dur[k, m] <= model.start[j, m],
         ]
-
+    # Apply Big-M to transform logic to MILP
     pyo.TransformationFactory("gdp.bigm").apply_to(model)
     return model
 # Generate the model
@@ -268,14 +266,18 @@ results = MRCPSP_solve(MRCPSP_model(TASKS))
 
 ## Output
 
-Finally, we extract the schedule from the results, store them in a suitable dataframe, and output a CSV file with start and finish times of each job, as well as the optimal mode selected for each job. This can also be output in the form of a GANTT chart. Other outputs can include resource usage, energy consumption, machine utilization statistics and costs.
+Finally, we extract the schedule from the results, store them in a suitable dataframe, and output a CSV (or JSON) file with start and finish times of each job, as well as the optimal mode selected for each job. This can also be output in the form of a GANTT chart. Other outputs can include resource usage, energy consumption, machine utilization statistics and costs.
 
 
 ## Time-Windows - EF, LF, etc.
 
-To reduce the number of variables in the MILP optimization, we define subsets of the time variable. Recall: the timespan $[0,T]$ is discretized into $T$ time periods of length one. Period $t$ refers to the time slot/interval $[t-1,t],$ where $t=1, \ldots, T.$ The processing time (duration) of job $j$ is denoted $d_j,$ the set of immediate predecessor activities of activity $j$ is denoted $\mathcal{P}_j$ and  the set of immediate successor activities of activity $j$ is denoted $\mathcal{S}_j.$
+To reduce the number of variables in the MILP optimization, we define subsets of the time variable. 
 
-The _forward pass_ to compute earliest start and finishing times is defined as follows:
+::: {.callout-note title="Timespan, Ordering"}
+The timespan $[0,T]$ is discretized into $T$ time periods of length one. Period $t$ refers to the time slot/interval $[t-1,t],$ where $t=1, \ldots, T.$ The processing time (duration) of job $j$ is denoted $d_j,$ the set of immediate predecessor activities of activity $j$ is denoted $\mathcal{P}_j$ and  the set of immediate successor activities of activity $j$ is denoted $\mathcal{S}_j.$
+:::
+
+The _forward pass_ to compute earliest start (EST) and finishing (EFT) times is defined as follows:
 
 ```{.python}
 EST[0], EFT[0] = 0 # initialization
@@ -284,7 +286,7 @@ for j in range(2, n):
   EFT[j] = EST[j] + d[j]
 ```
 
-The _backward pass_ to compute latest start and finishing times is defined as follows:
+The _backward pass_ to compute latest start (LST) and finishing (LFT) times is defined as follows:
 
 ```{.python}
 LFT[0], LST[0] = T # initialization

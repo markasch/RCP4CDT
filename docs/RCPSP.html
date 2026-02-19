@@ -246,7 +246,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: GDPopt Test</span></a>
+  <a href="./examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: GDPopt Test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -305,6 +310,8 @@ window.Quarto = {
 </header>
 
 
+<p>This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today’s scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude—outstanding examples are <a href="https://www.skao.int/en">SKA</a> and CERN’s <a href="https://home.cern/science/accelerators/future-circular-collider">FCC</a>.</p>
+<p>The realistic cases are presented in the Use-Cases chapter.</p>
 <section id="simplified-supply-chain-example" class="level2">
 <h2 class="anchored" data-anchor-id="simplified-supply-chain-example">Simplified Supply Chain Example</h2>
 <p>Putting together:</p>
@@ -312,6 +319,7 @@ window.Quarto = {
 <li>precedence</li>
 <li>TBC</li>
 </ul>
+<p>Coming soon…</p>
 </section>
 <section id="simplified-rcpsp-example" class="level2">
 <h2 class="anchored" data-anchor-id="simplified-rcpsp-example">Simplified RCPSP Example</h2>
@@ -321,6 +329,7 @@ window.Quarto = {
 <li>time-indexed</li>
 <li>disjunctive</li>
 </ul>
+<p>Coming soon…</p>
 </section>
 <section id="simplified-mrcpsp-example" class="level2">
 <h2 class="anchored" data-anchor-id="simplified-mrcpsp-example">Simplified MRCPSP Example</h2>
@@ -349,11 +358,11 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mrcp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1: A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs <span class="math inline">\(J_1,\cdots, J_4.\)</span> The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
+Figure&nbsp;7.1: A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs <span class="math inline">\(J_1,\cdots, J_4.\)</span> The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
 </figcaption>
 </figure>
 </div>
-<p>The project instance, shown above, is detailed in Table 1, where <span class="math inline">\(S_j\)</span> is the successor list of job <span class="math inline">\(j,\)</span> <span class="math inline">\(m\)</span> is the mode, <span class="math inline">\(d_{jm}\)</span> is the job duration, <span class="math inline">\(k^{\rho}_{jm1}\)</span> is the renewable resource requirement, <span class="math inline">\(R^{\rho}\)</span> is the renewable resource list, <span class="math inline">\(K^{\rho}\)</span> is the renewable resource limit, and <span class="math inline">\(R^{\nu}\)</span> is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.</p>
+<p>The project instance, shown above, is detailed in Table 1, where <span class="math inline">\(S_j\)</span> is the successor list of job <span class="math inline">\(j,\)</span> <span class="math inline">\(m\)</span> is the mode, <span class="math inline">\(d_{jm}\)</span> is the job duration, <span class="math inline">\(k^{\rho}_{jm1}\)</span> is the renewable resource requirement, <span class="math inline">\(R^{\rho}\)</span> is the renewable resource list, <span class="math inline">\(K^{\rho}\)</span> is the renewable resource limit, and <span class="math inline">\(R^{\nu}\)</span> is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.</p>
 <p><span class="math display">\[\begin{aligned}
 &amp; \text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\
 &amp;\begin{array}{cccccccc}
@@ -387,7 +396,7 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"input.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> jsonfile: </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    TASKS <span class="op">=</span> json.load(jsonfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Though, for interoperability, we should privilege the data model format, described before.</p>
+<p>Though, for interoperability, we should privilege the data model format, described above in <strong>CDT-Implementation</strong>.</p>
 </section>
 <section id="silly-examples" class="level2">
 <h2 class="anchored" data-anchor-id="silly-examples">Silly Examples</h2>
@@ -403,13 +412,13 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <img src="RCPSP_files/figure-html/fig-line-plot-output-1.png" width="566" height="411" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.2: A line plot
+Figure&nbsp;7.2: A line plot
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> that there is a clear trend, up and down.</p>
+<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> that there is a clear trend, up and down.</p>
 <p>To only have code displayed, but not executed…</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-line-plot</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "A line plot "</span></span>
