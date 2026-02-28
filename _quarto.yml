@@ -25,6 +25,8 @@ book:
         - examples/02-Disjunctions-GDPopt.ipynb    
         - examples/03-OPF_risk.ipynb    
         - CDT.qmd
+    - part: Examples, Use-cases
+      chapters:
         - RCPSP.qmd
         - usecases.qmd
 

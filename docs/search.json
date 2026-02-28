@@ -492,7 +492,7 @@
     "section": "",
     "text": "Simplified Supply Chain Example\nThis chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today’s scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude—outstanding examples are SKA and CERN’s FCC.\nThe realistic cases are presented in the Use-Cases chapter.\nPutting together:\nComing soon…",
     "crumbs": [
-      "Implementation",
+      "Examples, Use-cases",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Examples</span>"
     ]
   },
@@ -503,7 +503,7 @@
     "section": "",
     "text": "precedence\nTBC",
     "crumbs": [
-      "Implementation",
+      "Examples, Use-cases",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Examples</span>"
     ]
   },
@@ -514,7 +514,7 @@
     "section": "Simplified RCPSP Example",
     "text": "Simplified RCPSP Example\nPutting together:\n\nprecedence\ntime-indexed\ndisjunctive\n\nComing soon…",
     "crumbs": [
-      "Implementation",
+      "Examples, Use-cases",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Examples</span>"
     ]
   },
@@ -525,7 +525,7 @@
     "section": "Simplified MRCPSP Example",
     "text": "Simplified MRCPSP Example\nIn this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.\n\n\n\n\n\n\n\n\ngraph LR\n    A[\"$$J_0$$\"] --&gt; B(\"$$J_1$$\")\n    A --&gt; C(\"$$J_2$$\")\n    B --&gt; D(\"$$J_3$$\")\n    C --&gt; E(\"$$J_4$$\")\n    D --&gt; F[\"$$J_5$$\"]\n    E --&gt; F\n\n\n\n\n\n\n\n\n\nFigure 7.1: A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs \\(J_1,\\cdots, J_4.\\) The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.\n\n\n\nThe project instance, shown above, is detailed in Table 1, where \\(S_j\\) is the successor list of job \\(j,\\) \\(m\\) is the mode, \\(d_{jm}\\) is the job duration, \\(k^{\\rho}_{jm1}\\) is the renewable resource requirement, \\(R^{\\rho}\\) is the renewable resource list, \\(K^{\\rho}\\) is the renewable resource limit, and \\(R^{\\nu}\\) is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.\n\\[\\begin{aligned}\n& \\text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\\\\n&\\begin{array}{cccccccc}\n%\\begin{tabular}{|c|c|c|c|c|c|c|c|}\n\\hline\nj & S_{j}& m & d_{jm} & k^{\\rho}_{jm1} & R^{\\rho} & K^{\\rho}_{1} & R^{\\nu}\\\\\n\\hline\n0 & \\left\\{ 1,2\\right\\}  & 1 & 0 & 0 & \\left\\{ 1\\right\\}  & 3 & \\emptyset \\\\\n1 & \\left\\{ 3\\right\\}  & 1 & 2 & 2  &  &  & \\\\\n2 & \\left\\{ 4\\right\\}  & 1 & 2 & 2 &  &  & \\\\\n&  & 2 & 3 & 1 &  &  & \\\\\n3 & \\left\\{ 5\\right\\}  & 1 & 1 & 3 &  &  & \\\\\n&  & 2 & 2 & 1 &  &  & \\\\\n4 & \\left\\{ 5\\right\\}  & 1 & 2 & 3 &  &  & \\\\\n5 & \\emptyset & 1 & 0 & 0 &  &  & \\\\\n\\hline\n%\\end{tabular}\n\\end{array}\n\\end{aligned}\\]\nInput File\nThe simplest input file is a direct transcription of the table of variables.\n{\n  \"0\":{\"suc\":(\"1\",\"2\"),\"mod\":\"A\",\"drt\":0,    \"rsc\":0},\n  \"1\":{\"suc\":\"3\",\"mod\":\"A\",      \"drt\":2,    \"rsc\":2},\n  \"2\":{\"suc\":\"4\",\"mod\":(\"A\",\"B\"),\"drt\":[2,3],\"rsc\":[2, 1]},\n  \"3\":{\"suc\":\"5\",\"mod\":(\"A\",\"B\"),\"drt\":[1,2],\"rsc\":[3, 1]},\n  \"4\":{\"suc\":\"5\",\"mod\":\"A\",      \"drt\":2,    \"rsc\":3},\n  \"5\": {\"suc\":\"\",\"mod\":\"A\",      \"drt\":0,    \"rsc\":0 }\n}\nimport json\n\nwith open(\"input.json\", \"r\") as jsonfile: \n    TASKS = json.load(jsonfile)\nThough, for interoperability, we should privilege the data model format, described above in CDT-Implementation.",
     "crumbs": [
-      "Implementation",
+      "Examples, Use-cases",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Examples</span>"
     ]
   },
@@ -536,7 +536,7 @@
     "section": "Silly Examples",
     "text": "Silly Examples\nIn summary, this book has no content whatsoever.\n\nimport matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()\n\n\n\n\n\n\n\nFigure 7.2: A line plot\n\n\n\n\n\nWe observe in Figure 7.2 that there is a clear trend, up and down.\nTo only have code displayed, but not executed…\n#| label: fig-line-plot\n#| fig-cap: \"A line plot \"\n\nimport matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()",
     "crumbs": [
-      "Implementation",
+      "Examples, Use-cases",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Examples</span>"
     ]
   },
@@ -547,8 +547,8 @@
     "section": "",
     "text": "DDFACET\nThe workflow is quite simple, with choice of HPC centers, data centers and network connections. The batch size is large and so are the data volumes. For these reasons, optimal scheduling that takes into account facility availability and reliability, is very important.\nTBC\nTBC\nTBC",
     "crumbs": [
-      "Implementation",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Use-Cases</span>"
+      "Examples, Use-cases",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Use-Cases</span>"
     ]
   },
   {
@@ -558,8 +558,8 @@
     "section": "NSBAS",
     "text": "NSBAS\nTBC\nTBC\nTBC",
     "crumbs": [
-      "Implementation",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Use-Cases</span>"
+      "Examples, Use-cases",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Use-Cases</span>"
     ]
   },
   {
