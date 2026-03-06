@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Ex. D1a: Supply Chain Optimization – Optimal Scheduling for Cross-Facility Workflows</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../examples/03-OPF_risk.html" rel="next">
+<link href="../examples/D1a_SC_simple.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-68c8bffd90dad8f2b55c52d7b6410dc0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-d661fd49052cdedcb9ca2693aa63deef.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/D1b_SC_4_stage.html"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../graphics/xwf_logo.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../graphics/xwf_logo.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Optimal Scheduling for Cross-Facility Workflows</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Background and Setting</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Theory</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Theoretical Framework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../th-stochastic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uncertainty</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Implementation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pyomo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using PYOMO</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I1: Disjunctions - Theory, Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I2: GDPopt Test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CPLEX-MRCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ex. I3: CPLEX Benchmark - MRCPSP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../RCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/D1a_SC_simple.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D1: Simple Supply Chain (SSC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/D1b_SC_4_stage.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Use-cases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../usecases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../DDFACET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DDFACET</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../NSBAS.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NSBAS</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective">Objective</a>
+  <ul class="collapse">
+  <li><a href="#objective-function" id="toc-objective-function" class="nav-link" data-scroll-target="#objective-function">Objective Function</a></li>
+  <li><a href="#constraints" id="toc-constraints" class="nav-link" data-scroll-target="#constraints">Constraints</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a>
+  <ul class="collapse">
+  <li><a href="#optimization-section" id="toc-optimization-section" class="nav-link" data-scroll-target="#optimization-section">Optimization Section</a></li>
+  <li><a href="#graph-section" id="toc-graph-section" class="nav-link" data-scroll-target="#graph-section">Graph Section</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/D1b_SC_4_stage.html"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Adapted to the CDT context from the <a href="https://github.com/onuryus/Supply_Chain_Optimization">original</a> version.</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Supply chains are encountered in almost every field, and optimizing these processes can yield substantial financial benefits for businesses/companies. This chain encompasses the entire process from sourcing raw materials from suppliers, processing them in factories, storing them in warehouses, and finally delivering them to retailers.</p>
+<p>In the CDT context, we can consider primary data sources (instruments), high performance computing centers for processing, data centers for storage, and finally data products delivered to end-users. Note that this is very similar to what is envisaged for the SKA Observatory - see https://www.skao.int/en</p>
+</section>
+<section id="objective" class="level1">
+<h1>Objective</h1>
+<p>The objective of this study is to minimize costs within a supply chain model while meeting the demands of retailers. The model aims to ensure that products are delivered at the lowest possible cost by optimizing the flow of goods between suppliers, production centers, warehouses, and retailers.</p>
+<p>We have 3 different suppliers, 3 production centers (factories), 3 warehouses, and 3 retailers. Each of these entities has distinct capacities and demands, as well as varying production, processing, storage, and sales costs.</p>
+<table>
+<tbody><tr>
+<td>
+<p>### 1. Suppliers</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Supplier ID</th>
+<th>Production Capacity (tons)</th>
+<th>Production Cost (USD/ton)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S1</td>
+<td>5000</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>S2</td>
+<td>6000</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>S3</td>
+<td>4000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<p>### 2. Production Centers (Factories)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Production Center ID</th>
+<th>Capacity (tons)</th>
+<th>Operating Cost (USD/ton)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>F1</td>
+<td>7000</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>F2</td>
+<td>6000</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>F3</td>
+<td>5000</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<p>### 3. Warehouses</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Warehouses ID</th>
+<th>Capacity (tons)</th>
+<th>Storage Cost (USD/ton)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>W1</td>
+<td>3000</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>W2</td>
+<td>4000</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>W3</td>
+<td>5000</td>
+<td>1.5</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<p>### 4. Retailers</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Retailers ID</th>
+<th>Demand (tons)</th>
+<th>Sale Price (USD/ton)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R1</td>
+<td>4000</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>R2</td>
+<td>5000</td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td>R3</td>
+<td>6000</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody></table>
+<p>In addition to the costs, transportation costs between each location also vary, and the cost data is presented in the table below</p>
+<table>
+<tbody><tr>
+<td>
+<table>
+<tbody><tr>
+<th>
+Supplier → Production Center
+</th>
+<th>
+F1
+</th>
+<th>
+F2
+</th>
+<th>
+F3
+</th>
+</tr>
+<tr>
+<td>
+S1
+</td>
+<td>
+3
+</td>
+<td>
+2.5
+</td>
+<td>
+3.5
+</td>
+</tr>
+<tr>
+<td>
+S2
+</td>
+<td>
+2
+</td>
+<td>
+2
+</td>
+<td>
+3
+</td>
+</tr>
+<tr>
+<td>
+S3
+</td>
+<td>
+3
+</td>
+<td>
+3.5
+</td>
+<td>
+2.5
+</td>
+</tr>
+</tbody></table>
+</td>
+<td>
+<table>
+<tbody><tr>
+<th>
+Production Center → WareHouse
+</th>
+<th>
+W1
+</th>
+<th>
+W2
+</th>
+<th>
+W3
+</th>
+</tr>
+<tr>
+<td>
+F1
+</td>
+<td>
+1.5
+</td>
+<td>
+2
+</td>
+<td>
+2.5
+</td>
+</tr>
+<tr>
+<td>
+F2
+</td>
+<td>
+2
+</td>
+<td>
+1.5
+</td>
+<td>
+2
+</td>
+</tr>
+<tr>
+<td>
+F3
+</td>
+<td>
+2.5
+</td>
+<td>
+2
+</td>
+<td>
+1.5
+</td>
+</tr>
+</tbody></table>
+</td>
+<td>
+<table>
+<tbody><tr>
+<th>
+WareHouse → Retailers
+</th>
+<th>
+R1
+</th>
+<th>
+R2
+</th>
+<th>
+R3
+</th>
+</tr>
+<tr>
+<td>
+W1
+</td>
+<td>
+1
+</td>
+<td>
+1.5
+</td>
+<td>
+2
+</td>
+</tr>
+<tr>
+<td>
+W2
+</td>
+<td>
+1.2
+</td>
+<td>
+1
+</td>
+<td>
+1.8
+</td>
+</tr>
+<tr>
+<td>
+W3
+</td>
+<td>
+1.5
+</td>
+<td>
+1.2
+</td>
+<td>
+1
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<p>We impose quotas on the factories. Accordingly, Factory1 can only use 70% of its capacity, Factory2 can use 100%, and finally, Factory3 can utilize 85% of its capacity.</p>
+<p>Here is a summary of the system, parameters, variables, constraints, and objective function.</p>
+<p><strong>Sets:</strong></p>
+<ul>
+<li><span class="math inline">\(\mathcal{S}\)</span>: Suppliers Suppliers</li>
+<li><span class="math inline">\(\mathcal{F}\)</span>: Factories</li>
+<li><span class="math inline">\(\mathcal{W}\)</span>: Warehouses</li>
+<li><span class="math inline">\(\mathcal{R}\)</span>: Retailers</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><span class="math inline">\(P_s\)</span>: Production capacity of supplier <span class="math inline">\(s\)</span> (tons)</li>
+<li><span class="math inline">\(C_s\)</span>: Production cost of supplier <span class="math inline">\(s\)</span> (USD/ton)</li>
+<li><span class="math inline">\(P_f\)</span>: Capacity of factory <span class="math inline">\(f\)</span> (tons)</li>
+<li><span class="math inline">\(O_f\)</span>: Operating cost of factory <span class="math inline">\(f\)</span> (USD/ton)</li>
+<li><span class="math inline">\(P_w\)</span>: Capacity of warehouse <span class="math inline">\(w\)</span> (tons)</li>
+<li><span class="math inline">\(S_w\)</span>: Storage cost for warehouse <span class="math inline">\(w\)</span> (USD/ton)</li>
+<li><span class="math inline">\(D_r\)</span>: Demand for retailer <span class="math inline">\(r\)</span> (tons)</li>
+<li><span class="math inline">\(T_{sf}\)</span>: Transportation cost between supplier <span class="math inline">\(s\)</span> and factory <span class="math inline">\(f\)</span> (USD/ton)</li>
+<li><span class="math inline">\(T_{fw}\)</span>: Transportation cost between factory <span class="math inline">\(f\)</span> and warehouse <span class="math inline">\(w\)</span> (USD/ton)</li>
+<li><span class="math inline">\(T_{wr}\)</span>: Transportation cost between warehouse <span class="math inline">\(w\)</span> and retailer <span class="math inline">\(r\)</span> (USD/ton)</li>
+</ul>
+<p><strong>Variables:</strong></p>
+<ul>
+<li><span class="math inline">\(x_{sf}\)</span>: Raw materials sent from supplier <span class="math inline">\(s\)</span> to factory <span class="math inline">\(f\)</span> (tons)</li>
+<li><span class="math inline">\(y_{fw}\)</span>: Products sent from factory <span class="math inline">\(f\)</span> to warehouse <span class="math inline">\(w\)</span> (tons)</li>
+<li><span class="math inline">\(z_{wr}\)</span>: Products sent from warehouse <span class="math inline">\(w\)</span> to retailer <span class="math inline">\(r\)</span> (tons)</li>
+</ul>
+<section id="objective-function" class="level2">
+<h2 class="anchored" data-anchor-id="objective-function">Objective Function</h2>
+<p>The goal is to minimize the total cost:</p>
+<p><span class="math display">\[
+\text{Minimize} \ Z = \sum_{s \in S} \sum_{f \in F} C_s \cdot x_{sf} + \sum_{f \in F} \sum_{w \in W} O_f \cdot y_{fw} + \sum_{w \in W} \sum_{r \in R} S_w \cdot z_{wr} + \sum_{s \in S} \sum_{f \in F} T_{sf} \cdot x_{sf} + \sum_{f \in F} \sum_{w \in W} T_{fw} \cdot y_{fw} + \sum_{w \in W} \sum_{r \in R} T_{wr} \cdot z_{wr}
+\]</span></p>
+</section>
+<section id="constraints" class="level2">
+<h2 class="anchored" data-anchor-id="constraints">Constraints</h2>
+<ol type="1">
+<li><p><strong>Supplier Capacity Constraints</strong>: The total raw materials sent by each supplier must not exceed its production capacity: <span class="math display">\[
+\sum_{f \in F} x_{sf} \leq P_s, \quad \forall s \in S.
+\]</span></p></li>
+<li><p><strong>Factory Capacity Constraints</strong>: The amount of raw materials received by each factory must not exceed its capacity. Additionally, the operating rate of each factory is restricted to a specific percentage: <span class="math display">\[
+\sum_{s \in S} x_{sf} \leq P_f, \quad \forall f \in F.
+\]</span></p></li>
+</ol>
+<ul>
+<li><span class="math inline">\(F_1\)</span>: <span class="math inline">\(\sum_{s \in S} x_{sf_1} \le 0.7  P_1\)</span></li>
+<li><span class="math inline">\(F_2\)</span>: <span class="math inline">\(\sum_{s \in S} x_{sf_2} \le 1.0  P_2\)</span></li>
+<li><span class="math inline">\(F_3\)</span>: <span class="math inline">\(\sum_{s \in S} x_{sf_3} \le 0.85  P_3\)</span></li>
+</ul>
+<ol start="3" type="1">
+<li><p><strong>Warehouse Capacity Constraints</strong>: The amount of products received by each warehouse must not exceed its capacity: <span class="math display">\[
+\sum_{f \in F} y_{fw} \leq P_w, \quad \forall w \in W
+\]</span></p></li>
+<li><p><strong>Retailer Demand Constraints</strong>: The demand of each retailer must be met by the products received from the corresponding warehouse: <span class="math display">\[
+\sum_{w \in W} z_{wr} = D_r, \quad \forall r \in R
+\]</span></p></li>
+<li><p><strong>Factory Input-Output Balance</strong>: There must be a balance between the incoming and outgoing products for each factory: <span class="math display">\[
+\sum_{s \in S} x_{sf} = \sum_{w \in W} y_{fw}, \quad \forall f \in F
+\]</span></p></li>
+<li><p><strong>Warehouse Input-Output Balance</strong>: There must be a balance between the incoming and outgoing products for each warehouse: <span class="math display">\[
+\sum_{f \in F} y_{fw} = \sum_{r \in R} z_{wr}, \quad \forall w \in W
+\]</span></p></li>
+</ol>
+</section>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<section id="optimization-section" class="level3">
+<h3 class="anchored" data-anchor-id="optimization-section">Optimization Section</h3>
+<div id="0e8087e1-847a-4016-a436-3d344edb0469" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.opt <span class="im">import</span> SolverFactory</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.environ <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> mcolors</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.cm <span class="im">import</span> ScalarMappable</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="83b454e8-56e7-4985-9005-8b0bb63ab7f1" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ConcreteModel()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sets</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>model.suppliers <span class="op">=</span> Set(initialize<span class="op">=</span>[<span class="st">'S1'</span>, <span class="st">'S2'</span>, <span class="st">'S3'</span>])</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>model.factories <span class="op">=</span> Set(initialize<span class="op">=</span>[<span class="st">'F1'</span>, <span class="st">'F2'</span>, <span class="st">'F3'</span>])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>model.warehouses <span class="op">=</span> Set(initialize<span class="op">=</span>[<span class="st">'W1'</span>, <span class="st">'W2'</span>, <span class="st">'W3'</span>])</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>model.retailers <span class="op">=</span> Set(initialize<span class="op">=</span>[<span class="st">'R1'</span>, <span class="st">'R2'</span>, <span class="st">'R3'</span>])</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>model.production_capacity <span class="op">=</span> Param(model.suppliers, initialize<span class="op">=</span>{<span class="st">'S1'</span>: <span class="dv">10000</span>, <span class="st">'S2'</span>: <span class="dv">12000</span>, <span class="st">'S3'</span>: <span class="dv">8000</span>})</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>model.production_cost <span class="op">=</span> Param(model.suppliers, initialize<span class="op">=</span>{<span class="st">'S1'</span>: <span class="dv">10</span>, <span class="st">'S2'</span>: <span class="dv">12</span>, <span class="st">'S3'</span>: <span class="dv">11</span>})</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>model.factory_capacity <span class="op">=</span> Param(model.factories, initialize<span class="op">=</span>{<span class="st">'F1'</span>: <span class="dv">10000</span>, <span class="st">'F2'</span>: <span class="dv">9000</span>, <span class="st">'F3'</span>: <span class="dv">8000</span>})</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>model.operating_cost <span class="op">=</span> Param(model.factories, initialize<span class="op">=</span>{<span class="st">'F1'</span>: <span class="dv">5</span>, <span class="st">'F2'</span>: <span class="dv">6</span>, <span class="st">'F3'</span>: <span class="dv">4</span>})</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>model.warehouse_capacity <span class="op">=</span> Param(model.warehouses, initialize<span class="op">=</span>{<span class="st">'W1'</span>: <span class="dv">6000</span>, <span class="st">'W2'</span>: <span class="dv">8000</span>, <span class="st">'W3'</span>: <span class="dv">10000</span>})</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>model.storage_cost <span class="op">=</span> Param(model.warehouses, initialize<span class="op">=</span>{<span class="st">'W1'</span>: <span class="dv">2</span>, <span class="st">'W2'</span>: <span class="dv">3</span>, <span class="st">'W3'</span>: <span class="fl">1.5</span>})</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>model.demand <span class="op">=</span> Param(model.retailers, initialize<span class="op">=</span>{<span class="st">'R1'</span>: <span class="dv">4000</span>, <span class="st">'R2'</span>: <span class="dv">5000</span>, <span class="st">'R3'</span>: <span class="dv">6000</span>})</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Transportation Cost</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>model.transport_cost <span class="op">=</span> {</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'S1'</span>, <span class="st">'F1'</span>): <span class="dv">3</span>,   (<span class="st">'S1'</span>, <span class="st">'F2'</span>): <span class="fl">2.5</span>, (<span class="st">'S1'</span>, <span class="st">'F3'</span>): <span class="fl">3.5</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'S2'</span>, <span class="st">'F1'</span>): <span class="dv">2</span>,   (<span class="st">'S2'</span>, <span class="st">'F2'</span>): <span class="dv">2</span>,   (<span class="st">'S2'</span>, <span class="st">'F3'</span>): <span class="dv">3</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'S3'</span>, <span class="st">'F1'</span>): <span class="dv">3</span>,   (<span class="st">'S3'</span>, <span class="st">'F2'</span>): <span class="fl">3.5</span>, (<span class="st">'S3'</span>, <span class="st">'F3'</span>): <span class="fl">2.5</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'F1'</span>, <span class="st">'W1'</span>): <span class="fl">1.5</span>, (<span class="st">'F1'</span>, <span class="st">'W2'</span>): <span class="dv">2</span>,   (<span class="st">'F1'</span>, <span class="st">'W3'</span>): <span class="fl">2.5</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'F2'</span>, <span class="st">'W1'</span>): <span class="dv">2</span>,   (<span class="st">'F2'</span>, <span class="st">'W2'</span>): <span class="fl">1.5</span>, (<span class="st">'F2'</span>, <span class="st">'W3'</span>): <span class="dv">2</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'F3'</span>, <span class="st">'W1'</span>): <span class="fl">2.5</span>, (<span class="st">'F3'</span>, <span class="st">'W2'</span>): <span class="dv">2</span>,   (<span class="st">'F3'</span>, <span class="st">'W3'</span>): <span class="fl">1.5</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'W1'</span>, <span class="st">'R1'</span>): <span class="dv">1</span>,   (<span class="st">'W1'</span>, <span class="st">'R2'</span>): <span class="fl">1.5</span>, (<span class="st">'W1'</span>, <span class="st">'R3'</span>): <span class="dv">2</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'W2'</span>, <span class="st">'R1'</span>): <span class="fl">1.2</span>, (<span class="st">'W2'</span>, <span class="st">'R2'</span>): <span class="dv">1</span>,   (<span class="st">'W2'</span>, <span class="st">'R3'</span>): <span class="fl">1.8</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'W3'</span>, <span class="st">'R1'</span>): <span class="fl">1.5</span>, (<span class="st">'W3'</span>, <span class="st">'R2'</span>): <span class="fl">1.2</span>, (<span class="st">'W3'</span>, <span class="st">'R3'</span>): <span class="dv">1</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>model.x <span class="op">=</span> Var(model.suppliers, model.factories, domain<span class="op">=</span>NonNegativeReals)  <span class="co"># from supplier to factory</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>model.y <span class="op">=</span> Var(model.factories, model.warehouses, domain<span class="op">=</span>NonNegativeReals)  <span class="co"># from factory to warehouse</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>model.z <span class="op">=</span> Var(model.warehouses, model.retailers, domain<span class="op">=</span>NonNegativeReals)  <span class="co"># from warehouse to retailer</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Objective Function: Minimize Total Cost</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> total_cost(model):</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="bu">sum</span>(model.production_cost[s] <span class="op">*</span> model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers <span class="cf">for</span> f <span class="kw">in</span> model.factories) <span class="op">+</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>            <span class="bu">sum</span>(model.operating_cost[f] <span class="op">*</span> model.y[f, w] <span class="cf">for</span> f <span class="kw">in</span> model.factories <span class="cf">for</span> w <span class="kw">in</span> model.warehouses) <span class="op">+</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>            <span class="bu">sum</span>(model.storage_cost[w] <span class="op">*</span> model.z[w, r] <span class="cf">for</span> w <span class="kw">in</span> model.warehouses <span class="cf">for</span> r <span class="kw">in</span> model.retailers) <span class="op">+</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>            <span class="bu">sum</span>(model.transport_cost[s, f] <span class="op">*</span> model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers <span class="cf">for</span> f <span class="kw">in</span> model.factories) <span class="op">+</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>            <span class="bu">sum</span>(model.transport_cost[f, w] <span class="op">*</span> model.y[f, w] <span class="cf">for</span> f <span class="kw">in</span> model.factories <span class="cf">for</span> w <span class="kw">in</span> model.warehouses) <span class="op">+</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            <span class="bu">sum</span>(model.transport_cost[w, r] <span class="op">*</span> model.z[w, r] <span class="cf">for</span> w <span class="kw">in</span> model.warehouses <span class="cf">for</span> r <span class="kw">in</span> model.retailers))</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>model.obj <span class="op">=</span> Objective(rule<span class="op">=</span>total_cost, sense<span class="op">=</span>minimize)</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Constraints</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Production Capacity Constraints</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> supply_capacity_rule(model, s):</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> f <span class="kw">in</span> model.factories) <span class="op">&lt;=</span> model.production_capacity[s]</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>model.supply_capacity_constraint <span class="op">=</span> Constraint(model.suppliers, rule<span class="op">=</span>supply_capacity_rule)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Factory Capacity Constraints</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factory_capacity_rule(model, f):</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers) <span class="op">&lt;=</span> model.factory_capacity[f]</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>model.factory_capacity_constraint <span class="op">=</span> Constraint(model.factories, rule<span class="op">=</span>factory_capacity_rule)</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Special Capacity Constraints of Factories</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factory_capacity_limit_rule(model, f):</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> f <span class="op">==</span> <span class="st">'F1'</span>:</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers) <span class="op">&lt;=</span> <span class="fl">0.7</span> <span class="op">*</span> model.factory_capacity[f]  <span class="co"># F1  %70</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> f <span class="op">==</span> <span class="st">'F2'</span>:</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers) <span class="op">&lt;=</span> <span class="fl">1.0</span> <span class="op">*</span> model.factory_capacity[f]  <span class="co"># F2  %100</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> f <span class="op">==</span> <span class="st">'F3'</span>:</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers) <span class="op">&lt;=</span> <span class="fl">0.85</span> <span class="op">*</span> model.factory_capacity[f]  <span class="co"># F3  %85</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>model.factory_capacity_limit_constraint <span class="op">=</span> Constraint(model.factories, rule<span class="op">=</span>factory_capacity_limit_rule)</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Warehouse Capacity Constraints</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> warehouse_capacity_rule(model, w):</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.y[f, w] <span class="cf">for</span> f <span class="kw">in</span> model.factories) <span class="op">&lt;=</span> model.warehouse_capacity[w]</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>model.warehouse_capacity_constraint <span class="op">=</span> Constraint(model.warehouses, rule<span class="op">=</span>warehouse_capacity_rule)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Retailer Demand Constraints</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retailer_demand_rule(model, r):</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.z[w, r] <span class="cf">for</span> w <span class="kw">in</span> model.warehouses) <span class="op">==</span> model.demand[r]</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>model.retailer_demand_constraint <span class="op">=</span> Constraint(model.retailers, rule<span class="op">=</span>retailer_demand_rule)</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Factory Inflow-Outflow Balance</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factory_balance_rule(model, f):</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.x[s, f] <span class="cf">for</span> s <span class="kw">in</span> model.suppliers) <span class="op">==</span> <span class="bu">sum</span>(model.y[f, w] <span class="cf">for</span> w <span class="kw">in</span> model.warehouses)</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>model.factory_balance_constraint <span class="op">=</span> Constraint(model.factories, rule<span class="op">=</span>factory_balance_rule)</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Warehouse Inflow-Outflow Balance</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> warehouse_balance_rule(model, w):</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(model.y[f, w] <span class="cf">for</span> f <span class="kw">in</span> model.factories) <span class="op">==</span> <span class="bu">sum</span>(model.z[w, r] <span class="cf">for</span> r <span class="kw">in</span> model.retailers)</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>model.warehouse_balance_constraint <span class="op">=</span> Constraint(model.warehouses, rule<span class="op">=</span>warehouse_balance_rule)</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> SolverFactory(<span class="st">'glpk'</span>)</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> solver.solve(model)</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>model.display()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model unknown
+
+  Variables:
+    x : Size=9, Index=suppliers*factories
+        Key          : Lower : Value  : Upper : Fixed : Stale : Domain
+        ('S1', 'F1') :     0 : 7000.0 :  None : False : False : NonNegativeReals
+        ('S1', 'F2') :     0 : 1200.0 :  None : False : False : NonNegativeReals
+        ('S1', 'F3') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S2', 'F1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S2', 'F2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S2', 'F3') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S3', 'F1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S3', 'F2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('S3', 'F3') :     0 : 6800.0 :  None : False : False : NonNegativeReals
+    y : Size=9, Index=factories*warehouses
+        Key          : Lower : Value  : Upper : Fixed : Stale : Domain
+        ('F1', 'W1') :     0 : 6000.0 :  None : False : False : NonNegativeReals
+        ('F1', 'W2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('F1', 'W3') :     0 : 1000.0 :  None : False : False : NonNegativeReals
+        ('F2', 'W1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('F2', 'W2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('F2', 'W3') :     0 : 1200.0 :  None : False : False : NonNegativeReals
+        ('F3', 'W1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('F3', 'W2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('F3', 'W3') :     0 : 6800.0 :  None : False : False : NonNegativeReals
+    z : Size=9, Index=warehouses*retailers
+        Key          : Lower : Value  : Upper : Fixed : Stale : Domain
+        ('W1', 'R1') :     0 : 4000.0 :  None : False : False : NonNegativeReals
+        ('W1', 'R2') :     0 : 2000.0 :  None : False : False : NonNegativeReals
+        ('W1', 'R3') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('W2', 'R1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('W2', 'R2') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('W2', 'R3') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('W3', 'R1') :     0 :    0.0 :  None : False : False : NonNegativeReals
+        ('W3', 'R2') :     0 : 3000.0 :  None : False : False : NonNegativeReals
+        ('W3', 'R3') :     0 : 6000.0 :  None : False : False : NonNegativeReals
+
+  Objectives:
+    obj : Size=1, Index=None, Active=True
+        Key  : Active : Value
+        None :   True : 333400.0
+
+  Constraints:
+    supply_capacity_constraint : Size=3
+        Key : Lower : Body   : Upper
+         S1 :  None : 8200.0 : 10000.0
+         S2 :  None :    0.0 : 12000.0
+         S3 :  None : 6800.0 :  8000.0
+    factory_capacity_constraint : Size=3
+        Key : Lower : Body   : Upper
+         F1 :  None : 7000.0 : 10000.0
+         F2 :  None : 1200.0 :  9000.0
+         F3 :  None : 6800.0 :  8000.0
+    factory_capacity_limit_constraint : Size=3
+        Key : Lower : Body   : Upper
+         F1 :  None : 7000.0 : 7000.0
+         F2 :  None : 1200.0 : 9000.0
+         F3 :  None : 6800.0 : 6800.0
+    warehouse_capacity_constraint : Size=3
+        Key : Lower : Body   : Upper
+         W1 :  None : 6000.0 :  6000.0
+         W2 :  None :    0.0 :  8000.0
+         W3 :  None : 9000.0 : 10000.0
+    retailer_demand_constraint : Size=3
+        Key : Lower  : Body   : Upper
+         R1 : 4000.0 : 4000.0 : 4000.0
+         R2 : 5000.0 : 5000.0 : 5000.0
+         R3 : 6000.0 : 6000.0 : 6000.0
+    factory_balance_constraint : Size=3
+        Key : Lower : Body : Upper
+         F1 :   0.0 :  0.0 :   0.0
+         F2 :   0.0 :  0.0 :   0.0
+         F3 :   0.0 :  0.0 :   0.0
+    warehouse_balance_constraint : Size=3
+        Key : Lower : Body : Upper
+         W1 :   0.0 :  0.0 :   0.0
+         W2 :   0.0 :  0.0 :   0.0
+         W3 :   0.0 :  0.0 :   0.0</code></pre>
+</div>
+</div>
+</section>
+<section id="graph-section" class="level3">
+<h3 class="anchored" data-anchor-id="graph-section">Graph Section</h3>
+<div id="f55e4a20-157c-4264-8362-90d3bcc37df6" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>supplier_color, factory_color, warehouse_color, retailer_color <span class="op">=</span> <span class="st">'blue'</span>, <span class="st">'green'</span>, <span class="st">'orange'</span>, <span class="st">'red'</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>node_size <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> model.suppliers:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    G.add_node(s, color<span class="op">=</span>supplier_color, size<span class="op">=</span>node_size)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> model.factories:</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    G.add_node(f, color<span class="op">=</span>factory_color, size<span class="op">=</span>node_size)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> model.warehouses:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    G.add_node(w, color<span class="op">=</span>warehouse_color, size<span class="op">=</span>node_size)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> model.retailers:</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    G.add_node(r, color<span class="op">=</span>retailer_color, size<span class="op">=</span>node_size)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Flow and cost information for edge labels</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>max_flow <span class="op">=</span> <span class="bu">max</span>([model.x[s, f].value <span class="cf">for</span> s <span class="kw">in</span> model.suppliers <span class="cf">for</span> f <span class="kw">in</span> model.factories] <span class="op">+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>               [model.y[f, w].value <span class="cf">for</span> f <span class="kw">in</span> model.factories <span class="cf">for</span> w <span class="kw">in</span> model.warehouses] <span class="op">+</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>               [model.z[w, r].value <span class="cf">for</span> w <span class="kw">in</span> model.warehouses <span class="cf">for</span> r <span class="kw">in</span> model.retailers])</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> model.suppliers:</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> model.factories:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model.x[s, f].value <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>            flow <span class="op">=</span> model.x[s, f].value</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            G.add_edge(s, f, weight<span class="op">=</span>flow, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>flow<span class="sc">:.2f}</span><span class="ss">'</span>, color<span class="op">=</span><span class="st">'purple'</span>, </span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                       linewidth<span class="op">=</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> (flow <span class="op">/</span> max_flow))</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> model.factories:</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> w <span class="kw">in</span> model.warehouses:</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model.y[f, w].value <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            flow <span class="op">=</span> model.y[f, w].value</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            G.add_edge(f, w, weight<span class="op">=</span>flow, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>flow<span class="sc">:.2f}</span><span class="ss">'</span>, color<span class="op">=</span><span class="st">'gray'</span>, </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>                       linewidth<span class="op">=</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> (flow <span class="op">/</span> max_flow))</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> model.warehouses:</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> model.retailers:</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model.z[w, r].value <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            flow <span class="op">=</span> model.z[w, r].value</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            G.add_edge(w, r, weight<span class="op">=</span>flow, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>flow<span class="sc">:.2f}</span><span class="ss">'</span>, color<span class="op">=</span><span class="st">'brown'</span>, </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>                       linewidth<span class="op">=</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> (flow <span class="op">/</span> max_flow))</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Node</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> {</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">'S1'</span>: (<span class="dv">0</span>, <span class="dv">2</span>), <span class="st">'S2'</span>: (<span class="dv">0</span>, <span class="dv">1</span>), <span class="st">'S3'</span>: (<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">'F1'</span>: (<span class="dv">1</span>, <span class="dv">2</span>), <span class="st">'F2'</span>: (<span class="dv">1</span>, <span class="dv">1</span>), <span class="st">'F3'</span>: (<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">'W1'</span>: (<span class="dv">2</span>, <span class="dv">2</span>), <span class="st">'W2'</span>: (<span class="dv">2</span>, <span class="dv">1</span>), <span class="st">'W3'</span>: (<span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">'R1'</span>: (<span class="dv">3</span>, <span class="dv">2</span>), <span class="st">'R2'</span>: (<span class="dv">3</span>, <span class="dv">1</span>), <span class="st">'R3'</span>: (<span class="dv">3</span>, <span class="dv">0</span>),</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>node_colors <span class="op">=</span> [G.nodes[node][<span class="st">'color'</span>] <span class="cf">for</span> node <span class="kw">in</span> G.nodes]</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>node_sizes <span class="op">=</span> [G.nodes[node][<span class="st">'size'</span>] <span class="cf">for</span> node <span class="kw">in</span> G.nodes]</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>edge_colors <span class="op">=</span> [G[u][v][<span class="st">'color'</span>] <span class="cf">for</span> u, v <span class="kw">in</span> G.edges()]</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>edge_widths <span class="op">=</span> [G[u][v][<span class="st">'linewidth'</span>] <span class="cf">for</span> u, v <span class="kw">in</span> G.edges()]</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_nodes(G, pos, node_color<span class="op">=</span>node_colors, node_size<span class="op">=</span>node_sizes, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_labels(G, pos, font_size<span class="op">=</span><span class="dv">10</span>, font_weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edges(G, pos, edge_color<span class="op">=</span>edge_colors, width<span class="op">=</span>edge_widths, arrows<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>edge_labels <span class="op">=</span> nx.get_edge_attributes(G, <span class="st">'label'</span>)</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edge_labels(G, pos, edge_labels<span class="op">=</span>edge_labels, font_size<span class="op">=</span><span class="dv">8</span>, font_color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Supply Chain Flow Network"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)<span class="co"># fontweight='bold')</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="D1b_SC_4_stage_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation column-page-right">
+  <div class="nav-page nav-page-previous">
+      <a href="../examples/D1a_SC_simple.html" class="pagination-link" aria-label="Ex. D1: Simple Supply Chain (SSC)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D1: Simple Supply Chain (SSC)</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../examples/03-OPF_risk.html" class="pagination-link" aria-label="Ex. S3: Energy Dispatch Problem - Risk Measures">
+        <span class="nav-page-text"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

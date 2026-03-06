@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Background and Setting – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>DDFACET – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,8 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./theory.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./NSBAS.html" rel="next">
+<link href="./usecases.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -90,44 +70,12 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
 </head>
 
-<body class="nav-sidebar floating slimcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -136,7 +84,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Introduction</a></li><li class="breadcrumb-item"><a href="./intro.html">Background and Setting</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./usecases.html">Use-cases</a></li><li class="breadcrumb-item"><a href="./DDFACET.html"><span class="chapter-title">DDFACET</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -182,7 +130,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Background and Setting</span></a>
   </div>
 </li>
@@ -293,7 +241,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./DDFACET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DDFACET</span></a>
+  <a href="./DDFACET.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">DDFACET</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -305,31 +253,23 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#the-exa-atow-project" id="toc-the-exa-atow-project" class="nav-link active" data-scroll-target="#the-exa-atow-project">The Exa-AtoW Project</a></li>
-  <li><a href="#continuum-digital-twin-or-shadow" id="toc-continuum-digital-twin-or-shadow" class="nav-link" data-scroll-target="#continuum-digital-twin-or-shadow">Continuum Digital Twin or Shadow</a></li>
-  <li><a href="#uncertainty" id="toc-uncertainty" class="nav-link" data-scroll-target="#uncertainty">Uncertainty</a></li>
-  </ul>
-</nav>
+    
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content page-columns page-full column-body" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Introduction</a></li><li class="breadcrumb-item"><a href="./intro.html">Background and Setting</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./usecases.html">Use-cases</a></li><li class="breadcrumb-item"><a href="./DDFACET.html"><span class="chapter-title">DDFACET</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Background and Setting</h1>
+<h1 class="title"><span class="chapter-title">DDFACET</span></h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -341,80 +281,15 @@ window.Quarto = {
 </header>
 
 
-<p>A wide-scale, cross-facility workflow is a complex beast. It reunites users, jobs, and facilities, each with its resources and constraints. In the workflows that interest us, the facilites include data centres, HPC<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> centres, and the network connections between these.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;High Performance Computing</p></div></div><p>The basic problem can be resumed as follows: find an optimal schedule <span class="math inline">\(S\)</span> for a collection of jobs <span class="math inline">\(J\)</span> to be executed on a set of facilities <span class="math inline">\(F,\)</span> subject to constraints on resources, availability, precedences. The optimization can be performed for various objectives, or combinations of these, such as cost, project duration, facility availability, environmental impact. The presence of <em>uncertainty</em> plays a central role and is included in the optimization process.</p>
-<section id="the-exa-atow-project" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="the-exa-atow-project">The Exa-AtoW Project</h2>
-<div class="page-columns page-full"><p>This work is part of the Exa-AtoW project, a member of the NumPEx consortium. The Exa-AToW project aims at providing solutions for the efficient management of large-scale workflows composed of HPDA, AI, and HPC tasks that are distributed over a continuum of resources ranging from the Exascale, HPC, and Data infrastructures.</p><div class="no-row-height column-margin column-container"><span class=""><a href="https://numpex.org/">https://numpex.org</a></span></div></div>
-<p>Exa-AToW focuses on effective end-to-end solutions, at scale, by considering not only functional dimensions such as workflows and data logistics but also resource federation governance, cybersecurity, energy, and sustainability.</p>
-</section>
-<section id="continuum-digital-twin-or-shadow" class="level2">
-<h2 class="anchored" data-anchor-id="continuum-digital-twin-or-shadow">Continuum Digital Twin or Shadow</h2>
-<p>Given the inherent complexity of Exascale workflows, they will inevitably be executed on a cross-facility infrastructure. Such a multi-component basis will inevtibaly be subject to uncertainties in availability, maintenance, cost, etc. In addition, the cybersecurity constraints will impose strict access conditions that make workflow testing basically impossible. And, more recently, the issue of sustainability and energy consumption by cyberinfrastructure <span class="citation" data-cites="IEA2025">(<a href="index.html#ref-IEA2025" role="doc-biblioref">IEA 2025</a>)</span> is a critical issue, in particular for so-called hyperscalers and data centers used for AI training and inference.</p>
-<p>For all these reasons, the presence of a digital twin, or shadow, is indispensable for testing and planning workflow executions <em>before</em> actually executing them. The computer science setup, based on micro-services and ontologies, is fully described in <span class="citation" data-cites="MGG2025implementation">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Martineau, et al. 2026</a>)</span> and extended use-cases are presented in <span class="citation" data-cites="MGG2025usecases">(<a href="index.html#ref-MGG2025usecases" role="doc-biblioref">Garénaux-Gruau, Certenais, et al. 2026</a>)</span>.</p>
-<div id="fig-modules" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    A[SIM] --&gt; B[SCD]
-    B --&gt; C[OPT]
-    C --&gt; A
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Three modules of the CDT: simuulation (SIM), scheduling (SCD), optimization (OPT). An initial workflow definition enters at the left and an optimal workflow is produced.
-</figcaption>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="graphics/v2.scenario-hpc.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
-<p>The core of the CDT is a set of three modules: simulation, scheduling and optimization, as shown in <a href="#fig-modules" class="quarto-xref">Figure&nbsp;<span>1</span></a>. They can be used independently, or be chained together. These three are fed by a shared database, based on a common ontology that contains descriptions of all the jobs to perform, resources available, constraints to be respected, and any objectives to be attained. This database is connected to, and communicates with the real world—see <a href="#fig-global" class="quarto-xref">Figure&nbsp;<span>2</span></a>. This communication can take the form of a MADPP (machine actionable data project plan), a user-interface, or a combination of the two <span class="citation" data-cites="MGG2025implementation">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Martineau, et al. 2026</a>)</span>.</p>
-<div id="fig-global" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-global-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="graphics/CDT.png" class="img-fluid figure-img" style="width:80.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-global-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Global software architecture of the CDT, consisting of three modules: simulation (SIM), scheduling (SCD), optimization (OPT).
-</figcaption>
-</figure>
-</div>
-<p>All details can be found in <span class="citation" data-cites="MGG2025math">(<a href="index.html#ref-MGG2025math" role="doc-biblioref">Garénaux-Gruau, Bodin, and Asch 2026</a>)</span>.</p>
-</section>
-<section id="uncertainty" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="uncertainty">Uncertainty</h2>
-<p>Deterministic schedules optimize for a world that, in theory, never materializes. Processing times vary, machines fail, networks are overloaded, demand shifts. As a result, a schedule that is “optimal” under perfect information often performs poorly when reality intervenes. Stochastic formulations, on the other hand, explicitly hedge against variability. The resulting schedules may sacrifice some of the theoretical efficiency, but maintain feasibility when <em>disruptions</em> occur, thus avoiding costly rescheduling or missed deadlines. Rather than a single makespan or cost figure, one can obtain distributions: “We meet the deadline with 95% confidence” which is far more informative than “the expected completion is Tuesday.”</p>
-<p>Hence, when uncertainty in job durations or data transfer arrivals is modeled, the true value of buffer capacity, parallel facilities, or overtime flexibility becomes visible. Deterministic models systematically undervalue these. We can compute the value of the stochastic solution (VSS), which quantifies what can be gained by solving the full stochastic program rather than just optimizing against average conditions. Note that averaging yields a deterministic problem.</p>
-<p>The Value of Stochastic Solution (VSS) is defined as the difference between the Expectation of the Expected Value Solution (EEVS) and the optimal objective value of the Recourse Problem (RP). The VSS quantifies the benefit of using a stochastic model in place of a deterministic one in decision-making problems under uncertainty. A large VSS signals that the system is sensitive to variability, hedging decisions matter, and the deterministic approximation is potentially dangerous.</p>
+<p>TBC</p>
+<p>TBC</p>
+<p>TBC</p>
 
-<div class="no-row-height column-margin column-container"><div class="">
-<p><span class="math display">\[\mathrm{VSS} = \mathrm{EEV} - \mathrm{RP}\]</span></p>
-</div></div><p>In conclusion, when faced with expensive (financially and environmentally), time-consuming Exascale workflows, the need to consider uncertainty in the scheduling program is vital. Stochastic-based scheduling can take into account any uncertain resources and all uncertain costs—a good example would be variable energy costs. The solution thus obtained will permit a <em>hedging</em> strategy. We can, in addition, perform risk analysis, where we compare alternative deployments of the workflow as a function of our <em>risk profile</em>.</p>
-
-
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-MGG2025math" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin—Mathematical Models.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
-</div>
-<div id="ref-MGG2025usecases" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, Mathis Certenais, Laurent Morin, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin Use Cases.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
-</div>
-<div id="ref-MGG2025implementation" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, Olivier Martineau, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin Implementation.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
-</div>
-<div id="ref-IEA2025" class="csl-entry" role="listitem">
-IEA, Paris. 2025. <span>“Energy and AI.”</span> <a href="https://www.iea.org/reports/energy-and-ai">https://www.iea.org/reports/energy-and-ai</a>.
-</div>
-</div>
-</section>
 
 
 </main> <!-- /main -->
@@ -818,15 +693,15 @@ IEA, Paris. 2025. <span>“Energy and AI.”</span> <a href="https://www.iea.org
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Welcome">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
+      <a href="./usecases.html" class="pagination-link" aria-label="Overview">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./theory.html" class="pagination-link" aria-label="Theoretical Framework">
-        <span class="nav-page-text">Theoretical Framework</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./NSBAS.html" class="pagination-link" aria-label="NSBAS">
+        <span class="nav-page-text"><span class="chapter-title">NSBAS</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

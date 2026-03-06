@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Use-Cases – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>Overview – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./RCPSP.html" rel="prev">
+<link href="./DDFACET.html" rel="next">
+<link href="./examples/03-OPF_risk.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -83,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./RCPSP.html">Examples, Use-cases</a></li><li class="breadcrumb-item"><a href="./usecases.html"><span class="chapter-title">Use-Cases</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./usecases.html">Use-cases</a></li><li class="breadcrumb-item"><a href="./usecases.html">Overview</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -152,7 +153,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./th-stochastic.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Uncertainty</span></a>
+  <a href="./th-stochastic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uncertainty</span></a>
   </div>
 </li>
       </ul>
@@ -168,7 +170,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pyomo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Using PYOMO</span></a>
+  <a href="./pyomo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using PYOMO</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -183,7 +186,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a>
+  <a href="./CPLEX-MRCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ex. I3: CPLEX Benchmark - MRCPSP</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -196,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Examples, Use-cases</span></a>
+ <span class="menu-text">Examples</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -204,12 +208,45 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Examples</span></a>
+  <a href="./RCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./usecases.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Use-Cases</span></a>
+  <a href="./examples/D1a_SC_simple.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D1: Simple Supply Chain (SSC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Use-cases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./usecases.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DDFACET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DDFACET</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NSBAS.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NSBAS</span></a>
   </div>
 </li>
       </ul>
@@ -232,9 +269,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./RCPSP.html">Examples, Use-cases</a></li><li class="breadcrumb-item"><a href="./usecases.html"><span class="chapter-title">Use-Cases</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./usecases.html">Use-cases</a></li><li class="breadcrumb-item"><a href="./usecases.html">Overview</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Use-Cases</span></h1>
+<h1 class="title">Overview</h1>
 </div>
 
 
@@ -251,23 +288,35 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>The objective of the Exa-AtoW project is to produce operational workflows of exascale and post-exascale workflows. We ilustrate here the scheduling optimization of two full-scale use-cases, as implemented by the CDT:</p>
+<ul>
+<li>DDFFACET</li>
+<li>NSBAS.</li>
+</ul>
 <section id="ddfacet" class="level2">
 <h2 class="anchored" data-anchor-id="ddfacet">DDFACET</h2>
-<p>The workflow is quite simple, with choice of HPC centers, data centers and network connections. The batch size is large and so are the data volumes. For these reasons, optimal scheduling that takes into account facility availability and reliability, is very important.</p>
+<p>The DDF Pipeline is a data processing tool initially designed for the LOw-Frequency ARray (LOFAR) radio telescope and is a candidate for processing SKA data. The workflow is quite simple, with choice of HPC centers, data centers and network connections. The batch size is large and so are the data volumes. For these reasons, optimal scheduling that takes into account facility availability and reliability, is very important.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="graphics/v2.scenario-hpc.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
-<p>TBC</p>
-<p>TBC</p>
-<p>TBC</p>
+<p>Consult the <a href="here">implementation</a>. (COMING SOON)</p>
 </section>
 <section id="nsbas" class="level2">
 <h2 class="anchored" data-anchor-id="nsbas">NSBAS</h2>
-<p>TBC</p>
-<p>TBC</p>
-<p>TBC</p>
+<p>The detection of slow, time-dependent ground motion using the Interferometric Synthetic Aperture Radar (InSAR) technique requires the analysis and combination of multiple radar data takes over an extended time period. NSBAS is a workflow for InSAR data. The workflow, when broken down into all its components, is very complex. It includes numerous data acquisition stages from different sources—indicated in green. The workflow produces several outputs—shown in blue. In addition, there are numerous intermediate data products.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="graphics/24243_JOLIVET_2011_archivage-nsbas1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="graphics/24243_JOLIVET_2011_archivage-nsbas2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+<p>Consult the <a href="here">implementation</a>. (COMING SOON)</p>
 
 
 </section>
@@ -675,11 +724,14 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="./RCPSP.html" class="pagination-link" aria-label="Examples">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Examples</span></span>
+      <a href="./examples/03-OPF_risk.html" class="pagination-link" aria-label="Example 3: Energy Dispatch Problem - Risk Measures">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./DDFACET.html" class="pagination-link" aria-label="DDFACET">
+        <span class="nav-page-text"><span class="chapter-title">DDFACET</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

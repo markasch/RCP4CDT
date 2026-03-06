@@ -1,6 +1,6 @@
-# Using PYOMO {#sec-exam}
+# Using PYOMO {.unnumbered}
 
-::: {.unnumbered}
+::: {#sec-exam}
 :::
 
 This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.

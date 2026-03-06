@@ -1,22 +1,32 @@
-# Examples
+# Overview {.unnumbered}
 
 This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today's scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude---outstanding examples are [SKA](https://www.skao.int/en) and CERN's [FCC](https://home.cern/science/accelerators/future-circular-collider).
 
-The realistic cases are presented in the Use-Cases chapter.
+The chapter is divied into deterministic (D0 to D3) and stochastic (S1 to S3) scenarios.  Realistic cases are presented in the Use-Cases chapter.
 
-## Simplified Supply Chain Example
 
-Putting together:
 
-- precedence
-- TBC
-
-Coming soon...
-
-## Simplified RCPSP Example
+## D1. Simplified Supply Chain Example
 
 Putting together:
 
+- primal problem
+- dual problem
+- sensitivity analysis.
+
+See [Example D1](examples/D1a_SC_simple.ipynb) and  [Example D1a](examples/D1b_SC_4_stage.ipynb)
+
+## D2. Simplified Scheduling Example
+
+- empirical scheduling
+- multiple machine, disjunctive scheduling
+
+
+## D3. Simplified RCPSP Example
+
+Putting together:
+
+- resource constraints
 - precedence
 - time-indexed
 - disjunctive
@@ -24,7 +34,7 @@ Putting together:
 
 Coming soon...
 
-## Simplified MRCPSP Example
+## D4. Simplified MRCPSP Example
 
 In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
 
@@ -86,7 +96,27 @@ with open("input.json", "r") as jsonfile:
     TASKS = json.load(jsonfile)
 ```
 
-Though, for interoperability, we should privilege the data model format, described above in **CDT-Implementation**. 
+Though, for <mark>interoperability</mark>, we should privilege the data model format, described above in **CDT-Implementation**. 
+
+
+---
+
+---
+
+
+## S1. Two-Stage Stochastic
+
+TBC
+
+## S2. Multi-Stage Stochastic
+
+TBC
+
+## S3. Risk Measures
+
+As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In this example, we compare...
+
+TBC
 
 
 
@@ -105,7 +135,7 @@ plt.show()
 
 We observe in @fig-line-plot that there is a clear trend, up and down.
 
-To only have code displayed, but not executed...
+To only have code displayed, but not executed use `{.python}`...
 
 ```{.python}
 #| label: fig-line-plot

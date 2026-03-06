@@ -1,4 +1,4 @@
-# CPLEX Benchmark - MRCPSP {.unnumbered}
+# Ex. I3: CPLEX Benchmark - MRCPSP {.unnumbered}
 
 ## Motivation
 We execute a multi-mode RCPSP benchmark from [PSP-LIB](https://www.om-db.wi.tum.de/psplib/) to evaluate performance of the optimal scheduling in the CDT.

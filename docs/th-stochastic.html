@@ -133,7 +133,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-stochastic.html"><span class="chapter-title">Uncertainty</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-stochastic.html">Uncertainty</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -202,7 +202,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./th-stochastic.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Uncertainty</span></a>
+  <a href="./th-stochastic.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Uncertainty</span></a>
   </div>
 </li>
       </ul>
@@ -218,22 +219,24 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./pyomo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Using PYOMO</span></a>
+  <a href="./pyomo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using PYOMO</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a>
+  <a href="./examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I1: Disjunctions - Theory, Examples</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: GDPopt Test</span></a>
+  <a href="./examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I2: GDPopt Test</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a>
+  <a href="./CPLEX-MRCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ex. I3: CPLEX Benchmark - MRCPSP</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -241,14 +244,58 @@ window.Quarto = {
   <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Examples</span></a>
+  <a href="./RCPSP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./usecases.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Use-Cases</span></a>
+  <a href="./examples/D1a_SC_simple.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D1: Simple Supply Chain (SSC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Use-cases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./usecases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DDFACET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">DDFACET</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NSBAS.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NSBAS</span></a>
   </div>
 </li>
       </ul>
@@ -273,9 +320,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content page-columns page-full column-body" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-stochastic.html"><span class="chapter-title">Uncertainty</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-stochastic.html">Uncertainty</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-stoch" class="quarto-section-identifier"><span class="chapter-title">Uncertainty</span></span></h1>
+<h1 class="title">Uncertainty</h1>
 </div>
 
 
@@ -292,6 +339,9 @@ window.Quarto = {
 </header>
 
 
+<div id="sec-stoch">
+
+</div>
 <p>In practice some of the scheduling parameters may be uncertain. The exact duration of an activity, for instance, might not be known at the beginning of the project. Similarly, the number of available resources is another parameter that may not be known before project execution. These uncertainties may be due to different sources, including estimation errors, unforeseen (weather) conditions, late “delivery” (unavailability) of some required resources, unpredictable incidents such as machine breakdown or worker accidents, etc.</p>
 <section id="stochastic-multistage-programming" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="stochastic-multistage-programming">Stochastic, multistage programming</h2>
@@ -338,7 +388,7 @@ Caution
 <img src="graphics/sdp.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: A multistage decision process with uncertainty. Uncertain, exogenous inputs <span class="math inline">\(\xi_t\)</span> arrive, starting from stage <span class="math inline">\(t=2,\)</span> and trigger subsequent recourse actions.
+Figure&nbsp;1: A multistage decision process with uncertainty. Uncertain, exogenous inputs <span class="math inline">\(\xi_t\)</span> arrive, starting from stage <span class="math inline">\(t=2,\)</span> and trigger subsequent recourse actions.
 </figcaption>
 </figure>
 </div>
@@ -841,7 +891,7 @@ Shapiro, Alexander, Darinka Dentcheva, and Andrzej Ruszczyński. 2009. <em>Lectu
   </div>
   <div class="nav-page nav-page-next">
       <a href="./pyomo.html" class="pagination-link" aria-label="Using PYOMO">
-        <span class="nav-page-text"><span class="chapter-title">Using PYOMO</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Using PYOMO</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

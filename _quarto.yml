@@ -23,13 +23,19 @@ book:
         - pyomo.qmd
         - examples/01-Disjunctions.ipynb
         - examples/02-Disjunctions-GDPopt.ipynb    
-        - examples/03-OPF_risk.ipynb
         - CPLEX-MRCPSP.qmd    
         - CDT.qmd
-    - part: Examples, Use-cases
+    - part: Examples
       chapters:
         - RCPSP.qmd
+        - examples/D1a_SC_simple.ipynb
+        - examples/D1b_SC_4_stage.ipynb
+        - examples/03-OPF_risk.ipynb
+    - part: Use-cases
+      chapters:
         - usecases.qmd
+        - DDFACET.qmd
+        - NSBAS.qmd
 
 bibliography: references.bib
 
