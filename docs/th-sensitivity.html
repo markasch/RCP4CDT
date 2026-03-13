@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Background and Setting – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>Duality and Sensitivity – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -50,8 +50,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./theory.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./pyomo.html" rel="next">
+<link href="./th-stochastic.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -90,9 +90,6 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -136,7 +133,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Introduction</a></li><li class="breadcrumb-item"><a href="./intro.html">Background and Setting</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-sensitivity.html">Duality and Sensitivity</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -182,7 +179,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Background and Setting</span></a>
   </div>
 </li>
@@ -211,7 +208,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./th-sensitivity.html" class="sidebar-item-text sidebar-link">
+  <a href="./th-sensitivity.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Duality and Sensitivity</span></a>
   </div>
 </li>
@@ -320,9 +317,10 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#the-exa-atow-project" id="toc-the-exa-atow-project" class="nav-link active" data-scroll-target="#the-exa-atow-project">The Exa-AtoW Project</a></li>
-  <li><a href="#continuum-digital-twin-or-shadow" id="toc-continuum-digital-twin-or-shadow" class="nav-link" data-scroll-target="#continuum-digital-twin-or-shadow">Continuum Digital Twin or Shadow</a></li>
-  <li><a href="#uncertainty" id="toc-uncertainty" class="nav-link" data-scroll-target="#uncertainty">Uncertainty</a></li>
+  <li><a href="#standard-notation" id="toc-standard-notation" class="nav-link active" data-scroll-target="#standard-notation">Standard Notation</a></li>
+  <li><a href="#primal-and-dual-problems" id="toc-primal-and-dual-problems" class="nav-link" data-scroll-target="#primal-and-dual-problems">Primal and Dual Problems</a></li>
+  <li><a href="#lagrange-multipliers-dual-variables-and-sensitivity" id="toc-lagrange-multipliers-dual-variables-and-sensitivity" class="nav-link" data-scroll-target="#lagrange-multipliers-dual-variables-and-sensitivity">Lagrange Multipliers, Dual Variables and Sensitivity</a></li>
+  <li><a href="#shadow-prices-marginal-values" id="toc-shadow-prices-marginal-values" class="nav-link" data-scroll-target="#shadow-prices-marginal-values">Shadow Prices, Marginal Values</a></li>
   </ul>
 </nav>
 </nav>
@@ -333,9 +331,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content page-columns page-full column-body" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Introduction</a></li><li class="breadcrumb-item"><a href="./intro.html">Background and Setting</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./theory.html">Theory</a></li><li class="breadcrumb-item"><a href="./th-sensitivity.html">Duality and Sensitivity</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Background and Setting</h1>
+<h1 class="title">Duality and Sensitivity</h1>
 </div>
 
 
@@ -352,77 +350,154 @@ window.Quarto = {
 </header>
 
 
-<p>A wide-scale, cross-facility workflow is a complex beast. It reunites users, jobs, and facilities, each with its resources and constraints. In the workflows that interest us, the facilites include data centres, HPC<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> centres, and the network connections between these.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;High Performance Computing</p></div></div><p>The basic problem can be resumed as follows: find an optimal schedule <span class="math inline">\(S\)</span> for a collection of jobs <span class="math inline">\(J\)</span> to be executed on a set of facilities <span class="math inline">\(F,\)</span> subject to constraints on resources, availability, precedences. The optimization can be performed for various objectives, or combinations of these, such as cost, project duration, facility availability, environmental impact. The presence of <em>uncertainty</em> plays a central role and is included in the optimization process.</p>
-<section id="the-exa-atow-project" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="the-exa-atow-project">The Exa-AtoW Project</h2>
-<div class="page-columns page-full"><p>This work is part of the Exa-AtoW project, a member of the NumPEx consortium. The Exa-AToW project aims at providing solutions for the efficient management of large-scale workflows composed of HPDA, AI, and HPC tasks that are distributed over a continuum of resources ranging from the Exascale, HPC, and Data infrastructures.</p><div class="no-row-height column-margin column-container"><span class=""><a href="https://numpex.org/">https://numpex.org</a></span></div></div>
-<p>Exa-AToW focuses on effective end-to-end solutions, at scale, by considering not only functional dimensions such as workflows and data logistics but also resource federation governance, cybersecurity, energy, and sustainability.</p>
-</section>
-<section id="continuum-digital-twin-or-shadow" class="level2">
-<h2 class="anchored" data-anchor-id="continuum-digital-twin-or-shadow">Continuum Digital Twin or Shadow</h2>
-<p>Given the inherent complexity of Exascale workflows, they will inevitably be executed on a cross-facility infrastructure. Such a multi-component basis will inevtibaly be subject to uncertainties in availability, maintenance, cost, etc. In addition, the cybersecurity constraints will impose strict access conditions that make workflow testing basically impossible. And, more recently, the issue of sustainability and energy consumption by cyberinfrastructure <span class="citation" data-cites="IEA2025">(<a href="index.html#ref-IEA2025" role="doc-biblioref">IEA 2025</a>)</span> is a critical issue, in particular for so-called hyperscalers and data centers used for AI training and inference.</p>
-<p>For all these reasons, the presence of a digital twin, or shadow, is indispensable for testing and planning workflow executions <em>before</em> actually executing them. The computer science setup, based on micro-services and ontologies, is fully described in <span class="citation" data-cites="MGG2025implementation">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Martineau, et al. 2026</a>)</span> and extended use-cases are presented in <span class="citation" data-cites="MGG2025usecases">(<a href="index.html#ref-MGG2025usecases" role="doc-biblioref">Garénaux-Gruau, Certenais, et al. 2026</a>)</span>.</p>
-<div id="fig-modules" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    A[SIM] --&gt; B[SCD]
-    B --&gt; C[OPT]
-    C --&gt; A
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Three modules of the CDT: simuulation (SIM), scheduling (SCD), optimization (OPT). An initial workflow definition enters at the left and an optimal workflow is produced.
-</figcaption>
-</figure>
-</div>
-<p>The core of the CDT is a set of three modules: simulation, scheduling and optimization, as shown in <a href="#fig-modules" class="quarto-xref">Figure&nbsp;<span>1</span></a>. They can be used independently, or be chained together. These three are fed by a shared database, based on a common ontology that contains descriptions of all the jobs to perform, resources available, constraints to be respected, and any objectives to be attained. This database is connected to, and communicates with the real world—see <a href="#fig-global" class="quarto-xref">Figure&nbsp;<span>2</span></a>. This communication can take the form of a MADPP (machine actionable data project plan), a user-interface, or a combination of the two <span class="citation" data-cites="MGG2025implementation">(<a href="index.html#ref-MGG2025implementation" role="doc-biblioref">Garénaux-Gruau, Martineau, et al. 2026</a>)</span>.</p>
-<div id="fig-global" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-global-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="graphics/CDT.png" class="img-fluid figure-img" style="width:80.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-global-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Global software architecture of the CDT, consisting of three modules: simulation (SIM), scheduling (SCD), optimization (OPT).
-</figcaption>
-</figure>
-</div>
-<p>All details can be found in <span class="citation" data-cites="MGG2025math">(<a href="index.html#ref-MGG2025math" role="doc-biblioref">Garénaux-Gruau, Bodin, and Asch 2026</a>)</span>.</p>
-</section>
-<section id="uncertainty" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="uncertainty">Uncertainty</h2>
-<p>Deterministic schedules optimize for a world that, in theory, never materializes. Processing times vary, machines fail, networks are overloaded, demand shifts. As a result, a schedule that is “optimal” under perfect information often performs poorly when reality intervenes. Stochastic formulations, on the other hand, explicitly hedge against variability. The resulting schedules may sacrifice some of the theoretical efficiency, but maintain feasibility when <em>disruptions</em> occur, thus avoiding costly rescheduling or missed deadlines. Rather than a single makespan or cost figure, one can obtain distributions: “We meet the deadline with 95% confidence” which is far more informative than “the expected completion is Tuesday.”</p>
-<p>Hence, when uncertainty in job durations or data transfer arrivals is modeled, the true value of buffer capacity, parallel facilities, or overtime flexibility becomes visible. Deterministic models systematically undervalue these. We can compute the value of the stochastic solution (VSS), which quantifies what can be gained by solving the full stochastic program rather than just optimizing against average conditions. Note that averaging yields a deterministic problem.</p>
-<p>The Value of Stochastic Solution (VSS) is defined as the difference between the Expectation of the Expected Value Solution (EEVS) and the optimal objective value of the Recourse Problem (RP). The VSS quantifies the benefit of using a stochastic model in place of a deterministic one in decision-making problems under uncertainty. A large VSS signals that the system is sensitive to variability, hedging decisions matter, and the deterministic approximation is potentially dangerous.</p>
+<div id="sec-dual">
 
-<div class="no-row-height column-margin column-container"><div class="">
-<p><span class="math display">\[\mathrm{VSS} = \mathrm{EEV} - \mathrm{RP}\]</span></p>
-</div></div><p>In conclusion, when faced with expensive (financially and environmentally), time-consuming Exascale workflows, the need to consider uncertainty in the scheduling program is vital. Stochastic-based scheduling can take into account any uncertain resources and all uncertain costs—a good example would be variable energy costs. The solution thus obtained will permit a <em>hedging</em> strategy. We can, in addition, perform risk analysis, where we compare alternative deployments of the workflow as a function of our <em>risk profile</em>.</p>
+</div>
+<ul>
+<li>primal and dual problems</li>
+<li>Lagrange multipliers</li>
+<li>KKT conditions</li>
+<li>shadow prices, reduced costs and slack values</li>
+</ul>
+<p>Uncertainty can also be related to the sensitivity of the objective to perturbations in the parameters. In other words, which parameters are most sensitive to changes, or what is the influence of parameters on the final objective?</p>
+<section id="standard-notation" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="standard-notation">Standard Notation</h2>
+<p>There are two standard notations for general optimization problems: one used by the LP community<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that wants to maximize the “profit”, the other by mathematicians who seek to minimize the “cost” function. We can easily transform one into the other by taking the negative of the objective function, i.e.&nbsp;maximizing a positive funtion <span class="math inline">\(f\)</span> is strictly equivalent to minimizing <span class="math inline">\(-f.\)</span> For a general theory, we usually consider the general optimization formulation, where we define</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Also used in <code>pyomo</code>.</p></div></div><ul>
+<li><span class="math inline">\(\mathbf{x}\quad\)</span> the vector of variables <span class="math inline">\((x_1,\ldots,x_n)^\top \in \mathbb{ R}^n\)</span>, also called unknowns or parameters.</li>
+<li><span class="math inline">\(f\quad\)</span> the objective, or cost function to minimize or maximize.</li>
+<li><span class="math inline">\(\mathbf{c}\quad\)</span> the vector function of <span class="math inline">\(m\)</span> constraints <span class="math inline">\((c_1(\mathbf{x}), \ldots, c_m(\mathbf{x}) )\)</span> that the unknowns must satisfy. Then, the optimization problem becomes <span id="eq-opt"><span class="math display">\[\begin{equation}
+  \min_{\mathbf{x}\in \mathbb{ R}^{n}}f(\mathbf{x})\qquad\mathrm{subject}\,\,\mathrm{to}\,\begin{array}{cc}
+      \left\{ \begin{array}{cc}
+          c_{i}(\mathbf{x})=0, &amp; \quad i\in\mathcal{E},\\
+          c_{i}(\mathbf{x})\geq0, &amp; \quad i\in\mathcal{I},
+      \end{array}\right.\end{array}\label{eq:pbopt}
+\end{equation} \tag{1}\]</span></span></li>
+</ul>
+<p>where <span class="math inline">\(\mathcal{E},\)</span> <span class="math inline">\(\mathcal{I}\)</span> are the index sets of equality and inequality constraints respectively.</p>
+<p>The linear problem, <span id="eq-primal"><span class="math display">\[
+\mathrm{(LP)}\begin{cases}
+    \mathrm{maximize} &amp; \mathbf{c}^{\top}\mathbf{x}\\
+    \mathrm{subject\,to} &amp; A\mathbf{x}\le\mathbf{b}\\
+    \mathrm{and} &amp; \mathbf{x}\ge0.
+\end{cases}
+\tag{2}\]</span></span></p>
+<p>and its dual <span id="eq-dual"><span class="math display">\[
+\mathrm{(LP')}\begin{cases}
+    \mathrm{minimize} &amp; \mathbf{b}^{\top}\mathbf{y}\\
+    \mathrm{subject\,to} &amp; A^{\top}\mathbf{y}\ge\mathbf{c}\\
+    \mathrm{and} &amp; \mathbf{y}\ge0.
+\end{cases}
+\tag{3}\]</span></span></p>
+<p>More details below. The simplex algorithm is the basic approach for solving (LP).</p>
+<p>The mixed-integer linear problem (MILP) is defined by <span class="math display">\[
+\mathrm{(MILP)}\begin{cases}
+    \mathrm{maximize} &amp; \mathbf{c}_{1}^{\top}\mathbf{x}+\mathbf{c}_{2}^{\top}\mathbf{y}\\
+    \mathrm{subject\,to} &amp; A_{1}\mathbf{x}+A_{1}\mathbf{y}\le\mathbf{b}\\
+    \mathrm{and} &amp; \mathbf{x}\ge0,\,\mathbf{y}\in\mathbb{Z}.
+\end{cases}
+\]</span></p>
+<p>This is an NP-hard problem<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, and must be solved by combinatorial methods based on graph theory. The most widely used commercial package for solving these is CPLEX.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The computation time increases with <span class="math inline">\(N\)</span> as <span class="math inline">\(\exp (cN)\)</span> and becomes prohibitively expensive as the number of variables, <span class="math inline">\(N,\)</span> increases.</p></div><div id="fn3"><p><sup>3</sup>&nbsp; <a href="https://www.ibm.com/analytics/cplex-optimizer">https://www.ibm.com/analytics/cplex-optimizer</a> and <a href="https://en.wikipedia.org/wiki/CPLEX">https://en.wikipedia.org/wiki/CPLEX</a></p></div></div></section>
+<section id="primal-and-dual-problems" class="level2">
+<h2 class="anchored" data-anchor-id="primal-and-dual-problems">Primal and Dual Problems</h2>
+<p>Duality theory shows how we can construct an alternative problem from the functions and data that define the original optimization problem. This alternative “dual” problem is related to the original problem, referred to as the “primal”, in fascinating ways. In some cases, the dual problem is easier to solve computationally than the original problem. In other cases, the dual can be used to obtain easily a lower bound on the optimal value of the objective for the primal problem. The dual has also been used to design algorithms for solving the primal problem. We can also use the dual formulation to perform sensitivity analysis. Here is how, and why, it works.</p>
+<p>To define and obtain the dual formulation, we can use the Lagrangian formulation that is the basis of the Karush-Khun-Tucker (KKT) conditions for constrained optimization, which are in turn the generalization of the necessary conditions for optimality in unconstrained optimization. It can then be shown that the Lagrange multipliers are precisely the dual variables. Full details can be found in <span class="citation" data-cites="Boyd2004">(<a href="index.html#ref-Boyd2004" role="doc-biblioref">Boyd and Vandenberghe 2004</a>)</span> and <span class="citation" data-cites="Nocedal2006">(<a href="index.html#ref-Nocedal2006" role="doc-biblioref">Nocedal and Wright 2006</a>)</span>.</p>
+<p>Recall:</p>
+<ul>
+<li>Necessary conditions for optimality.</li>
+<li>Lagrangian formulation.</li>
+<li>KKT conditions.</li>
+</ul>
+<p>Before starting, we recall the KKT conditions—the first order necessary conditions for the existence of an optimum. In the case of LP, which is a convex problem, these conditions are also sufficient. First, we define the Lagrangian for the general problem <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a> as <span class="math display">\[
+\mathcal{L} (x, \lambda) = f(x) - \sum_{i \in \mathcal{E} \cup \mathcal{I} } \lambda_i c_i(x) = f(x) - \lambda^\top c(x).
+\]</span></p>
+<p>Note that for the linear problem <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a>, this becomes <span class="math display">\[
+   \mathcal{L} (x, \lambda) = c^\top x - \lambda^\top (Ax - b),
+\]</span></p>
+<p>where <em>slack</em> variables <span class="citation" data-cites="Nocedal2006">(<a href="index.html#ref-Nocedal2006" role="doc-biblioref">Nocedal and Wright 2006</a>)</span> are introduced to convert the bound constraints into equality constraints.</p>
+<div id="thm-KKT" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1 (KKT Conditions)</strong></span> Suppose that <span class="math inline">\(x^*\)</span> is an optimal solution of <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a>. Then there is a Lagrange multiplier vector <span class="math inline">\(\lambda^*\)</span> with components <span class="math inline">\(\lambda_i^*,\)</span> <span class="math inline">\(i \in \mathcal{E} \cup \mathcal{I},\)</span> such that the following condtions are satisfied at the optimum <span class="math inline">\((x^*, \lambda_i^*)\)</span></p>
+<p><span class="math display">\[\begin{eqnarray}
+\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) &amp; = &amp; 0\label{eq:kkta}\\
+c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\label{eq:kktb}\\
+c_{i}(x^{*}) &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\label{eq:kktc}\\
+\lambda_{i}^{*} &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\label{eq:kktd}\\
+\lambda_{i}^{*}c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\label{eq:kkte}\end{eqnarray}\]</span></p>
+</div>
+<p>Next, we introduce notion of <em>strong duality</em> which is fundamental in the theory of linear programming.</p>
+<div id="thm-duality" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2 (Strong Duality Theorem)</strong></span> If either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> has a finite-valued solution, then so does the other, and the objective values are <em>equal</em>. On the other hand, if either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> is unbounded, then the other problem is <em>infeasible</em>.</p>
+</div>
+<p>Note that weak duality, which is valid for general optimization problems of the form <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a>, implies that the dual solution is only a lower bound for the primal solution, <span class="math display">\[
+c^\top x \ge b^\top y.\]</span></p>
+<p>To define the dual, we need to start with the Lagrangian.</p>
+<div id="def-duality" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Dual Function)</strong></span> The dual function <span class="math inline">\(g\)</span> is the minimum value of the Lagrangian over <span class="math inline">\(x.\)</span> We write <span class="math display">\[
+  g(\lambda) = \inf_x  \mathcal{L} (x, \lambda) .
+\]</span></p>
+</div>
+<p>And the dual problem to <span id="eq-primal1"><span class="math display">\[
+\min_{x\in \mathbb{R}^n} f(x) \quad \text{s.t.} \quad c(x) \ge 0  \tag{4}\]</span></span></p>
+<p>is then <span id="eq-dual1"><span class="math display">\[
+\max_{\lambda\in \mathbb{R}^m} g(\lambda) \quad \text{s.t.} \quad \lambda \ge 0.  \tag{5}\]</span></span></p>
+<p>Note that, thanks to <em>strong duality</em>, the optimal Lagrange multipliers for the primal problem <a href="#eq-primal1" class="quarto-xref">Equation&nbsp;<span>4</span></a> are solutions of this dual problem.</p>
+<p>An important special case of <a href="#eq-primal1" class="quarto-xref">Equation&nbsp;<span>4</span></a> is the LP problem <span class="math display">\[
+\min_{x\in \mathbb{R}^n} c^\top x \quad \text{s.t.} \quad Ax - b \ge 0 ,\]</span></p>
+<p>for which the dual objective is <span class="math display">\[ \begin{align}
+   g(\lambda) &amp;= \inf_x \left[ c^\top x - \lambda^\top (Ax - b) \right] \\
+              &amp;= \inf_x \left[ (c - A^\top \lambda)^\top  x - b^\top \lambda \right] . \end{align}
+\]</span></p>
+<p>Finally, since we must impose <span class="math inline">\(c - A^\top \lambda = 0\)</span> to obtain a finite infimum, the dual problem <a href="#eq-dual1" class="quarto-xref">Equation&nbsp;<span>5</span></a> can be written as <span class="math display">\[
+  \max_\lambda b^\top \lambda \quad \text{s.t.} \quad  A^\top \lambda = c, \, \lambda \ge 0.
+\]</span></p>
+<p>This explains the form of <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> above.</p>
+</section>
+<section id="lagrange-multipliers-dual-variables-and-sensitivity" class="level2">
+<h2 class="anchored" data-anchor-id="lagrange-multipliers-dual-variables-and-sensitivity">Lagrange Multipliers, Dual Variables and Sensitivity</h2>
+<p>We will now show that each Lagrange multiplier <span class="math inline">\(\lambda_i^*\)</span> describes the <em>sensitivity</em> of the optimal value of the objective, <span class="math inline">\(f(x^*),\)</span> with respect to the constraint <span class="math inline">\(c_i.\)</span> In other words, a dual variable descibes the sensitivity of the primal objective to a change in the corresponding constraint. In fact, the process of finding <span class="math inline">\(\lambda\)</span> for a given optimal <span class="math inline">\(x\)</span> is often called <em>sensitivity analysis</em>.</p>
+<p>Since the optimal objectives of the primal and dual problems are equal, for both the original and perturbed problems, we have <span class="math display">\[
+  c^\top x = b^\top \lambda \]</span> and <span class="math display">\[
+c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).\]</span></p>
+<p>We can then easily show <span class="citation" data-cites="Nocedal2006">(<a href="index.html#ref-Nocedal2006" role="doc-biblioref">Nocedal and Wright 2006</a>)</span> that <span class="math display">\[
+   c^\top \Delta x = (\Delta  b)^\top \lambda .\]</span></p>
+<p>Hence, if we have a small perturbation <span class="math inline">\(\Delta b = \epsilon e_j,\)</span> then for all <span class="math inline">\(\epsilon\)</span> sufficiently small</p>
+<p><span class="math display">\[
+       c^\top \Delta x  = \epsilon  \lambda_j.
+   \]</span></p>
+<p>That is, the change in optimal objective is <span class="math inline">\(\lambda_j\)</span> times the size of the perturbation to <span class="math inline">\(b_j,\)</span> if the perturbation is small. And in the general case, <span class="math display">\[
+  \lambda_j^* =  \frac{\partial{f^*}}{\partial{b_j}} , \]</span></p>
+<p>which is exactly the definition of the sensitivity of a function to a given variable.</p>
+</section>
+<section id="shadow-prices-marginal-values" class="level2">
+<h2 class="anchored" data-anchor-id="shadow-prices-marginal-values">Shadow Prices, Marginal Values</h2>
+<p>In the context of an optimal resource allocation problem, we have the following definition of the so-called <em>shadow price</em>, or marginal value.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Shadow Price">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Shadow Price
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The dual variable, or Lagrange multiplier, <span class="math inline">\(\lambda_i^*,\)</span> tells us how much more profit we can make for a small increase in the availability of resource <span class="math inline">\(b_i.\)</span></p>
+</div>
+</div>
+<p>We make the following interpretation:</p>
+<ul>
+<li>if <span class="math inline">\(\lambda_i^* = c \gtrless 0,\)</span> then increasing (decreasing) <span class="math inline">\(b_i\)</span> by one unit will increase (decrease) the profit (primal objective function) by <span class="math inline">\(c,\)</span></li>
+<li>if <span class="math inline">\(\lambda_i^* = 0,\)</span> then constraint <span class="math inline">\(b_i\)</span> is not active (binding) and there is a surplus of resource <span class="math inline">\(i,\)</span> which could eventually be reallocated elsewhere. The optimal solution is not sensitive to (small) changes in <span class="math inline">\(b_i.\)</span></li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-MGG2025math" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin—Mathematical Models.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
+<div id="ref-Boyd2004" class="csl-entry" role="listitem">
+Boyd, Stephen, and Lieven Vandenberghe. 2004. <em>Convex Optimization</em>. Cambridge University Press.
 </div>
-<div id="ref-MGG2025usecases" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, Mathis Certenais, Laurent Morin, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin Use Cases.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
-</div>
-<div id="ref-MGG2025implementation" class="csl-entry" role="listitem">
-Garénaux-Gruau, Marius, Olivier Martineau, François Bodin, and Mark Asch. 2026. <span>“Continuum Digital Twin Implementation.”</span> <a href="https://arxiv.org/abs/26xx.xxxx">https://arxiv.org/abs/26xx.xxxx</a>.
-</div>
-<div id="ref-IEA2025" class="csl-entry" role="listitem">
-IEA, Paris. 2025. <span>“Energy and AI.”</span> <a href="https://www.iea.org/reports/energy-and-ai">https://www.iea.org/reports/energy-and-ai</a>.
+<div id="ref-Nocedal2006" class="csl-entry" role="listitem">
+Nocedal, Jorge, and Stephen J. Wright. 2006. <em>Numerical Optimization</em>. 2. ed. Springer Series in Operations Research and Financial Engineering. New York, NY: Springer.
 </div>
 </div>
 </section>
@@ -831,13 +906,13 @@ IEA, Paris. 2025. <span>“Energy and AI.”</span> <a href="https://www.iea.org
   </script>
 <nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Welcome">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
+      <a href="./th-stochastic.html" class="pagination-link" aria-label="Uncertainty">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Uncertainty</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./theory.html" class="pagination-link" aria-label="Theoretical Framework">
-        <span class="nav-page-text">Theoretical Framework</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./pyomo.html" class="pagination-link" aria-label="Using PYOMO">
+        <span class="nav-page-text">Using PYOMO</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

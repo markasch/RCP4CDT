@@ -1,0 +1,196 @@
+# Duality and Sensitivity {.unnumbered}
+
+::: {#sec-dual}
+:::
+
+- primal and dual problems
+- Lagrange multipliers
+- KKT conditions
+- shadow prices, reduced costs and slack values
+
+Uncertainty can also be related to the sensitivity of the objective to perturbations in the parameters. In other words, which parameters are most sensitive to changes, or what is the influence of parameters on the final objective?
+
+
+## Standard Notation
+
+There are two standard notations for general optimization problems: one used by the LP community^[Also used in `pyomo`.] that wants to maximize the "profit", the other by mathematicians who seek to minimize the "cost" function.  We can easily transform one into the other by taking the negative of the objective function, i.e. maximizing a positive funtion $f$ is strictly equivalent to minimizing $-f.$ For a general theory, we usually consider the general optimization formulation, where we define
+
+- $\mathbf{x}\quad$ the vector of variables $(x_1,\ldots,x_n)^\top \in \mathbb{ R}^n$, also called unknowns or parameters.
+- $f\quad$ the objective, or cost function to minimize or maximize.
+- $\mathbf{c}\quad$ the  vector function of $m$ constraints $(c_1(\mathbf{x}), \ldots, c_m(\mathbf{x}) )$ that the unknowns  must satisfy. Then, the optimization problem becomes
+$$\begin{equation}
+	\min_{\mathbf{x}\in \mathbb{ R}^{n}}f(\mathbf{x})\qquad\mathrm{subject}\,\,\mathrm{to}\,\begin{array}{cc}
+		\left\{ \begin{array}{cc}
+			c_{i}(\mathbf{x})=0, & \quad i\in\mathcal{E},\\
+			c_{i}(\mathbf{x})\geq0, & \quad i\in\mathcal{I},
+		\end{array}\right.\end{array}\label{eq:pbopt}
+\end{equation}$$ {#eq-opt}
+
+where $\mathcal{E},$ $\mathcal{I}$ are the index sets of equality and inequality constraints respectively.
+
+The linear problem,
+$$
+\mathrm{(LP)}\begin{cases}
+	\mathrm{maximize} & \mathbf{c}^{\top}\mathbf{x}\\
+	\mathrm{subject\,to} & A\mathbf{x}\le\mathbf{b}\\
+	\mathrm{and} & \mathbf{x}\ge0.
+\end{cases}
+$$ {#eq-primal}
+
+and its dual
+$$
+\mathrm{(LP')}\begin{cases}
+	\mathrm{minimize} & \mathbf{b}^{\top}\mathbf{y}\\
+	\mathrm{subject\,to} & A^{\top}\mathbf{y}\ge\mathbf{c}\\
+	\mathrm{and} & \mathbf{y}\ge0.
+\end{cases}
+$$  {#eq-dual}
+
+More details below. The simplex algorithm is the basic approach for solving (LP).
+
+The mixed-integer linear problem (MILP) is defined by
+$$
+\mathrm{(MILP)}\begin{cases}
+	\mathrm{maximize} & \mathbf{c}_{1}^{\top}\mathbf{x}+\mathbf{c}_{2}^{\top}\mathbf{y}\\
+	\mathrm{subject\,to} & A_{1}\mathbf{x}+A_{1}\mathbf{y}\le\mathbf{b}\\
+	\mathrm{and} & \mathbf{x}\ge0,\,\mathbf{y}\in\mathbb{Z}.
+\end{cases}
+$$
+
+This is an NP-hard problem^[The computation time increases with $N$ as $\exp (cN)$ and becomes prohibitively expensive as the number of variables, $N,$ increases.], and must be solved by combinatorial methods based on graph theory. The most widely used commercial package for solving  these is CPLEX.^[ [https://www.ibm.com/analytics/cplex-optimizer](https://www.ibm.com/analytics/cplex-optimizer) and [https://en.wikipedia.org/wiki/CPLEX](https://en.wikipedia.org/wiki/CPLEX)]
+
+## Primal and Dual Problems
+
+Duality theory shows how we can construct an alternative problem from the functions and data that define the original optimization problem. This alternative “dual” problem is related to the original problem, referred to as the “primal”, in fascinating ways. In some cases, the dual problem is easier to solve computationally than the original problem. In other cases, the dual can be used to obtain easily a lower bound on the optimal value of the objective for the primal problem. The dual has also been used to design algorithms for solving the primal problem. We can also use the dual formulation to perform sensitivity analysis. Here is how, and why, it works.
+
+To define and obtain the dual formulation, we can use the Lagrangian formulation that is the basis of the Karush-Khun-Tucker (KKT) conditions for constrained optimization, which are in turn the generalization of the necessary conditions for optimality in unconstrained optimization. It can then be shown that the Lagrange multipliers are precisely the dual variables. Full details can be found in [@Boyd2004] and [@Nocedal2006].
+
+Recall:
+
+- Necessary conditions for optimality.
+- Lagrangian formulation.
+- KKT conditions.
+
+Before starting, we recall the KKT conditions---the first order necessary conditions for the existence of an optimum. In the case of LP, which is a convex problem, these conditions are also sufficient. First, we define the Lagrangian for the general problem @eq-opt as
+$$
+ \mathcal{L} (x, \lambda) = f(x) - \sum_{i \in \mathcal{E} \cup \mathcal{I} } \lambda_i c_i(x) = f(x) - \lambda^\top c(x).
+$$
+
+Note that for the linear problem @eq-primal, this becomes
+$$
+   \mathcal{L} (x, \lambda) = c^\top x - \lambda^\top (Ax - b),
+$$
+
+where _slack_ variables [@Nocedal2006] are introduced to convert the bound constraints into equality constraints.
+
+::: {#thm-KKT}
+
+## KKT Conditions
+
+Suppose that $x^*$ is an optimal solution of @eq-opt. Then there is a Lagrange multiplier vector $\lambda^*$ with components $\lambda_i^*,$ $i \in \mathcal{E} \cup \mathcal{I},$ such that the following condtions are satisfied at the optimum $(x^*, \lambda_i^*)$ 
+
+\begin{eqnarray}
+\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) & = & 0\label{eq:kkta}\\
+c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\label{eq:kktb}\\
+c_{i}(x^{*}) & \geq & 0,\quad\forall i\in\mathcal{I}\label{eq:kktc}\\
+\lambda_{i}^{*} & \geq & 0,\quad\forall i\in\mathcal{I}\label{eq:kktd}\\
+\lambda_{i}^{*}c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\label{eq:kkte}\end{eqnarray}
+
+:::
+
+Next, we introduce notion of _strong duality_ which is fundamental in the theory of linear programming. 
+
+::: {#thm-duality}
+
+## Strong Duality Theorem
+
+If either @eq-primal or @eq-dual has a finite-valued solution, then so does the other, and the objective values are _equal_. On the other hand, if either @eq-primal or @eq-dual is unbounded, then the other problem is _infeasible_.
+
+:::
+
+Note that weak duality, which is valid for general optimization problems of the form @eq-opt, implies that the dual solution is only a lower bound for the primal solution, 
+$$
+c^\top x \ge b^\top y.$$
+
+To define the dual, we need to start with the Lagrangian. 
+
+::: {#def-duality}
+
+## Dual Function
+
+The dual function $g$ is the minimum value of the Lagrangian over $x.$ We write
+$$
+  g(\lambda) = \inf_x  \mathcal{L} (x, \lambda) .
+$$
+
+:::
+
+
+And the dual problem to 
+$$
+ \min_{x\in \mathbb{R}^n} f(x) \quad \text{s.t.} \quad c(x) \ge 0 $$ {#eq-primal1}
+
+is then 
+$$
+ \max_{\lambda\in \mathbb{R}^m} g(\lambda) \quad \text{s.t.} \quad \lambda \ge 0. $$  {#eq-dual1}
+
+ Note that, thanks to _strong duality_, the optimal Lagrange multipliers for the primal problem @eq-primal1 are solutions of this dual problem.
+
+ An important special case of @eq-primal1  is the LP problem
+ $$
+ \min_{x\in \mathbb{R}^n} c^\top x \quad \text{s.t.} \quad Ax - b \ge 0 ,$$ 
+
+ for which the dual objective is
+ $$ \begin{align}
+   g(\lambda) &= \inf_x \left[ c^\top x - \lambda^\top (Ax - b) \right] \\
+              &= \inf_x \left[ (c - A^\top \lambda)^\top  x - b^\top \lambda \right] . \end{align}
+ $$
+
+Finally, since we must impose $c - A^\top \lambda = 0$ to obtain a finite infimum, the dual problem @eq-dual1 can be written as
+$$
+  \max_\lambda b^\top \lambda \quad \text{s.t.} \quad  A^\top \lambda = c, \, \lambda \ge 0.
+$$
+
+This explains the form of @eq-dual above.
+
+
+## Lagrange Multipliers, Dual Variables and Sensitivity
+
+We will now show that each Lagrange multiplier $\lambda_i^*$ describes the _sensitivity_ of the optimal value of the objective, $f(x^*),$ with respect to the constraint $c_i.$ In other words, a dual variable descibes the sensitivity of the primal objective to a change in the corresponding constraint. In fact, the process of finding $\lambda$ for a given optimal $x$ is often called _sensitivity analysis_.
+
+ Since the optimal objectives of the primal and dual problems are equal, for both the original and perturbed problems, we have
+ $$
+  c^\top x = b^\top \lambda $$
+and
+$$
+ c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).$$
+ 
+We can then easily show [@Nocedal2006] that
+$$
+   c^\top \Delta x = (\Delta  b)^\top \lambda .$$
+
+Hence, if we have a small perturbation $\Delta b = \epsilon e_j,$ then for all $\epsilon$ sufficiently small
+
+   $$
+       c^\top \Delta x  = \epsilon  \lambda_j. 
+   $$
+
+That is, the change in optimal objective is $\lambda_j$ times the size of the perturbation to $b_j,$ if the perturbation is small. And in the general case,
+$$
+  \lambda_j^* =  \frac{\partial{f^*}}{\partial{b_j}} , $$ 
+
+which is exactly the definition of the sensitivity of a function to a given variable.
+
+
+## Shadow Prices, Marginal Values
+
+In the context of an optimal resource allocation problem, we have the following definition of the so-called _shadow price_, or marginal value.
+
+::: {.callout-important title="Shadow Price"}
+The dual variable, or Lagrange multiplier, $\lambda_i^*,$ tells us how much more profit we can make for a small increase in the availability of resource $b_i.$ 
+:::
+
+We make the following interpretation:
+
+- if $\lambda_i^* = c \gtrless 0,$ then increasing (decreasing) $b_i$ by one unit will increase (decrease) the profit (primal objective function) by $c,$
+- if $\lambda_i^* = 0,$ then constraint $b_i$ is not active (binding) and there is a surplus of resource $i,$ which could eventually be reallocated elsewhere. The optimal solution is not sensitive to (small) changes in $b_i.$ 
