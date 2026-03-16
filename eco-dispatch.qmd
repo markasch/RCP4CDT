@@ -170,6 +170,69 @@ print(f"Shadow price of `t1_max` = {model.dual[model.t1_max]}")
 print(f"Shadow price of `t1_min` = {model.dual[model.t1_min]}")
 ```
 
+### Exploring Multiple Parameters
+
+We want to explore the effect of varying parameters on the overall cost. We create a new version with a mutable parameter, set to the cost of generator 2. Then we can run multiple models, while varying this parameter, and accumulate the results in a list using `pyo.Param(mutable=True)`. 
+
+```{python}
+model = pyo.ConcreteModel(name="Economic dispatch, version 2")
+
+##
+# This is the key bit: we define a `pyo.Param` which is mutable,
+# allowing us to set (and change) its value later
+##
+model.c_2 = pyo.Param(mutable=True)
+
+model.p_1 = pyo.Var(within=pyo.NonNegativeReals)
+model.p_2 = pyo.Var(within=pyo.NonNegativeReals)
+
+model.generation_cost = pyo.Objective(
+    expr = 3 * model.p_1 + model.c_2 * model.p_2,
+    sense = pyo.minimize
+)
+
+model.t1_min = pyo.Constraint(expr=model.p_1 >= 50)
+model.t1_max = pyo.Constraint(expr=model.p_1 <= 300)
+model.t2_min = pyo.Constraint(expr=model.p_2 >= 100)
+model.t2_max = pyo.Constraint(expr=model.p_2 <= 400)
+model.demand = pyo.Constraint(expr=model.p_1 + model.p_2 == 500)
+
+model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)
+```
+
+Now that we have a parameter in the model, we can solve the model several times with different values for this parameter. First, we define a list of values we want to explore, $c_2 \in \{ 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0 \} $
+
+```{python}
+c_2_m = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+```
+
+Next, we areready to iterate over each value in this list, set the `c_2` parameter to the current value from the list, solve the model, and store three results we care about - the generation cost (objective function value), $p_1$$ power and $p_2$ power generation, into a list that we call `result_accumulator` - since it accumulates results with the Python functionality to append a new entry to an existing list: `result_accumulator.append(...)`.
+
+```{python}
+result_accumulator = []
+
+for i in c_2_m:
+    model.c_2 = i
+    solver.solve(model)
+    result_accumulator.append([model.generation_cost(), model.p_1(), model.p_2()])
+```
+
+Put all the results into a `pandas` dataframe.
+
+```{python}
+import pandas as pd
+
+results = pd.DataFrame(result_accumulator, columns=["generation cost", "power p1", "power p2"], index=c_2_m)
+results
+``` 
+
+Finally, we can save the results to a file and plot them.
+
+```{python}
+results.to_csv("results.csv")
+results.plot(xlabel="cost 1", ylabel="cost (EUR) / power (MW)", marker='o', linestyle=':')
+``` 
+
 
 ## Putting it all together: basic economic dispatch.
 
@@ -183,7 +246,7 @@ units = ['G1', 'G2', 'G3']
 cost  = {'G1': 20, 'G2': 35, 'G3': 50}   # €/MWh
 p_min = {'G1': 10, 'G2':  5, 'G3':  0}   # MW
 p_max = {'G1':100, 'G2': 80, 'G3': 60}   # MW
-demand = 180                               # MW
+demand = 180                             # MW
 
 m = pyo.ConcreteModel()
 m.I  = pyo.Set(initialize=units)
