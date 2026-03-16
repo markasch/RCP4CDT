@@ -1,0 +1,201 @@
+# Ex. T1: Economic Dispatch
+
+## Problem Description
+
+::: {.callout-tip title="Economic Dispatch"}
+ The economic dispatch (ED) problem is a classical LP (or QP) problem in power systems operations: given a set of generating units with known cost functions and physical limits, allocate the total power demand among them so as to minimize total generation cost, while satisfying system-wide power balance and individual unit constraints.
+:::
+
+In its canonical linear form, we have
+
+$$\min_{p} \sum_{i=1}^{n} c_i p_i$$
+
+$$\text{s.t.} \quad \sum_{i=1}^{n} p_i = D, \qquad p_i^{\min} \le p_i \le p_i^{\max}, \quad \forall i$$
+
+where $p_i$ is the power output of unit $i$, $c_i$ is its marginal cost (€/MWh), $D$ is the total system demand, and $[p_i^{\min}, p_i^{\max}]$ are the unit's generation limits. ED is widely used to optimize energy-mix problems, power markets, microgrid planning, and stochastic dispatch under uncertain conditions, eg. wind, solar.
+
+We will analyze and solve a simple ED problem with 2 generators, each with a cost and with generation bounds.
+
+| Unit $i$ | Cost $c_i$ | min output | max output | 
+|---|---|---|---|---|---|
+| 1 | 3 | 50 | 300 |
+| 2 | 4 | 100 | 400 |
+
+
+
+## Python and Pyomo
+
+Pyomo extends Python to provide a mathematical modelling language to formulate optimization problemss. The official [Pyomo documentation](https://pyomo.readthedocs.io/en/stable/index.html) contains many advanced features of Pyomo that we do not cover here.
+
+Before using Pyomo, it needs to be imported. By saying import `as pyo` where we are define `pyo` as a shorthand under which to access everything that Pyomo provides. This is best practice: it means that everything coming from Python itself or from other packages is cleanly separated from Pyomo - anytime we need Pyomo, we access it through `pyo`, as shown below.
+
+```{python}
+import pyomo.environ as pyo
+```
+
+Next, we define a variable to hold the model. By convention, we call this `model`. The model itself is created by calling `ConcreteModel()`, which creates an object which is a member of the ConcreteModel class.
+
+Later on, we will fill this `ConcreteModel` with the variables and constraints.
+```{python}
+model = pyo.ConcreteModel(name="Economic dispatch")
+```
+
+### Variables
+
+Variables, are defined with `Var` objects. We "attach" them to the model as follows: `model.variable_name = ...`. Here, `variable_name` is the name of the variable inside the model, and must therefore be unique to the model. For example:
+
+
+```{python}
+model.p_1 = pyo.Var(within=pyo.NonNegativeReals)
+model.p_2 = pyo.Var(within=pyo.NonNegativeReals)
+```
+
+By using `pyo.NonNegativeReals`, we do not need to add extra "greater than or equal to zero" constraints on these variables.
+
+### Objective Funcrion
+
+Just like we did for the variables, we create a `pyo.Objective` and attach it to our model. We noame it `generation_cost` but any name is possible (for example, you might want to always call the objective the same - `obj` or `objective`).
+
+We give the objective two arguments:
+
+* `expr` is the mathematical expression of the objective function
+* `sense` is used to specify whether we are looking for a maximum (`pyo.maximize`) or a minimum (`pyo.minimize`) of this function. If `sense` is omitted, minimization is assumed.
+
+```{python}
+model.generation_cost = pyo.Objective(
+    expr = 3 * model.p_1 + 4 * model.p_2,
+    sense = pyo.minimize
+    )
+```
+
+An alternative way to formulate the objective is to use sets.
+    
+```{.python}
+prices = {"c_1": 3, "c_2": 4}
+power_plant_types = ["t_1", "t_2"]
+model.power_generation = pyo.Var(power_plant_types, within=pyo.NonNegativeReals)
+model.generation_cost = pyo.Objective(
+    expr = sum(prices[i] * model.power_generation[i] for i in power_plant_types),
+    sense = pyo.minimize
+)
+```
+
+It makes use of additional features of Python, like the `sum()` function, and a so-called "comprehension" that iterates over all elements in the set (`for i in power_plant_types`). With this kind of approach, you can easily build a model with thousands of variables if necessary, which can easily be dealt with in mostly automated ways, like here wher we sum up in the objective function.
+
+
+### Constraints
+
+Finally, we add the equality and inequality (bound) constraints, again giving each constraint an `expr` which is its mathematical formulation.
+
+```{python}
+model.t1_min = pyo.Constraint(expr=model.p_1 >= 50)
+model.t1_max = pyo.Constraint(expr=model.p_1 <= 300)
+model.t2_min = pyo.Constraint(expr=model.p_2 >= 100)
+model.t2_max = pyo.Constraint(expr=model.p_2 <= 400)
+model.demand = pyo.Constraint(expr=model.p_1 + model.p_2 == 500)
+```
+
+### Solving the Model
+
+By default, Pyomo captures only a limited amount of information from the solver. Because we later want to look at dual variables, we need to specify this before solving with the following statement--see the [documentation](https://pyomo.readthedocs.io/en/6.7.2/working_models.html#accessing-duals) for details.
+
+```{python}
+model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)
+```
+
+Next, in order to solve the model, we first need to let Pyomo make the connection to a solver - a separate program that knows how to solve a specific kind of optimization problem. In our case, we are solving a linear (LP) problem. Gurobi is a commercial solver that uses the Simplex algorithm to solve such problems, and is free to use for problems with up to 2000 variables and constraints, so we can use it here. 
+
+```{python}
+solver = pyo.SolverFactory('gurobi')
+```
+If we prefer to use a free, open-source solver for linear problems, we can instead use [GLPK](https://www.gnu.org/software/glpk/):
+
+```{.python}
+solver = pyo.SolverFactory('glpk')
+```
+
+Finally, we can pass our model to the solver, which solves the problem and then passes back the solution to Pyomo (or tells us if something went wrong and no optimal solution was found).
+
+```{python}
+solver.solve(model)
+```
+
+We observe that `solver.solve(model)` returns very summary information about the model solution. In this case, you can see `'Termination condition': 'optimal'` -- this means the solver found an optimal solution.
+
+If we do not want to display this information but capture it for later use, we could assign it to a variable, i.e.:
+
+```{python}
+result_object = solver.solve(model)
+```
+
+If you want to see the output from the solver while it is solving the model, you can set the `tee` argument to `True` - in the above case, you would see the output from Gurobi, giving more detail on what it is doing while solving the problem (e.g. what exact algorithm it is using, etc):
+
+```{python}
+solver.solve(model, tee=True)
+```
+
+Now that the model is solved, we can display detailed information about it, including the state of the variables, the objective, and the constraints, with `model.display()`:
+
+```{python}
+model.display()
+```
+
+Finally, we can use the Python `print` function to set up a nicer overview of the results we care about most, for example:
+
+```{python}
+print(f"Generation costs (objective) = {model.generation_cost()} EUR")
+print(f"Plant 1 generation = {model.p_1()} MW")
+print(f"Plant 2 generation = {model.p_2()} MW")
+```
+
+### Dual Variables, Shadow Prices and Marginals
+
+Recall that constraints in the primal problem are associated with variables in the dual problem. The LP optimality condition for the basic ED (ignoring bound constraints) yields the classic _equal incremental cost_ rule,
+
+$$ c_i = \lambda \quad \forall i \text{ unconstrained}, $$
+
+where $\lambda$ is the dual variable (shadow price) of the balance constraint — precisely the system marginal price (SMP) or locational marginal price (LMP) in nodal pricing markets. This is the LP duality descibed above: $\lambda$ gives the marginal cost of serving one additional MW of demand.
+
+The solver solves the dual problem for us at the same time as solving the primal problem. Because we set up the model to extract this information earlier (`model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)`), we can now get the shadow prices of the primal problem by looking up the optimal values of the variables of the dual problem, as follows:
+
+```python
+model.dual[model.my_constraint_name]
+```
+
+We print out the shadow price of some of our constraints:
+
+```{python}
+print(f"Shadow price of `demand` = {model.dual[model.demand]}")
+print(f"Shadow price of `t1_max` = {model.dual[model.t1_max]}")
+print(f"Shadow price of `t1_min` = {model.dual[model.t1_min]}")
+```
+
+
+## Putting it all together: basic economic dispatch.
+
+For clarity, we execute the following complete case. All components should be clear from the previous example.
+
+```{python}
+import pyomo.environ as pyo
+
+# Data
+units = ['G1', 'G2', 'G3']
+cost  = {'G1': 20, 'G2': 35, 'G3': 50}   # €/MWh
+p_min = {'G1': 10, 'G2':  5, 'G3':  0}   # MW
+p_max = {'G1':100, 'G2': 80, 'G3': 60}   # MW
+demand = 180                               # MW
+
+m = pyo.ConcreteModel()
+m.I  = pyo.Set(initialize=units)
+m.p  = pyo.Var(m.I, bounds=lambda m, i: (p_min[i], p_max[i]))
+
+m.cost    = pyo.Objective(expr=sum(cost[i]*m.p[i] for i in m.I), sense=pyo.minimize)
+m.balance = pyo.Constraint(expr=sum(m.p[i] for i in m.I) == demand)
+
+solver = pyo.SolverFactory('glpk')
+result = solver.solve(m)
+
+for i in m.I:
+    print(f"{i}: {pyo.value(m.p[i]):.2f} MW")
+print(f"Total cost: {pyo.value(m.cost):.2f} €/h")
+```

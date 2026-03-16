@@ -117,31 +117,3 @@ TBC
 As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In this example, we compare...
 
 TBC
-
-
-
-## Silly Examples
-
-In summary, this book has no content whatsoever.
-
-```{python}
-#| label: fig-line-plot
-#| fig-cap: "A line plot "
-
-import matplotlib.pyplot as plt
-plt.plot([1,23,2,4])
-plt.show()
-```
-
-We observe in @fig-line-plot that there is a clear trend, up and down.
-
-To only have code displayed, but not executed use `{.python}`...
-
-```{.python}
-#| label: fig-line-plot
-#| fig-cap: "A line plot "
-
-import matplotlib.pyplot as plt
-plt.plot([1,23,2,4])
-plt.show()
-```

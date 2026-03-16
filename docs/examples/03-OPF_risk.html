@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../usecases.html" rel="next">
-<link href="../examples/D1a_SC_simple.html" rel="prev">
+<link href="../examples/D1b_SC_4_stage.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/03-OPF_risk.html"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/03-OPF_risk.html"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -221,6 +221,17 @@ window.Quarto = {
  <span class="menu-text">Uncertainty</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../th-sensitivity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Duality and Sensitivity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../eco-dispatch.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. T1: Economic Dispatch</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -240,12 +251,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 1: Disjunctions - Theory, Examples</span></a>
+  <a href="../examples/01-Disjunctions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I1: Disjunctions - Theory, Examples</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Example 2: GDPopt Test</span></a>
+  <a href="../examples/02-Disjunctions-GDPopt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. I2: GDPopt Test</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -283,7 +294,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a>
+  <a href="../examples/D1b_SC_4_stage.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
   </div>
 </li>
       </ul>
@@ -340,7 +356,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/03-OPF_risk.html"><span class="chapter-title">Example 3: Energy Dispatch Problem - Risk Measures</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/03-OPF_risk.html"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></h1>
 </div>
@@ -1213,8 +1229,8 @@ Figure saved to stochastic_dispatch.png</code></pre>
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="../examples/D1a_SC_simple.html" class="pagination-link" aria-label="Ex. D1: Simple Supply Chain (SSC)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D1: Simple Supply Chain (SSC)</span></span>
+      <a href="../examples/D1b_SC_4_stage.html" class="pagination-link" aria-label="Ex. D1a: Supply Chain Optimization">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D1a: Supply Chain Optimization</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

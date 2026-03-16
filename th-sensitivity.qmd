@@ -187,10 +187,83 @@ which is exactly the definition of the sensitivity of a function to a given vari
 In the context of an optimal resource allocation problem, we have the following definition of the so-called _shadow price_, or marginal value.
 
 ::: {.callout-important title="Shadow Price"}
-The dual variable, or Lagrange multiplier, $\lambda_i^*,$ tells us how much more profit we can make for a small increase in the availability of resource $b_i.$ 
+The dual variable, or Lagrange multiplier, $\lambda_i^*,$ defines the _shadow price_, that tells us how much more profit we can make for a small increase in the availability of resource $b_i.$ 
 :::
 
 We make the following interpretation:
 
 - if $\lambda_i^* = c \gtrless 0,$ then increasing (decreasing) $b_i$ by one unit will increase (decrease) the profit (primal objective function) by $c,$
 - if $\lambda_i^* = 0,$ then constraint $b_i$ is not active (binding) and there is a surplus of resource $i,$ which could eventually be reallocated elsewhere. The optimal solution is not sensitive to (small) changes in $b_i.$ 
+
+We resume the above:
+
+- The shadow price is the change in the optimal objective value if the right-hand side of an active constraint increases by a marginal amount. All other parts of the problem remain unchanged. 
+- The shadow price is the marginal cost or marginal benefit of relaxing a certain constraint.
+- Formally, the shadow price represents an infinitesimally small change that can be interpreted as the derivative of the objective function with respect to the specific constraint that is being relaxed.
+
+## Coverting Primal to Dual
+
+To sum up, here is a "recipe" for converting between primal and dual problems.
+
+**Step 1**: Rewrite in standard form:
+
+* Minimisation.
+* All constraints of the form $ax \leq b$..
+
+* All variables with bound $\geq 0 .$
+
+**Step 2**: Convert the standard-form primal problem into the dual problem, as illustrated below.
+
+![](graphics/primal_dual.jpg){width=100%}
+
+
+* The primal objective function coefficients, $c_i$, are the dual constraint parameters.
+* The primal constraint parameters, $b_j$, are the dual objective function coefficients.
+* The primal constraints in $\leq$ form lead to dual variables $y_m \leq 0.$
+* The primal constraints in $=$ form lead to dual variables $y_m$ which are unconstrained / free.
+* The primal variables $x_i \geq 0$ lead to dual constraints of $\leq$ form.
+* The constraint coefficient $a_{ij}$ corresponds to the $i$-th constraint and $j$-th variable in the primal problem. It corresponds to the $j$-th constraint and $i$-th variable in the dual problem.
+
+
+### Conclusion
+
+1. Primal variables become dual constraints.
+2. Primal constraints become dual variables.
+
+This explains (intuitively) why the the solution of the dual problem produces the sensitivity of the objective to the (primal) constraints. That is, how much a change in the constraint will affect a change in the objective.
+
+## The connection between duality and KKT conditions
+
+We know that for every primal problem, there exists a dual problem.
+
+Recall the general formulation of a primal problem,
+\begin{align}
+    \text{min.} \; & f(x)  \\
+    \text{s.t.} \; & h_i(x) = 0 \quad (\lambda_i) \quad \forall i \in \{1,2,...,m\}  \\
+    & g_j(x) \leq 0 \quad (\mu_j) \quad \forall j \in \{1,2,...,n\}
+\end{align}
+
+The Lagrangian is
+\begin{equation}
+    \mathcal{L}(x,\lambda,\mu) = f(x) + \sum_{i=1}^m \lambda_i \cdot h_i(x) + \sum_{j=1}^{n} \mu_j \cdot g_j(x)
+\end{equation}
+
+The Lagrangian dual function, or dual function, is the minimum of the Lagrangian,
+\begin{equation}
+    \mathcal{D}(\lambda,\mu)  = \text{inf}_{x} \{\mathcal{L}(x,\lambda,\mu)\} = \inf_{x} \{ f(x) + \sum_{i=1}^m \lambda_i \cdot h_i(x) + \sum_{j=1}^{n} \mu_j \cdot g_j(x) \}.
+\end{equation}
+
+The dual function defines a lower bound on the optimal value $p^*$ of the primal problem: $\mathcal{D}(\lambda,\mu) \leq p^*$ for any $\mu \geq 0$ and any $\lambda.$ We want to find the best possible lower bound of the primal problem, which means maximising the lower bound:
+
+$$\begin{align}
+    \text{max.} \; & \mathcal{D}(\lambda,\mu)  \\
+    \text{s.t.} \; & \mu_j \geq 0 \quad \forall j \in \{1,2,...,n\}
+\end{align}$$ {#eq-dual}
+
+This is the dual problem. We denote the optimal value of this problem as $d^*$.
+
+As mentioned above, strong duality holds when the optimal value of the primal equals the optimal value of the dual. In our new terminology, this is written as $d^* = p^* .$ Strong duality can be used to show that a solution that satisfies the KKT conditions must be an optimal solution to the primal and dual problems. In other words, the KKT conditions are necessary and sufficient conditions for optimality.
+
+Weak duality is when $d^* \leq p^*$. This holds even for non-convex problems. In such problems, $p^* - d^*$ is referred to as the duality gap.
+
+In practice, we do not need to start from the general expression in  @eq-dual to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.

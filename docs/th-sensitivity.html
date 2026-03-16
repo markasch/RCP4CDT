@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./pyomo.html" rel="next">
+<link href="./eco-dispatch.html" rel="next">
 <link href="./th-stochastic.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -212,6 +212,11 @@ window.Quarto = {
  <span class="menu-text">Duality and Sensitivity</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eco-dispatch.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. T1: Economic Dispatch</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -321,6 +326,11 @@ window.Quarto = {
   <li><a href="#primal-and-dual-problems" id="toc-primal-and-dual-problems" class="nav-link" data-scroll-target="#primal-and-dual-problems">Primal and Dual Problems</a></li>
   <li><a href="#lagrange-multipliers-dual-variables-and-sensitivity" id="toc-lagrange-multipliers-dual-variables-and-sensitivity" class="nav-link" data-scroll-target="#lagrange-multipliers-dual-variables-and-sensitivity">Lagrange Multipliers, Dual Variables and Sensitivity</a></li>
   <li><a href="#shadow-prices-marginal-values" id="toc-shadow-prices-marginal-values" class="nav-link" data-scroll-target="#shadow-prices-marginal-values">Shadow Prices, Marginal Values</a></li>
+  <li><a href="#coverting-primal-to-dual" id="toc-coverting-primal-to-dual" class="nav-link" data-scroll-target="#coverting-primal-to-dual">Coverting Primal to Dual</a>
+  <ul class="collapse">
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  <li><a href="#the-connection-between-duality-and-kkt-conditions" id="toc-the-connection-between-duality-and-kkt-conditions" class="nav-link" data-scroll-target="#the-connection-between-duality-and-kkt-conditions">The connection between duality and KKT conditions</a></li>
   </ul>
 </nav>
 </nav>
@@ -427,7 +437,7 @@ c_{i}(x^{*}) &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\label{eq:kktc}\\
 </div>
 <p>Next, we introduce notion of <em>strong duality</em> which is fundamental in the theory of linear programming.</p>
 <div id="thm-duality" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 2 (Strong Duality Theorem)</strong></span> If either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> has a finite-valued solution, then so does the other, and the objective values are <em>equal</em>. On the other hand, if either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> is unbounded, then the other problem is <em>infeasible</em>.</p>
+<p><span class="theorem-title"><strong>Theorem 2 (Strong Duality Theorem)</strong></span> If either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> has a finite-valued solution, then so does the other, and the objective values are <em>equal</em>. On the other hand, if either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> is unbounded, then the other problem is <em>infeasible</em>.</p>
 </div>
 <p>Note that weak duality, which is valid for general optimization problems of the form <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a>, implies that the dual solution is only a lower bound for the primal solution, <span class="math display">\[
 c^\top x \ge b^\top y.\]</span></p>
@@ -451,7 +461,7 @@ c^\top x \ge b^\top y.\]</span></p>
 <p>Finally, since we must impose <span class="math inline">\(c - A^\top \lambda = 0\)</span> to obtain a finite infimum, the dual problem <a href="#eq-dual1" class="quarto-xref">Equation&nbsp;<span>5</span></a> can be written as <span class="math display">\[
   \max_\lambda b^\top \lambda \quad \text{s.t.} \quad  A^\top \lambda = c, \, \lambda \ge 0.
 \]</span></p>
-<p>This explains the form of <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> above.</p>
+<p>This explains the form of <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> above.</p>
 </section>
 <section id="lagrange-multipliers-dual-variables-and-sensitivity" class="level2">
 <h2 class="anchored" data-anchor-id="lagrange-multipliers-dual-variables-and-sensitivity">Lagrange Multipliers, Dual Variables and Sensitivity</h2>
@@ -482,7 +492,7 @@ c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).\]</span><
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The dual variable, or Lagrange multiplier, <span class="math inline">\(\lambda_i^*,\)</span> tells us how much more profit we can make for a small increase in the availability of resource <span class="math inline">\(b_i.\)</span></p>
+<p>The dual variable, or Lagrange multiplier, <span class="math inline">\(\lambda_i^*,\)</span> defines the <em>shadow price</em>, that tells us how much more profit we can make for a small increase in the availability of resource <span class="math inline">\(b_i.\)</span></p>
 </div>
 </div>
 <p>We make the following interpretation:</p>
@@ -490,6 +500,64 @@ c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).\]</span><
 <li>if <span class="math inline">\(\lambda_i^* = c \gtrless 0,\)</span> then increasing (decreasing) <span class="math inline">\(b_i\)</span> by one unit will increase (decrease) the profit (primal objective function) by <span class="math inline">\(c,\)</span></li>
 <li>if <span class="math inline">\(\lambda_i^* = 0,\)</span> then constraint <span class="math inline">\(b_i\)</span> is not active (binding) and there is a surplus of resource <span class="math inline">\(i,\)</span> which could eventually be reallocated elsewhere. The optimal solution is not sensitive to (small) changes in <span class="math inline">\(b_i.\)</span></li>
 </ul>
+<p>We resume the above:</p>
+<ul>
+<li>The shadow price is the change in the optimal objective value if the right-hand side of an active constraint increases by a marginal amount. All other parts of the problem remain unchanged.</li>
+<li>The shadow price is the marginal cost or marginal benefit of relaxing a certain constraint.</li>
+<li>Formally, the shadow price represents an infinitesimally small change that can be interpreted as the derivative of the objective function with respect to the specific constraint that is being relaxed.</li>
+</ul>
+</section>
+<section id="coverting-primal-to-dual" class="level2">
+<h2 class="anchored" data-anchor-id="coverting-primal-to-dual">Coverting Primal to Dual</h2>
+<p>To sum up, here is a “recipe” for converting between primal and dual problems.</p>
+<p><strong>Step 1</strong>: Rewrite in standard form:</p>
+<ul>
+<li><p>Minimisation.</p></li>
+<li><p>All constraints of the form <span class="math inline">\(ax \leq b\)</span>..</p></li>
+<li><p>All variables with bound <span class="math inline">\(\geq 0 .\)</span></p></li>
+</ul>
+<p><strong>Step 2</strong>: Convert the standard-form primal problem into the dual problem, as illustrated below.</p>
+<p><img src="graphics/primal_dual.jpg" class="img-fluid" style="width:100.0%"></p>
+<ul>
+<li>The primal objective function coefficients, <span class="math inline">\(c_i\)</span>, are the dual constraint parameters.</li>
+<li>The primal constraint parameters, <span class="math inline">\(b_j\)</span>, are the dual objective function coefficients.</li>
+<li>The primal constraints in <span class="math inline">\(\leq\)</span> form lead to dual variables <span class="math inline">\(y_m \leq 0.\)</span></li>
+<li>The primal constraints in <span class="math inline">\(=\)</span> form lead to dual variables <span class="math inline">\(y_m\)</span> which are unconstrained / free.</li>
+<li>The primal variables <span class="math inline">\(x_i \geq 0\)</span> lead to dual constraints of <span class="math inline">\(\leq\)</span> form.</li>
+<li>The constraint coefficient <span class="math inline">\(a_{ij}\)</span> corresponds to the <span class="math inline">\(i\)</span>-th constraint and <span class="math inline">\(j\)</span>-th variable in the primal problem. It corresponds to the <span class="math inline">\(j\)</span>-th constraint and <span class="math inline">\(i\)</span>-th variable in the dual problem.</li>
+</ul>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<ol type="1">
+<li>Primal variables become dual constraints.</li>
+<li>Primal constraints become dual variables.</li>
+</ol>
+<p>This explains (intuitively) why the the solution of the dual problem produces the sensitivity of the objective to the (primal) constraints. That is, how much a change in the constraint will affect a change in the objective.</p>
+</section>
+</section>
+<section id="the-connection-between-duality-and-kkt-conditions" class="level2">
+<h2 class="anchored" data-anchor-id="the-connection-between-duality-and-kkt-conditions">The connection between duality and KKT conditions</h2>
+<p>We know that for every primal problem, there exists a dual problem.</p>
+<p>Recall the general formulation of a primal problem, <span class="math display">\[\begin{align}
+    \text{min.} \; &amp; f(x)  \\
+    \text{s.t.} \; &amp; h_i(x) = 0 \quad (\lambda_i) \quad \forall i \in \{1,2,...,m\}  \\
+    &amp; g_j(x) \leq 0 \quad (\mu_j) \quad \forall j \in \{1,2,...,n\}
+\end{align}\]</span></p>
+<p>The Lagrangian is <span class="math display">\[\begin{equation}
+    \mathcal{L}(x,\lambda,\mu) = f(x) + \sum_{i=1}^m \lambda_i \cdot h_i(x) + \sum_{j=1}^{n} \mu_j \cdot g_j(x)
+\end{equation}\]</span></p>
+<p>The Lagrangian dual function, or dual function, is the minimum of the Lagrangian, <span class="math display">\[\begin{equation}
+    \mathcal{D}(\lambda,\mu)  = \text{inf}_{x} \{\mathcal{L}(x,\lambda,\mu)\} = \inf_{x} \{ f(x) + \sum_{i=1}^m \lambda_i \cdot h_i(x) + \sum_{j=1}^{n} \mu_j \cdot g_j(x) \}.
+\end{equation}\]</span></p>
+<p>The dual function defines a lower bound on the optimal value <span class="math inline">\(p^*\)</span> of the primal problem: <span class="math inline">\(\mathcal{D}(\lambda,\mu) \leq p^*\)</span> for any <span class="math inline">\(\mu \geq 0\)</span> and any <span class="math inline">\(\lambda.\)</span> We want to find the best possible lower bound of the primal problem, which means maximising the lower bound:</p>
+<p><span id="eq-dual"><span class="math display">\[\begin{align}
+    \text{max.} \; &amp; \mathcal{D}(\lambda,\mu)  \\
+    \text{s.t.} \; &amp; \mu_j \geq 0 \quad \forall j \in \{1,2,...,n\}
+\end{align} \tag{6}\]</span></span></p>
+<p>This is the dual problem. We denote the optimal value of this problem as <span class="math inline">\(d^*\)</span>.</p>
+<p>As mentioned above, strong duality holds when the optimal value of the primal equals the optimal value of the dual. In our new terminology, this is written as <span class="math inline">\(d^* = p^* .\)</span> Strong duality can be used to show that a solution that satisfies the KKT conditions must be an optimal solution to the primal and dual problems. In other words, the KKT conditions are necessary and sufficient conditions for optimality.</p>
+<p>Weak duality is when <span class="math inline">\(d^* \leq p^*\)</span>. This holds even for non-convex problems. In such problems, <span class="math inline">\(p^* - d^*\)</span> is referred to as the duality gap.</p>
+<p>In practice, we do not need to start from the general expression in <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -911,8 +979,8 @@ Nocedal, Jorge, and Stephen J. Wright. 2006. <em>Numerical Optimization</em>. 2.
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./pyomo.html" class="pagination-link" aria-label="Using PYOMO">
-        <span class="nav-page-text">Using PYOMO</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./eco-dispatch.html" class="pagination-link" aria-label="Ex. T1: Economic Dispatch">
+        <span class="nav-page-text"><span class="chapter-title">Ex. T1: Economic Dispatch</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

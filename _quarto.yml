@@ -5,7 +5,7 @@ project:
 book:
   title: "Optimal Scheduling for Cross-Facility Workflows"
   subtitle: "XWF for CDT"
-  author: "Mark Asch"
+  author: "Mark Asch" 
   date: last-modified
   sidebar:
     logo: graphics/xwf_logo.svg
@@ -19,6 +19,7 @@ book:
         - theory.qmd
         - th-stochastic.qmd
         - th-sensitivity.qmd
+        - eco-dispatch.qmd
     - part: Implementation
       chapters:
         - pyomo.qmd
