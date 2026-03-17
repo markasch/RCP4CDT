@@ -214,7 +214,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./eco-dispatch.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. T1: Economic Dispatch</span></a>
+  <a href="./eco-dispatch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ex. T1: Economic Dispatch</span></a>
   </div>
 </li>
       </ul>
@@ -381,7 +382,7 @@ window.Quarto = {
       \left\{ \begin{array}{cc}
           c_{i}(\mathbf{x})=0, &amp; \quad i\in\mathcal{E},\\
           c_{i}(\mathbf{x})\geq0, &amp; \quad i\in\mathcal{I},
-      \end{array}\right.\end{array}\label{eq:pbopt}
+      \end{array}\right.\end{array}
 \end{equation} \tag{1}\]</span></span></li>
 </ul>
 <p>where <span class="math inline">\(\mathcal{E},\)</span> <span class="math inline">\(\mathcal{I}\)</span> are the index sets of equality and inequality constraints respectively.</p>
@@ -428,16 +429,16 @@ window.Quarto = {
 <p>where <em>slack</em> variables <span class="citation" data-cites="Nocedal2006">(<a href="index.html#ref-Nocedal2006" role="doc-biblioref">Nocedal and Wright 2006</a>)</span> are introduced to convert the bound constraints into equality constraints.</p>
 <div id="thm-KKT" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 1 (KKT Conditions)</strong></span> Suppose that <span class="math inline">\(x^*\)</span> is an optimal solution of <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a>. Then there is a Lagrange multiplier vector <span class="math inline">\(\lambda^*\)</span> with components <span class="math inline">\(\lambda_i^*,\)</span> <span class="math inline">\(i \in \mathcal{E} \cup \mathcal{I},\)</span> such that the following condtions are satisfied at the optimum <span class="math inline">\((x^*, \lambda_i^*)\)</span></p>
-<p><span class="math display">\[\begin{eqnarray}
-\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) &amp; = &amp; 0\label{eq:kkta}\\
-c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\label{eq:kktb}\\
-c_{i}(x^{*}) &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\label{eq:kktc}\\
-\lambda_{i}^{*} &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\label{eq:kktd}\\
-\lambda_{i}^{*}c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\label{eq:kkte}\end{eqnarray}\]</span></p>
+<p><span class="math display">\[\begin{eqnarray*}
+\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) &amp; = &amp; 0\\
+c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\\
+c_{i}(x^{*}) &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\\
+\lambda_{i}^{*} &amp; \geq &amp; 0,\quad\forall i\in\mathcal{I}\\
+\lambda_{i}^{*}c_{i}(x^{*}) &amp; = &amp; 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\end{eqnarray*}\]</span></p>
 </div>
-<p>Next, we introduce notion of <em>strong duality</em> which is fundamental in the theory of linear programming.</p>
+<p>Next, we introduce the notion of <em>strong duality</em> which is fundamental in the theory of linear programming.</p>
 <div id="thm-duality" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 2 (Strong Duality Theorem)</strong></span> If either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> has a finite-valued solution, then so does the other, and the objective values are <em>equal</em>. On the other hand, if either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> is unbounded, then the other problem is <em>infeasible</em>.</p>
+<p><span class="theorem-title"><strong>Theorem 2 (Strong Duality Theorem)</strong></span> If either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> has a finite-valued solution, then so does the other, and the objective values are <em>equal</em>. On the other hand, if either <a href="#eq-primal" class="quarto-xref">Equation&nbsp;<span>2</span></a> or <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> is unbounded, then the other problem is <em>infeasible</em>.</p>
 </div>
 <p>Note that weak duality, which is valid for general optimization problems of the form <a href="#eq-opt" class="quarto-xref">Equation&nbsp;<span>1</span></a>, implies that the dual solution is only a lower bound for the primal solution, <span class="math display">\[
 c^\top x \ge b^\top y.\]</span></p>
@@ -461,7 +462,7 @@ c^\top x \ge b^\top y.\]</span></p>
 <p>Finally, since we must impose <span class="math inline">\(c - A^\top \lambda = 0\)</span> to obtain a finite infimum, the dual problem <a href="#eq-dual1" class="quarto-xref">Equation&nbsp;<span>5</span></a> can be written as <span class="math display">\[
   \max_\lambda b^\top \lambda \quad \text{s.t.} \quad  A^\top \lambda = c, \, \lambda \ge 0.
 \]</span></p>
-<p>This explains the form of <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> above.</p>
+<p>This explains the form of <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>3</span></a> above.</p>
 </section>
 <section id="lagrange-multipliers-dual-variables-and-sensitivity" class="level2">
 <h2 class="anchored" data-anchor-id="lagrange-multipliers-dual-variables-and-sensitivity">Lagrange Multipliers, Dual Variables and Sensitivity</h2>
@@ -473,8 +474,7 @@ c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).\]</span><
    c^\top \Delta x = (\Delta  b)^\top \lambda .\]</span></p>
 <p>Hence, if we have a small perturbation <span class="math inline">\(\Delta b = \epsilon e_j,\)</span> then for all <span class="math inline">\(\epsilon\)</span> sufficiently small</p>
 <p><span class="math display">\[
-       c^\top \Delta x  = \epsilon  \lambda_j.
-   \]</span></p>
+    c^\top \Delta x  = \epsilon  \lambda_j. \]</span></p>
 <p>That is, the change in optimal objective is <span class="math inline">\(\lambda_j\)</span> times the size of the perturbation to <span class="math inline">\(b_j,\)</span> if the perturbation is small. And in the general case, <span class="math display">\[
   \lambda_j^* =  \frac{\partial{f^*}}{\partial{b_j}} , \]</span></p>
 <p>which is exactly the definition of the sensitivity of a function to a given variable.</p>
@@ -550,14 +550,14 @@ c^\top (x + \Delta x) = (b+ \Delta b)^\top (\lambda + \Delta \lambda).\]</span><
     \mathcal{D}(\lambda,\mu)  = \text{inf}_{x} \{\mathcal{L}(x,\lambda,\mu)\} = \inf_{x} \{ f(x) + \sum_{i=1}^m \lambda_i \cdot h_i(x) + \sum_{j=1}^{n} \mu_j \cdot g_j(x) \}.
 \end{equation}\]</span></p>
 <p>The dual function defines a lower bound on the optimal value <span class="math inline">\(p^*\)</span> of the primal problem: <span class="math inline">\(\mathcal{D}(\lambda,\mu) \leq p^*\)</span> for any <span class="math inline">\(\mu \geq 0\)</span> and any <span class="math inline">\(\lambda.\)</span> We want to find the best possible lower bound of the primal problem, which means maximising the lower bound:</p>
-<p><span id="eq-dual"><span class="math display">\[\begin{align}
+<p><span id="eq-dual2"><span class="math display">\[\begin{align}
     \text{max.} \; &amp; \mathcal{D}(\lambda,\mu)  \\
     \text{s.t.} \; &amp; \mu_j \geq 0 \quad \forall j \in \{1,2,...,n\}
 \end{align} \tag{6}\]</span></span></p>
 <p>This is the dual problem. We denote the optimal value of this problem as <span class="math inline">\(d^*\)</span>.</p>
 <p>As mentioned above, strong duality holds when the optimal value of the primal equals the optimal value of the dual. In our new terminology, this is written as <span class="math inline">\(d^* = p^* .\)</span> Strong duality can be used to show that a solution that satisfies the KKT conditions must be an optimal solution to the primal and dual problems. In other words, the KKT conditions are necessary and sufficient conditions for optimality.</p>
 <p>Weak duality is when <span class="math inline">\(d^* \leq p^*\)</span>. This holds even for non-convex problems. In such problems, <span class="math inline">\(p^* - d^*\)</span> is referred to as the duality gap.</p>
-<p>In practice, we do not need to start from the general expression in <a href="#eq-dual" class="quarto-xref">Equation&nbsp;<span>6</span></a> to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.</p>
+<p>In practice, we do not need to start from the general expression in <a href="#eq-dual2" class="quarto-xref">Equation&nbsp;<span>6</span></a> to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -980,7 +980,7 @@ Nocedal, Jorge, and Stephen J. Wright. 2006. <em>Numerical Optimization</em>. 2.
   </div>
   <div class="nav-page nav-page-next">
       <a href="./eco-dispatch.html" class="pagination-link" aria-label="Ex. T1: Economic Dispatch">
-        <span class="nav-page-text"><span class="chapter-title">Ex. T1: Economic Dispatch</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Ex. T1: Economic Dispatch</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

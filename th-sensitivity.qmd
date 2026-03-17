@@ -23,7 +23,7 @@ $$\begin{equation}
 		\left\{ \begin{array}{cc}
 			c_{i}(\mathbf{x})=0, & \quad i\in\mathcal{E},\\
 			c_{i}(\mathbf{x})\geq0, & \quad i\in\mathcal{I},
-		\end{array}\right.\end{array}\label{eq:pbopt}
+		\end{array}\right.\end{array}
 \end{equation}$$ {#eq-opt}
 
 where $\mathcal{E},$ $\mathcal{I}$ are the index sets of equality and inequality constraints respectively.
@@ -44,7 +44,7 @@ $$
 	\mathrm{subject\,to} & A^{\top}\mathbf{y}\ge\mathbf{c}\\
 	\mathrm{and} & \mathbf{y}\ge0.
 \end{cases}
-$$  {#eq-dual}
+$$ {#eq-dual}
 
 More details below. The simplex algorithm is the basic approach for solving (LP).
 
@@ -89,16 +89,16 @@ where _slack_ variables [@Nocedal2006] are introduced to convert the bound const
 
 Suppose that $x^*$ is an optimal solution of @eq-opt. Then there is a Lagrange multiplier vector $\lambda^*$ with components $\lambda_i^*,$ $i \in \mathcal{E} \cup \mathcal{I},$ such that the following condtions are satisfied at the optimum $(x^*, \lambda_i^*)$ 
 
-\begin{eqnarray}
-\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) & = & 0\label{eq:kkta}\\
-c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\label{eq:kktb}\\
-c_{i}(x^{*}) & \geq & 0,\quad\forall i\in\mathcal{I}\label{eq:kktc}\\
-\lambda_{i}^{*} & \geq & 0,\quad\forall i\in\mathcal{I}\label{eq:kktd}\\
-\lambda_{i}^{*}c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\label{eq:kkte}\end{eqnarray}
+\begin{eqnarray*}
+\nabla_{x}\mathcal{L}(x^{*},\lambda^{*}) & = & 0\\
+c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\\
+c_{i}(x^{*}) & \geq & 0,\quad\forall i\in\mathcal{I}\\
+\lambda_{i}^{*} & \geq & 0,\quad\forall i\in\mathcal{I}\\
+\lambda_{i}^{*}c_{i}(x^{*}) & = & 0,\quad\forall i\in\mathcal{E}\cup\mathcal{I}\end{eqnarray*}
 
 :::
 
-Next, we introduce notion of _strong duality_ which is fundamental in the theory of linear programming. 
+Next, we introduce the notion of _strong duality_ which is fundamental in the theory of linear programming. 
 
 ::: {#thm-duality}
 
@@ -132,7 +132,7 @@ $$
 
 is then 
 $$
- \max_{\lambda\in \mathbb{R}^m} g(\lambda) \quad \text{s.t.} \quad \lambda \ge 0. $$  {#eq-dual1}
+ \max_{\lambda\in \mathbb{R}^m} g(\lambda) \quad \text{s.t.} \quad \lambda \ge 0. $$ {#eq-dual1}
 
  Note that, thanks to _strong duality_, the optimal Lagrange multipliers for the primal problem @eq-primal1 are solutions of this dual problem.
 
@@ -171,9 +171,8 @@ $$
 
 Hence, if we have a small perturbation $\Delta b = \epsilon e_j,$ then for all $\epsilon$ sufficiently small
 
-   $$
-       c^\top \Delta x  = \epsilon  \lambda_j. 
-   $$
+$$
+    c^\top \Delta x  = \epsilon  \lambda_j. $$
 
 That is, the change in optimal objective is $\lambda_j$ times the size of the perturbation to $b_j,$ if the perturbation is small. And in the general case,
 $$
@@ -258,7 +257,7 @@ The dual function defines a lower bound on the optimal value $p^*$ of the primal
 $$\begin{align}
     \text{max.} \; & \mathcal{D}(\lambda,\mu)  \\
     \text{s.t.} \; & \mu_j \geq 0 \quad \forall j \in \{1,2,...,n\}
-\end{align}$$ {#eq-dual}
+\end{align}$$ {#eq-dual2}
 
 This is the dual problem. We denote the optimal value of this problem as $d^*$.
 
@@ -266,4 +265,4 @@ As mentioned above, strong duality holds when the optimal value of the primal eq
 
 Weak duality is when $d^* \leq p^*$. This holds even for non-convex problems. In such problems, $p^* - d^*$ is referred to as the duality gap.
 
-In practice, we do not need to start from the general expression in  @eq-dual to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.
+In practice, we do not need to start from the general expression in  @eq-dual2 to derive the dual problem. Instead, we can simply follow the steps introduced above: write the primal problem in standard form and then mechanically translate it into its dual counterpart.

@@ -53,7 +53,7 @@ model.p_2 = pyo.Var(within=pyo.NonNegativeReals)
 
 By using `pyo.NonNegativeReals`, we do not need to add extra "greater than or equal to zero" constraints on these variables.
 
-### Objective Funcrion
+### Objective Function
 
 Just like we did for the variables, we create a `pyo.Objective` and attach it to our model. We noame it `generation_cost` but any name is possible (for example, you might want to always call the objective the same - `obj` or `objective`).
 
