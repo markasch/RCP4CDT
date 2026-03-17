@@ -376,7 +376,7 @@ window.Quarto = {
 
 
 <p><strong>Problem structure.</strong></p>
-<p>A single generator commits a day-ahead schedule <span class="math inline">\(g\)</span> before the uncertain demand <span class="math inline">\(\xi\)</span> is revealed. In each scenario <span class="math inline">\(s\)</span>, real-time imbalance is settled via curtailment (spillage, cheap) or load shedding (expensive):</p>
+<p>A single generator commits a day-ahead schedule <span class="math inline">\(g\)</span> before the uncertain demand <span class="math inline">\(\xi\)</span> is revealed. In each scenario <span class="math inline">\(s,\)</span> real-time imbalance is settled via curtailment (spillage, cheap) or load shedding (expensive):</p>
 <p><span class="math display">\[\begin{align}
 \min_{g,\, r^+_s,\, r^-_s} &amp; \quad \rho\bigl[C_s(g, \xi)\bigr] \\
 \quad \text{s.t.} &amp; \quad g - r^+_s + r^-_s = d_s, \\
@@ -428,6 +428,7 @@ C_s = c_g \cdot g + c_{\text{spill}} \cdot r^+_s + c_{\text{shed}} \cdot r^-_s
 </tbody>
 </table>
 <p>Optimization results will be compared for these risk measures.</p>
+<p>In the <mark>CDT context</mark>, we can consider either a HPC center or a data center that has either too much, or not enough capacity to process a given (uncertain) task. In the case of under-capacity this incurs a large cost of deporting the job (or a part of it) to an external center. In the case of over-capacity, this implies idling of the machines, which incurs a lower operational cost (e.g.&nbsp;power, cooling).</p>
 <section id="model-explanation" class="level2">
 <h2 class="anchored" data-anchor-id="model-explanation">Model explanation</h2>
 <section id="decision-variables" class="level3">
