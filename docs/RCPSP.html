@@ -232,7 +232,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./eco-dispatch.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. T1: Economic Dispatch</span></a>
+  <a href="./eco-dispatch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ex. T1: Economic Dispatch</span></a>
   </div>
 </li>
       </ul>
@@ -340,14 +341,13 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#d1.-simplified-supply-chain-example" id="toc-d1.-simplified-supply-chain-example" class="nav-link active" data-scroll-target="#d1.-simplified-supply-chain-example">D1. Simplified Supply Chain Example</a></li>
-  <li><a href="#d2.-simplified-scheduling-example" id="toc-d2.-simplified-scheduling-example" class="nav-link" data-scroll-target="#d2.-simplified-scheduling-example">D2. Simplified Scheduling Example</a></li>
+  <li><a href="#d1.-simplified-supply-chain-examples" id="toc-d1.-simplified-supply-chain-examples" class="nav-link active" data-scroll-target="#d1.-simplified-supply-chain-examples">D1. Simplified Supply Chain Examples</a></li>
+  <li><a href="#d2.-simplified-scheduling-examples" id="toc-d2.-simplified-scheduling-examples" class="nav-link" data-scroll-target="#d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</a></li>
   <li><a href="#d3.-simplified-rcpsp-example" id="toc-d3.-simplified-rcpsp-example" class="nav-link" data-scroll-target="#d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</a></li>
   <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a></li>
   <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a></li>
   <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a></li>
   <li><a href="#s3.-risk-measures" id="toc-s3.-risk-measures" class="nav-link" data-scroll-target="#s3.-risk-measures">S3. Risk Measures</a></li>
-  <li><a href="#silly-examples" id="toc-silly-examples" class="nav-link" data-scroll-target="#silly-examples">Silly Examples</a></li>
   </ul>
 </nav>
 </nav>
@@ -378,19 +378,110 @@ window.Quarto = {
 
 
 <p>This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today’s scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude—outstanding examples are <a href="https://www.skao.int/en">SKA</a> and CERN’s <a href="https://home.cern/science/accelerators/future-circular-collider">FCC</a>.</p>
-<p>The chapter is divied into deterministic (D0 to D3) and stochastic (S1 to S3) scenarios. Realistic cases are presented in the Use-Cases chapter.</p>
-<section id="d1.-simplified-supply-chain-example" class="level2">
-<h2 class="anchored" data-anchor-id="d1.-simplified-supply-chain-example">D1. Simplified Supply Chain Example</h2>
+<p>The chapter is divied into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios. Realistic cases are presented in the Use-Cases chapter.</p>
+<section id="d1.-simplified-supply-chain-examples" class="level2">
+<h2 class="anchored" data-anchor-id="d1.-simplified-supply-chain-examples">D1. Simplified Supply Chain Examples</h2>
 <p>Putting together:</p>
 <ul>
-<li>primal problem</li>
-<li>dual problem</li>
+<li>primal problem,</li>
+<li>dual problem,</li>
 <li>sensitivity analysis.</li>
 </ul>
 <p>See <a href="./examples/D1a_SC_simple.html">Example D1</a> and <a href="./examples/D1b_SC_4_stage.html">Example D1a</a></p>
+<p>These supply chain examples have the following structure.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A["Suppliers"] --&gt;  B["Factories"] 
+    B --&gt; C["Warehouses"] 
+    C --&gt; D["Retailers"] 
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart LR
+  subgraph SUP["Suppliers"]
+    S1["$$S_1$$"]
+    S2["$$S_2$$"]
+    S3["$$S_3$$"]
+  end
+  subgraph FAC["Factories"]
+    F1["$$F_1$$"]
+    F2["$$F_2$$"]
+    F3["$$F_3$$"]
+  end
+  subgraph WAR["Warehouses"]
+    W1["$$W_1$$"]
+    W2["$$W_2$$"]
+    W3["$$W_3$$"]
+  end
+  subgraph RET["Retailers"]
+    R1["$$R_1$$"]
+    R2["$$R_2$$"]
+    R3["$$R_3$$"]
+  end
+
+  S1 --&gt; F1
+  S1 --&gt; F2
+  S1 --&gt; F3
+
+  F1 --&gt; W1
+  F1 --&gt; W2
+  F1 --&gt; W3
+
+  W1 --&gt; R1
+  W1 --&gt; R2 
+  W1 --&gt; R3
+
+  style SUP fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+  style FAC fill:#E1F5EE,stroke:#5DCAA5,color:#085041
+  style WAR fill:#FAEEDA,stroke:#EF9F27,color:#633806
+  style RET fill:#FAECE7,stroke:#F0997B,color:#993C1D
+
+  classDef purple fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+  classDef teal   fill:#E1F5EE,stroke:#5DCAA5,color:#085041
+  classDef amber  fill:#FAEEDA,stroke:#EF9F27,color:#633806
+  classDef coral  fill:#FAECE7,stroke:#F0997B,color:#993C1D
+
+  class S1,S2,S3 purple
+  class F1,F2,F3 teal
+  class W1,W2,W3 amber
+  class R1,R2,R3 coral
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A["Instruments"] --&gt;  B["HPC centres"] 
+    B --&gt; C["Data centres"] 
+    C --&gt; D["End-users"] 
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
-<section id="d2.-simplified-scheduling-example" class="level2">
-<h2 class="anchored" data-anchor-id="d2.-simplified-scheduling-example">D2. Simplified Scheduling Example</h2>
+<section id="d2.-simplified-scheduling-examples" class="level2">
+<h2 class="anchored" data-anchor-id="d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</h2>
 <ul>
 <li>empirical scheduling</li>
 <li>multiple machine, disjunctive scheduling</li>
@@ -438,7 +529,7 @@ Figure&nbsp;1: A project network represented as a directed acyclic graph (DAG) f
 </figcaption>
 </figure>
 </div>
-<p>The project instance, shown above, is detailed in Table 1, where <span class="math inline">\(S_j\)</span> is the successor list of job <span class="math inline">\(j,\)</span> <span class="math inline">\(m\)</span> is the mode, <span class="math inline">\(d_{jm}\)</span> is the job duration, <span class="math inline">\(k^{\rho}_{jm1}\)</span> is the renewable resource requirement, <span class="math inline">\(R^{\rho}\)</span> is the renewable resource list, <span class="math inline">\(K^{\rho}\)</span> is the renewable resource limit, and <span class="math inline">\(R^{\nu}\)</span> is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.</p>
+<p>The project instance, shown above, is detailed in Table 1, where <span class="math inline">\(S_j\)</span> is the successor list of job <span class="math inline">\(j,\)</span> <span class="math inline">\(m\)</span> is the mode, <span class="math inline">\(d_{jm}\)</span> is the duration of job <span class="math inline">\(j\)</span> in mode <span class="math inline">\(m,\)</span> <span class="math inline">\(k^{\rho}_{jm1}\)</span> is the renewable resource requirement, <span class="math inline">\(R^{\rho}\)</span> is the renewable resource list, <span class="math inline">\(K^{\rho}\)</span> is the renewable resource limit, and <span class="math inline">\(R^{\nu}\)</span> is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.</p>
 <p><span class="math display">\[\begin{aligned}
 &amp; \text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\
 &amp;\begin{array}{cccccccc}
@@ -472,7 +563,7 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"input.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> jsonfile: </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    TASKS <span class="op">=</span> json.load(jsonfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Though, for <mark>interoperability</mark>, we should privilege the data model format, described above in <strong>CDT-Implementation</strong>.</p>
+<p>Though, for interoperability, we should privilege the data model format, described above in <strong>CDT-Implementation</strong>.</p>
 <hr>
 <hr>
 </section>
@@ -488,35 +579,6 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <h2 class="anchored" data-anchor-id="s3.-risk-measures">S3. Risk Measures</h2>
 <p>As presented in the <a href="./th-stochastic.html#risk-measures">Risk Measures</a> section, there are various ways to include risk in the cost function. In this example, we compare…</p>
 <p>TBC</p>
-</section>
-<section id="silly-examples" class="level2">
-<h2 class="anchored" data-anchor-id="silly-examples">Silly Examples</h2>
-<p>In summary, this book has no content whatsoever.</p>
-<div id="cell-fig-line-plot" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">1</span>,<span class="dv">23</span>,<span class="dv">2</span>,<span class="dv">4</span>])</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="fig-line-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-line-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="RCPSP_files/figure-html/fig-line-plot-output-1.png" width="566" height="411" class="figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: A line plot
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>We observe in <a href="#fig-line-plot" class="quarto-xref">Figure&nbsp;<span>2</span></a> that there is a clear trend, up and down.</p>
-<p>To only have code displayed, but not executed use <code>{.python}</code>…</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-line-plot</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "A line plot "</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">1</span>,<span class="dv">23</span>,<span class="dv">2</span>,<span class="dv">4</span>])</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

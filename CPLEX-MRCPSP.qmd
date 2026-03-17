@@ -536,7 +536,7 @@ nr_plot(ax_nr2, nr2_per_task, cum_nr2, BUD_NR[1],
         'Non-Renewable NR2  (budget = 94)', '#C4AD66')
 
 plt.show()
-#plt.savefig('/mnt/user-data/outputs/rcpsp_schedule_v2.png',
+#plt.savefig('./outputs/rcpsp_schedule.png',
 #            dpi=150, bbox_inches='tight', facecolor=fig.get_facecolor())
 #print("Saved.")
 ```

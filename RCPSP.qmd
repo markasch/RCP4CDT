@@ -2,21 +2,90 @@
 
 This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today's scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude---outstanding examples are [SKA](https://www.skao.int/en) and CERN's [FCC](https://home.cern/science/accelerators/future-circular-collider).
 
-The chapter is divied into deterministic (D0 to D3) and stochastic (S1 to S3) scenarios.  Realistic cases are presented in the Use-Cases chapter.
+The chapter is divied into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios.  Realistic cases are presented in the Use-Cases chapter.
 
 
 
-## D1. Simplified Supply Chain Example
+## D1. Simplified Supply Chain Examples
 
 Putting together:
 
-- primal problem
-- dual problem
+- primal problem,
+- dual problem,
 - sensitivity analysis.
 
 See [Example D1](examples/D1a_SC_simple.ipynb) and  [Example D1a](examples/D1b_SC_4_stage.ipynb)
 
-## D2. Simplified Scheduling Example
+These supply chain examples have the following structure.
+
+```{mermaid}
+graph LR
+    A["Suppliers"] -->  B["Factories"] 
+    B --> C["Warehouses"] 
+    C --> D["Retailers"] 
+```
+
+
+```{mermaid}
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart LR
+  subgraph SUP["Suppliers"]
+    S1["$$S_1$$"]
+    S2["$$S_2$$"]
+    S3["$$S_3$$"]
+  end
+  subgraph FAC["Factories"]
+    F1["$$F_1$$"]
+    F2["$$F_2$$"]
+    F3["$$F_3$$"]
+  end
+  subgraph WAR["Warehouses"]
+    W1["$$W_1$$"]
+    W2["$$W_2$$"]
+    W3["$$W_3$$"]
+  end
+  subgraph RET["Retailers"]
+    R1["$$R_1$$"]
+    R2["$$R_2$$"]
+    R3["$$R_3$$"]
+  end
+
+  S1 --> F1
+  S1 --> F2
+  S1 --> F3
+
+  F1 --> W1
+  F1 --> W2
+  F1 --> W3
+
+  W1 --> R1
+  W1 --> R2 
+  W1 --> R3
+
+  style SUP fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+  style FAC fill:#E1F5EE,stroke:#5DCAA5,color:#085041
+  style WAR fill:#FAEEDA,stroke:#EF9F27,color:#633806
+  style RET fill:#FAECE7,stroke:#F0997B,color:#993C1D
+
+  classDef purple fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+  classDef teal   fill:#E1F5EE,stroke:#5DCAA5,color:#085041
+  classDef amber  fill:#FAEEDA,stroke:#EF9F27,color:#633806
+  classDef coral  fill:#FAECE7,stroke:#F0997B,color:#993C1D
+
+  class S1,S2,S3 purple
+  class F1,F2,F3 teal
+  class W1,W2,W3 amber
+  class R1,R2,R3 coral
+```
+
+```{mermaid}
+graph LR
+    A["Instruments"] -->  B["HPC centres"] 
+    B --> C["Data centres"] 
+    C --> D["End-users"] 
+```
+
+## D2. Simplified Scheduling Examples
 
 - empirical scheduling
 - multiple machine, disjunctive scheduling
@@ -52,7 +121,7 @@ graph LR
 A project network represented as a directed acyclic graph (DAG) for a workflow with 4 processing jobs $J_1,\cdots, J_4.$ The tasks 0 and 5 are dummy tasks, representing the start and the end of the workflow.
 :::
 
-The project instance, shown above, is detailed in Table 1, where $S_j$ is the successor list of job $j,$ $m$ is the mode, $d_{jm}$ is the job duration, $k^{\rho}_{jm1}$ is the renewable resource requirement, $R^{\rho}$ is the renewable resource list, $K^{\rho}$ is the renewable resource limit, and $R^{\nu}$ is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.
+The project instance, shown above, is detailed in Table 1, where $S_j$ is the successor list of job $j,$ $m$ is the mode, $d_{jm}$ is the duration of job $j$ in mode $m,$ $k^{\rho}_{jm1}$ is the renewable resource requirement, $R^{\rho}$ is the renewable resource list, $K^{\rho}$ is the renewable resource limit, and $R^{\nu}$ is the non-renewable resource list, taken as empty. In other words we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2. Jobs 0 and 5 are the source and sink respectively, with zero duration and zero resources.
 
 $$\begin{aligned}
 & \text {Table 1. Multi-mode RCPSP for a 4-job, 2-mode workflow. }\\
@@ -96,7 +165,7 @@ with open("input.json", "r") as jsonfile:
     TASKS = json.load(jsonfile)
 ```
 
-Though, for <mark>interoperability</mark>, we should privilege the data model format, described above in **CDT-Implementation**. 
+Though, for interoperability, we should privilege the data model format, described above in **CDT-Implementation**. 
 
 
 ---
