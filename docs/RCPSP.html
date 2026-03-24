@@ -303,7 +303,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/03-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
+  <a href="./examples/D2_sched-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D2: Scheduling Problems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S3-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
   </div>
 </li>
       </ul>
@@ -482,19 +487,24 @@ flowchart LR
 </section>
 <section id="d2.-simplified-scheduling-examples" class="level2">
 <h2 class="anchored" data-anchor-id="d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</h2>
+<p>The scheduling <a href="./examples/D2_sched-intro.html">Example D2</a> covers a lot of ground. We study a classical scheduling problem, where we are given a set of jobs, their release times, their durations and their due times. The objective is to optimize the makespan, or total duration of all the jobs.</p>
+<p>We study:</p>
 <ul>
-<li>empirical scheduling</li>
-<li>multiple machine, disjunctive scheduling</li>
+<li>empirical scheduling (LIFO, EDD, SPT);</li>
+<li>key performance indicators (KPI);</li>
+<li>single-machine and multiple-machine scheduling;</li>
+<li>disjunctive scheduling using Big-M and convex hull approaches.</li>
 </ul>
 </section>
 <section id="d3.-simplified-rcpsp-example" class="level2">
 <h2 class="anchored" data-anchor-id="d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</h2>
-<p>Putting together:</p>
+<p>We are now in a position to add resource constraints to the scheduling problems above. The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan.</p>
+<p>In <a href="">Example D3</a> we put together:</p>
 <ul>
-<li>resource constraints</li>
-<li>precedence</li>
-<li>time-indexed</li>
-<li>disjunctive</li>
+<li>resource constraints,</li>
+<li>precedence relations,</li>
+<li>time-indexed formulation,</li>
+<li>disjunctive approach.</li>
 </ul>
 <p>Coming soon…</p>
 </section>
@@ -577,8 +587,13 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 </section>
 <section id="s3.-risk-measures" class="level2">
 <h2 class="anchored" data-anchor-id="s3.-risk-measures">S3. Risk Measures</h2>
-<p>As presented in the <a href="./th-stochastic.html#risk-measures">Risk Measures</a> section, there are various ways to include risk in the cost function. In this example, we compare…</p>
-<p>TBC</p>
+<p>As presented in the <a href="./th-stochastic.html#risk-measures">Risk Measures</a> section, there are various ways to include risk in the cost function. In this <a href="./examples/03-OPF_risk.ipnb">example</a>, we analyze a stochastic energy dispatch problem, and compare the following risk measures:</p>
+<ul>
+<li>mean,</li>
+<li>CVaR,</li>
+<li>mean-variance,</li>
+<li>exponential.</li>
+</ul>
 
 
 </section>

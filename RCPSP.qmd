@@ -87,18 +87,26 @@ graph LR
 
 ## D2. Simplified Scheduling Examples
 
-- empirical scheduling
-- multiple machine, disjunctive scheduling
+The scheduling [Example D2](examples/D2_sched-intro.ipynb) covers a lot of ground. We study a classical scheduling problem, where we are given a set of jobs, their release times, their durations and their due times. The objective is to optimize the makespan, or total duration of all the jobs.
+
+We study:
+
+- empirical scheduling (LIFO, EDD, SPT);
+- key performance indicators (KPI);
+- single-machine and multiple-machine scheduling;
+- disjunctive scheduling using Big-M and convex hull approaches.
 
 
 ## D3. Simplified RCPSP Example
 
-Putting together:
+We are now in a position to add resource constraints to the scheduling problems above. The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan.
 
-- resource constraints
-- precedence
-- time-indexed
-- disjunctive
+In  [Example D3]() we put together:
+
+- resource constraints,
+- precedence relations,
+- time-indexed formulation,
+- disjunctive approach.
 
 
 Coming soon...
@@ -183,6 +191,11 @@ TBC
 
 ## S3. Risk Measures
 
-As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In this example, we compare...
+As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In this [example](./examples/03-OPF_risk.ipnb), we analyze a stochastic  energy dispatch problem, and compare the following risk measures:
 
-TBC
+- mean,
+- CVaR,
+- mean-variance,
+- exponential.
+
+
