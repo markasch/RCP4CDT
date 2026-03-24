@@ -1,5 +1,139 @@
 # Background and Setting {.unnumbered}
 
+## Digital Models, Shadows and Twins
+
+Before embarking on a model for the Digital Continuum and its Cross-Facility Workflows, we need to clarify some definitions related to Digital Twins. We cannot talk about digital twins without mentioning two other closely related concepts: digital models and digital shadows.
+
+```{mermaid}
+flowchart LR
+  subgraph DM["① Digital Model"]
+    direction TB
+    PM("Physical <br> Entity")
+    VM("Digital <br> Model")
+    PM -. "manual only" .-> VM
+  end
+  subgraph DS["② Digital Shadow"]
+    direction TB
+    PS("Physical <br> Entity")
+    VS("Digital <br> Shadow")
+    PS -- "auto, one-way" --> VS
+  end
+  subgraph DTG["③ Digital Twin"]
+    direction TB
+    PT("Physical <br> Entity")
+    VT("Digital <br> Twin")
+    PT <-- "auto, bidirectional" --> VT
+  end
+  DM -- "automated <br> sensing (CN)" --> DS
+  DS -- "feedback <br> & actuation (CN)" --> DTG
+  classDef phy fill:#E1F5EE,stroke:#0F6E56,color:#085041
+  classDef dig fill:#EEEDFE,stroke:#534AB7,color:#26215C
+  classDef blc fill:white,stroke:#534AB7,color:#26215C
+  class PM,PS,PT phy
+  class VM,VS,VT dig
+  class DM,DS,DTG blc
+
+```
+
+### Digital Models
+
+A digital model is a virtual representation of a physical object, system, or process. It can have
+various forms, such as 3D models, computer-aided design (CAD) files, simulations, or
+mathematical algorithms. Digital models enable the visualisation, analysis, and manipulation of
+objects or systems in a digital environment, aiding in design, optimisation, and testing. Usually,
+a model represents a prediction or guess as to how a physical object, system, or process might
+operate in the future or in a particular environment.
+
+For instance, an architectural firm might use a digital model to create a virtual walkthrough of a building design, allowing clients to visualise and make changes to the layout and aesthetics before any construction begins. The same goes for the Digital Continuum, where we can envisage a model that allows the simulation of a given workflow, across diverse facilities.
+
+Digital models find applications across various industries and disciplines. They are mostly used
+in architecture, engineering, manufacturing, and entertainment for design, prototyping, and
+visualisation purposes. In scientific research, digital models are useful in simulations, data
+analysis, and hypothesis testing.
+
+
+### Digital Shadows
+
+A digital shadow is an evolving digital representation that mirrors the current state and
+behaviour of a physical entity or system. It collects data from the asset (this could be a database,
+a railway system, a banking platform, or a digital continuum) through sensors, Internet of Things (IoT) devices, or
+other sources that provide a feed of information that is fed into the model. This means that a
+digital shadow is up-to-date with the physical entity. It represents the asset to a sufficient level
+of detail, so it is useful to gain a good understanding of it.
+
+Typically, digital shadows are mathematical models, but they could also be 3D representations
+and often focus on specific aspects (such as performance metrics, operational conditions, or
+environmental factors). They enable monitoring, predictive analysis, and decision-making.
+
+A manufacturing company might create a digital shadow of their production line. The digital shadow allows the
+company to monitor and analyse production processes, identify bottlenecks, and make data-driven decisions for process optimisation and quality improvement. In case of any unexpected disruptions or data loss, the digital shadow can be used to restore the most recent operationaln state and minimise downtime.
+
+Digital shadows are valuable in situations where monitoring and analysis are critical. They are
+commonly employed in industries such as logistics, supply chain management, energy, and
+transportation. By collecting and analysing data from sensors and IoT devices, digital shadows
+facilitate predictive maintenance, anomaly detection, and optimisation of processes and
+operations. 
+
+We conclude that this is the concept most suited to the Digital Continuum.
+
+### Digital Twins
+
+Digital twins integrate the virtual and physical realms by creating a real-time connection
+between the physical entity and its digital counterpart, where the physical object gives
+information to the digital replica and vice versa. Digital twins simulate, monitor, and control
+physical objects or systems, facilitating analysis, optimisation, and predictive maintenance.
+They enable live feedback loops and foster insights for improving performance, efficiency, and
+reliability.
+
+There is a two-way interaction between the physical and the digital
+environments, where the digital replica is able to change how the physical entity operates. For
+instance, this is crucial if we are talking about a critical asset that is important in terms of the
+value it is adding, in areas of national importance, such as safety, or competitive advantage. In
+these cases, it is key to ensure that there is sufficient resilience when it comes to the ways in
+which the asset will respond to potential deviations.
+
+Digital twins are applicable in complex systems such as manufacturing plants, infrastructure,
+healthcare facilities, and smart cities. They enable real-time monitoring and control, predictive
+maintenance, and performance optimisation. Digital twins can also play an important role in
+optimising energy consumption, enhancing product development, and enabling remote
+monitoring and assistance. 
+
+We could, at term evolve a digital shadow of the Continuum into a full digital twin, though this would imply that the digital twin be permitted to control the underlying compute, network and data infrastructures, probably by using adequate software (micro)services.
+
+An important point to note, is that there is _no_ hierarchy between the three: models, shadows, and twins.  Rather,
+it is better to look at a system that requires a digital representation in terms of decisional needs
+and the types of desired value to make a decision on the solution that is required. Where is each
+of them most suitable? Note also that there is a tendency to use the term ‘digital twin’ broadly to encompass any digital
+representation that exhibits some form of virtual-physical integration. However, it is important
+to distinguish between digital twins and other digital models or shadows to ensure clarity and
+avoid diluting the concept’s significance.
+
+
+### 5-D Framework for Digital Twins
+
+Digital Twins (DT) can be modelled in five "dimensions" [@Qi2021] as 
+$$
+  M = \{ \mathrm{PE}, \mathrm{VM}, \mathrm{Ss},\mathrm{DD}, \mathrm{CN}\},$$
+
+where $\mathrm{PE}$ are the physical entities, $\mathrm{VM}$ are virtual models, $\mathrm{Ss}$ are services,
+$\mathrm{DD}$ are DT data, and $\mathrm{CN}$ are connections. 
+
+::: {#fig-5D}
+![](graphics/5D-DT.png){width=100%}
+
+5-D representation of a Digital Twin.
+:::
+
+To capture the full product lifecycle, the applications of a DT can be attached to the design, production and use phases, as shown below in @fig-5D-app 
+
+::: {#fig-5D-app}
+![](graphics/5D-DT-app.jpg){width=100%}
+
+Full life-cycle application of a Digital Twin in a industrial production setting.
+:::
+
+## Cross-Facility Workflows
+
 A wide-scale, cross-facility workflow is a complex beast. It reunites users, jobs, and facilities, each with its resources and constraints. In the workflows that interest us, the facilites include data centres, HPC^[High Performance Computing] centres, and the network connections between these.
 
 The basic problem can be resumed as follows: find an optimal schedule $S$ for a collection of jobs $J$ to be executed on a set of facilities $F,$ subject to constraints on resources, availability, precedences. The optimization can be performed for various objectives, or combinations of these, such as cost, project duration, facility availability, environmental impact. The presence of _uncertainty_ plays a central role and is included in the optimization process.
@@ -10,7 +144,7 @@ This work is part of the Exa-AtoW project, a member of the NumPEx consortium.[ [
 
 Exa-AToW focuses on effective end-to-end solutions, at scale, by considering not only functional dimensions such as workflows and data logistics but also resource federation governance, cybersecurity, energy, and sustainability.
 
-## Continuum Digital Twin or Shadow
+## CDT: Continuum Digital Twin or Shadow
 
 Given the inherent complexity of Exascale workflows, they will inevitably be executed on a cross-facility infrastructure. Such a multi-component basis will inevtibaly be subject to uncertainties in availability, maintenance, cost, etc. In addition, the cybersecurity constraints will impose strict access conditions that make workflow testing basically impossible. And, more recently, the issue of sustainability and energy consumption by cyberinfrastructure [@IEA2025] is a critical issue, in particular for so-called hyperscalers and data centers used for AI training and inference. 
 
@@ -27,15 +161,8 @@ graph LR
 Three modules of the CDT: simuulation (SIM), scheduling (SCD), optimization (OPT). An initial workflow definition enters at the left and an optimal workflow is produced.
 :::
 
-The core of the CDT is a set of
-three modules: simulation, scheduling and optimization, as shown in @fig-modules. 
-They can be used independently, or be chained together. These three are fed by
-a shared database, based on a common ontology that contains descriptions of all the jobs to perform,
-resources available, constraints to be respected, and any objectives
-to be attained. This database is connected to, and communicates with
-the real world---see  @fig-global.
-This communication can take the form of a MADPP (machine actionable
-data project plan), a user-interface, or a combination of the two [@MGG2025implementation].
+The core of the CDT is a set of three modules: simulation, scheduling and optimization, as shown in @fig-modules. 
+They can be used independently, or be chained together. These three are fed by a shared database, based on a common ontology that contains descriptions of all the jobs to perform, resources available, constraints to be respected, and any objectives to be attained. This database is connected to, and communicates with the real world---see  @fig-global. This communication can take the form of a MADPP (machine actionable data project plan), a user-interface, or a combination of the two [@MGG2025implementation].
 
 ::: {#fig-global}
 ![](graphics/CDT.png){width=80%}
