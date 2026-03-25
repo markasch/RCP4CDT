@@ -1,4 +1,5 @@
-# CDT Implementation
+# CDT Implementation {#sec-CDT}
+
 Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in @fig-imp.
 
 ::: {#fig-imp}

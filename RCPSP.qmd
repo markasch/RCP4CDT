@@ -99,19 +99,29 @@ We study:
 
 ## D3. Simplified RCPSP Example
 
-We are now in a position to add resource constraints to the scheduling problems above. The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan.
+We are now in a position to add:
 
-In  [Example D3]() we put together:
+- resource constraints, and
+- precedence relations described by a DAG 
+
+to the scheduling problems above. This problem is known as the Resource Constrained Project Scheduling Problem, or RCPSP.
+
+The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan, while satisfying all precedences described by the Directed Acyclic Graph of the complete workflow.
+
+In  [Example D3]() we combine:
 
 - resource constraints,
 - precedence relations,
 - time-indexed formulation,
 - disjunctive approach.
 
+The formulation is taken from Section @sec-math
 
-Coming soon...
+
 
 ## D4. Simplified MRCPSP Example
+
+The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CDT context.
 
 In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
 
@@ -155,7 +165,7 @@ j & S_{j}& m & d_{jm} & k^{\rho}_{jm1} & R^{\rho} & K^{\rho}_{1} & R^{\nu}\\
 
 The simplest input file is a direct transcription of the table of variables.
 
-```{json}
+```{.json}
 {
   "0":{"suc":("1","2"),"mod":"A","drt":0,    "rsc":0},
   "1":{"suc":"3","mod":"A",      "drt":2,    "rsc":2},
@@ -173,7 +183,7 @@ with open("input.json", "r") as jsonfile:
     TASKS = json.load(jsonfile)
 ```
 
-Though, for interoperability, we should privilege the data model format, described above in **CDT-Implementation**. 
+Though, for interoperability, we should privilege the data model format, described above in Section @sec-CDT. 
 
 
 ---

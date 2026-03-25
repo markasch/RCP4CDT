@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.0">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Uncertainty – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,7 +27,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -54,15 +56,14 @@ div.csl-indent {
 <link href="./theory.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-68c8bffd90dad8f2b55c52d7b6410dc0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-fb6aac2467e4833bec6e937f35198872.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d661fd49052cdedcb9ca2693aa63deef.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-fba19d6e25844055b84f5b76d40fcc7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -92,7 +93,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -285,7 +286,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/D2_sched-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Scheduling Problems</span></a>
+  <a href="./examples/D2_sched-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D2: Scheduling Problems</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -416,7 +417,7 @@ Figure&nbsp;1: A multistage decision process with uncertainty. Uncertain, exogen
 </div>
 <p>In the Figure we depict a generic multistage decision process with state <span class="math inline">\(\mathbf{x}_t\)</span> that evolves over time, starting at stage <span class="math inline">\(t=1,\)</span> and then receives uncertain, exogenous inputs, <span class="math inline">\(\xi_2, \xi_3, \ldots, \xi_T,\)</span> at given stages <span class="math inline">\(t = 2,3,\ldots, T.\)</span> At stage 1, a here-and-now (deterministic) decision is taken. The subsequent sequence of wait-and-see decision functions <span class="math inline">\({\mathbf{x}_t(\xi_t)}_{t\in [T]}\)</span> constitutes a <em>policy</em>, <span class="math inline">\(\pi.\)</span> The policy thus obtained, provides a decision rule for all stages <span class="math inline">\(t \in [T].\)</span> The aim of the decision process (stochastic multistage optimization) is then to compute an <em>optimal policy</em> for a given objective and subject to constraints.</p>
 <p>We will describe in detail the two-stage problem, since the multistage is a straightforward generalisation. In the stochastic setting, we can naturally classify <span class="math inline">\(x\in\mathscr{X}\)</span> as the <em>first-stage</em> decision variables, since the initial facilities<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> are fixed and <span class="math inline">\(y\in\mathbb{R}^{\left|\mathscr{A}\right|\times\left|\mathscr{K}\right|}\)</span> as the <em>second-stage</em> decision variables, since the job-flow operating conditions are uncertain over time.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Data centers, HPC centers, networks. </p></div></div><p>The two-stage stochastic linear program <span class="citation" data-cites="birgelouveaux2011">(<a href="index.html#ref-birgelouveaux2011" role="doc-biblioref">Birge and Louveaux 2011</a>)</span>, <span class="citation" data-cites="shapiro_lectures_2009">(<a href="index.html#ref-shapiro_lectures_2009" role="doc-biblioref">Shapiro, Dentcheva, and Ruszczyński 2009</a>)</span> is then</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Data centers, HPC centers, networks. </p></div></div><p>The two-stage stochastic linear program <span class="citation" data-cites="birgelouveaux2011">(<a href="index.html#ref-birgelouveaux2011" role="doc-biblioref">Birge and Louveaux 2011</a>)</span>, <span class="citation" data-cites="shapiro_lectures_2009">(<a href="index.html#ref-shapiro_lectures_2009" role="doc-biblioref">Shapiro et al. 2009</a>)</span> is then</p>
 <p><span class="math display">\[\begin{align} \label{eq:2stage}
 \min_{x\in\mathscr{X}} &amp; \,\,c^{\top}x + \mathrm{E}\left[Q(x;\xi)\right],
 \end{align}\]</span> where <span class="math inline">\(Q(x;\xi)\)</span> is the optimal value of the second-stage problem <span class="math display">\[\begin{align*}
@@ -490,7 +491,7 @@ Figure&nbsp;1: A multistage decision process with uncertainty. Uncertain, exogen
 <p>You can expect to observe this kind of phenomenon very often whenever you need to solve a problem under uncertainty and are unsure whether the worst-case or average-case performance should be optimized. The degree of trade-off can help you make the right decision.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-birgelouveaux2011" class="csl-entry" role="listitem">
 Birge, John R., and François Louveaux. 2011. <em>Introduction to Stochastic Programming</em>. <span>Second edition</span>. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-4614-0237-4">https://doi.org/10.1007/978-1-4614-0237-4</a>.
 </div>

@@ -1,8 +1,5 @@
 # Theoretical Framework {.unnumbered}
 
-::: {#theo}
-:::
-
 ## Some History...
 
 The development of a framework for CDT process scheduling is rooted in the _job scheduling problems_ that emerged with industrialization and assembly-line work. It is not a coincidence that many of the classical scheduling problems have names like Job Shop Problem or Flow Shop Problem. Back then and now the targets are the same: execute complex jobs that might need treatment on different machines in a defined sequential orders with certain degrees of efficiency. Efficiency in this context can be defined in a number of ways. It might be the total time needed to execute a set of jobs, the compliance of given deadlines, the minimization of overall costs or a combination of all the above.
