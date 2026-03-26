@@ -310,6 +310,11 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./examples/D3_RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D3: RCPSP Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./examples/S3-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
   </div>
 </li>
@@ -352,7 +357,10 @@ window.Quarto = {
   <li><a href="#d2.-simplified-scheduling-examples" id="toc-d2.-simplified-scheduling-examples" class="nav-link" data-scroll-target="#d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</a></li>
   <li><a href="#d3.-simplified-rcpsp-example" id="toc-d3.-simplified-rcpsp-example" class="nav-link" data-scroll-target="#d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</a></li>
   <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a></li>
-  <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a></li>
+  <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a>
+  <ul class="collapse">
+  <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
+  </ul></li>
   <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a></li>
   <li><a href="#s3.-risk-measures" id="toc-s3.-risk-measures" class="nav-link" data-scroll-target="#s3.-risk-measures">S3. Risk Measures</a></li>
   </ul>
@@ -507,14 +515,14 @@ flowchart LR
 </ul>
 <p>to the scheduling problems above. This problem is known as the Resource Constrained Project Scheduling Problem, or RCPSP.</p>
 <p>The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan, while satisfying all precedences described by the Directed Acyclic Graph of the complete workflow.</p>
-<p>In <a href="">Example D3</a> we combine:</p>
+<p>In <a href="./examples/D3_RCPSP.html">Example D3</a> we combine:</p>
 <ul>
 <li>resource constraints,</li>
 <li>precedence relations,</li>
 <li>time-indexed formulation,</li>
 <li>disjunctive approach.</li>
 </ul>
-<p>The formulation is taken from Section <a href="theory.html#sec-math" class="quarto-xref"><span>Mathematical Formulation - Deterministic Model</span></a></p>
+<p>The formulation is taken from Section <a href="theory.html#sec-math" class="quarto-xref"><span>Mathematical Formulation - Deterministic Model</span></a>.</p>
 </section>
 <section id="d4.-simplified-mrcpsp-example" class="level2">
 <h2 class="anchored" data-anchor-id="d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</h2>
@@ -588,7 +596,33 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s1.-two-stage-stochastic">S1. Two-Stage Stochastic</h2>
-<p>TBC</p>
+<section id="scenario-tree" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-tree">Scenario Tree</h3>
+<p>When the probability distributions for the random parameters (events) are discrete, there are only a finite number of outcomes in each stage. With each random parameter fixed to one of its possible outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.</p>
+<p>We illustrate the construction of a scenario tree with a stochastic version of the well-known Newsvendor inventory problem. In this problem, we must decide how much to order initially and then at a later time, how much of any unsold product to return before the end of the planning horizon. There is a shortage penalty when there are lost sales and a carrying cost for left over units. The decision process takes place under uncertain demand and uncertain price per returned item:</p>
+<ol type="1">
+<li>In stage 0, the order quantity has to be decided (under uncertain demand).</li>
+<li>In stage 1, at the beginning, the demand is revealed. A recourse decision, at the end of stage 1, is the number of units to be returned to the publisher (for an uncertain refund price)</li>
+<li>In stage 2 at the beginning, the refund price is announced by the publisher. The price per returned item can be either:</li>
+</ol>
+<ul>
+<li>Positive (i.e.&nbsp;publisher accepts them at a high price which covers the cost of shipping and handling) or</li>
+<li>Negative (i.e.&nbsp;publisher accepts them at a low price which doesn’t cover the cost of shipping and handling).</li>
+</ul>
+<ol start="4" type="1">
+<li>The objective is to maximize the total expected profit at the end of planning horizon (stage 2).</li>
+</ol>
+<div id="fig-slp0" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slp0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="graphics/LINGO-scenario-tree.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slp0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Scenario tree for 2 stage newsvendor problem.
+</figcaption>
+</figure>
+</div>
+</section>
 </section>
 <section id="s2.-multi-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</h2>

@@ -33,6 +33,7 @@ book:
         - examples/D1a_SC_simple.ipynb
         - examples/D1b_SC_4_stage.ipynb
         - examples/D2_sched-intro.ipynb
+        - examples/D3_RCPSP.ipynb
         - examples/S3-OPF_risk.ipynb
     - part: Use-cases
       chapters:

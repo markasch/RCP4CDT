@@ -158,7 +158,7 @@ The RCPSP has the following input data:
 - $u_{jr}$ amount of (renewable) resource $r$ required for processing job $j.$
 - $c_{r}$ capacity of renewable resource $r.$
 
-There are many different Mixed Integer Linear Programming (MILP) formulations for the RCPSP. We choose the most suitable, discrete-time (DT) formulation^[An alternative formulation, based on _disjunctions_ will be presenetd in the Examples---see @sec-exam.]. This is a binary formulation where we have a binary variable $x_{i,t}$ for each activity $i$ and starting time/date $t,$  
+There are many different Mixed Integer Linear Programming (MILP) formulations for the RCPSP. We choose the most suitable, discrete-time (DT) formulation^[An alternative formulation, based on _disjunctions_ will be presenetd in the Examples---see @sec-disj.]. This is a binary formulation where we have a binary variable $x_{i,t}$ for each activity $i$ and starting time/date $t,$  
 $$ x_{i,t} = \begin{cases} 1, \quad \text{if activity $i$ starts on day/time $t,$} \\ 0, \quad  \text{otherwise.}  \end{cases} $$ 
 
 The binary programming formulation, proposed by Pritsker et al. in
@@ -174,13 +174,11 @@ $$
 & x_{j,t}  \in \{0,1\} \,\,\, \forall j\in J, t \in \mathcal{T} & (5)
 \end{align}$$
 
-The objective function (1) represents the sum of all possible start dates for the final sink job (dummy variable) $x_{n+1,t}.$ We know that only one of these variables will equal 1 for a specific $t.$ Therefore, by minimizing the sum of the product $t \cdot x_{n+1,t},$ we are effectively minimizing the total project duration. Constraint (2) ensures that each activity $i$ has exactly one start date, i.e. a single execution. Constraint (3) guarantees that for any time period $t,$ the schedule does not exceed the capacity $R_k$ for any resource $k.$
-Finally, constraint (4)  ensures that if an activity $j$ follows another activity $i,$ then activity $j$ must start after the finish time of activity $i,$ which is equal to the start time of activity $i$ plus its duration $p_i.$
+The objective function (1) represents the sum of all possible start dates for the final sink job (dummy variable) $x_{n+1,t}.$ We know that only one of these variables will equal 1 for a specific $t.$ Therefore, by minimizing the sum of the product $t \cdot x_{n+1,t},$ we are effectively minimizing the total project duration. Constraint (2) ensures that each activity $i$ has exactly one start date, i.e. a single execution. Constraint (3) guarantees that for any time period $t,$ the schedule does not exceed the capacity $c_r$ for any renewable resource^[Non-renewable resources will be introduced below in the multi-mode formulation.] $r.$ Finally, constraint (4)  ensures that if an activity $j$ follows another activity $i,$ then activity $j$ must start after the finish time of activity $i,$ which is equal to the start time of activity $i$ plus its duration $p_i.$ This is the precedence constraint.
 
 **Time-indexed vs. Disjunctive approaches**
 
-Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times
-which respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models can become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the @sec-exam   section.
+Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times that respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models can become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the @sec-CDT section.
 
 **Mutli-Project Multi-Mode RCPSP**
 
@@ -189,7 +187,7 @@ Note that the above formulation is restricted to temporal scheduling on a _singl
 **Multi-Mode**
 The single-mode RCPSP assumed that each activity has only one way to be executed, whereas the multi-mode RCPSP considers multiple ways to execute an activity, which often have tradeoffs in duration, cost, or resource requirement.
 
-Let the decision variable $x_{jm,t} \in \{0,1 \}$ denote the execution of job $j$ in mode $m$ completed in period $t.$ Then the  MRCPSP with tight, time-indexed formulation^[A disjunctive formulation, based on XOR relations, is also possible---see @sec-exam] can be written as: 
+Let the decision variable $x_{jm,t} \in \{0,1 \}$ denote the execution of job $j$ in mode $m$ completed in period $t.$ Then the  MRCPSP with tight, time-indexed formulation^[A disjunctive formulation, based on XOR relations, is also possible---see @sec-disj] can be written as: 
 
 $$
 \begin{align}

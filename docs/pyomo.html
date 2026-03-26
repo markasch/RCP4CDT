@@ -346,7 +346,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#basic-pyomo-linear-programming-example" id="toc-basic-pyomo-linear-programming-example" class="nav-link active" data-scroll-target="#basic-pyomo-linear-programming-example">Basic <code>pyomo</code> Linear Programming Example</a></li>
-  <li><a href="#disjunctions" id="toc-disjunctions" class="nav-link" data-scroll-target="#disjunctions">Disjunctions</a>
+  <li><a href="#sec-disj" id="toc-sec-disj" class="nav-link" data-scroll-target="#sec-disj">Disjunctions</a>
   <ul class="collapse">
   <li><a href="#disjunctive-programming-in-pyomo" id="toc-disjunctive-programming-in-pyomo" class="nav-link" data-scroll-target="#disjunctive-programming-in-pyomo">Disjunctive Programming in <code>pyomo</code></a></li>
   <li><a href="#big-m-method" id="toc-big-m-method" class="nav-link" data-scroll-target="#big-m-method">Big-M Method</a></li>
@@ -382,9 +382,6 @@ window.Quarto = {
 </header>
 
 
-<div id="sec-exam">
-
-</div>
 <p>This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.</p>
 <section id="basic-pyomo-linear-programming-example" class="level2">
 <h2 class="anchored" data-anchor-id="basic-pyomo-linear-programming-example">Basic <code>pyomo</code> Linear Programming Example</h2>
@@ -399,7 +396,7 @@ window.Quarto = {
 <li><code>pyomo.environ</code> provides the framework for building the model</li>
 <li><code>SolverFactory</code> allows to call the solver used to solve the optimization problem</li>
 </ul>
-<div id="936e9750" class="cell" data-execution_count="1">
+<div id="cd430798" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.opt <span class="im">import</span> SolverFactory </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -430,8 +427,8 @@ optimal value = 0.67</code></pre>
 <li>a full trace of the optimization process.</li>
 </ul>
 </section>
-<section id="disjunctions" class="level2">
-<h2 class="anchored" data-anchor-id="disjunctions">Disjunctions</h2>
+<section id="sec-disj" class="level2">
+<h2 class="anchored" data-anchor-id="sec-disj">Disjunctions</h2>
 <p>The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:</p>
 <ul>
 <li>Sequencing decisions, where <span class="math inline">\(A\)</span> ends before <span class="math inline">\(B,\)</span> or <span class="math inline">\(B\)</span> ends before <span class="math inline">\(A.\)</span></li>
@@ -546,16 +543,16 @@ Note
 <section id="gdp-opt" class="level3">
 <h3 class="anchored" data-anchor-id="gdp-opt">GDP OPT</h3>
 <p><em>Disjunctive programming</em> is useful in certain situations since it is better than “forcing” a given constraint into a MI(N)LP form through complicated tricks.</p>
-<p>PYOMO includes a generalized disjunctive programming pack, <code>GDP.opt</code>, that accepts pure disjunctions and then uses specialized logic-based decompositions methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. The benefit of using a disjunctive programming formulation lies in its ability to preserve and leverage the intrinsic logical framework of the problem at hand, thereby mitigating its combinatorial complexity.</p>
+<p>PYOMO includes a generalized disjunctive programming pack, <code>GDP.opt</code>, that accepts pure disjunctions and then uses specialized logic-based decomposition methods to solve the problem, without the need for prior conversion to MI(N)LP, as discussed above. The benefit of using a disjunctive programming formulation lies in its ability to preserve and leverage the intrinsic logical framework of the problem at hand, thereby mitigating its combinatorial complexity.</p>
 </section>
 <section id="tight-formulations" class="level3">
 <h3 class="anchored" data-anchor-id="tight-formulations">Tight Formulations</h3>
-<p>Basically all MILP problems are solved by branch-and-bound methods. The performance of a branch-and-bound method can greatly improve by having a <em>tight</em> problem formulation, that is, one where the gap between the feasible region of the original problem and its linear relaxation is small. Such a tight formulation typically leads to better bounds and, therefore, more pruning of subproblems, speeding up computation. The extreme case is to use the convex hull for the formulation.</p>
-<p>Finding a tight formulation for a specific problem is an art that requires experience with mathematical modeling. Some “rules of thumb” here are to</p>
+<p>Basically all MILP problems are solved by <em>branch-and-bound</em> methods. The performance of a branch-and-bound method can greatly improve by having a <em>tight</em> problem formulation, that is, one where the gap between the feasible region of the original problem and its linear relaxation is small. Such a tight formulation typically leads to better bounds and, therefore, more pruning of subproblems, speeding up computation. The extreme case is to use the convex hull for the formulation.</p>
+<p>Finding a tight formulation for a specific problem is an art that requires experience with mathematical modeling. Some “rules of thumb” here are:</p>
 <ol type="1">
-<li>have as few as possible big-M constraints with the large constants <span class="math inline">\(M,\)</span></li>
-<li>avoid having superfluous decision variables, and</li>
-<li>avoid formulating as inequality a relation that should hold with equality for the optimal solution.</li>
+<li>to have as few as possible big-M constraints with the large constants <span class="math inline">\(M,\)</span></li>
+<li>to avoid having superfluous decision variables, and</li>
+<li>to avoid formulating as an inequality, a relation that should hold with equality for the optimal solution.</li>
 </ol>
 
 

@@ -1,11 +1,11 @@
 # Uncertainty {.unnumbered}
 
-::: {#sec-stoch}
-:::
+{#sec-stoch}
+
 
 In practice some of the scheduling parameters may be uncertain. The exact duration of an activity, for instance, might not be known at the beginning of the project. Similarly, the number of available resources is another parameter that may not be known before project execution. These uncertainties may be due to different sources, including estimation errors, unforeseen (weather) conditions, late "delivery" (unavailability) of some required resources, unpredictable incidents such as machine breakdown or worker accidents, etc. 
 
-## Stochastic, multistage programming
+## Stochastic, multistage programming {#sec-stoch}
 
 **Background**
 

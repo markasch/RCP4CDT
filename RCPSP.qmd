@@ -108,14 +108,14 @@ to the scheduling problems above. This problem is known as the Resource Constrai
 
 The optimization is now more complex, since the resource constraints have to be simultaneously satisfied while minimizing the makespan, or any function of the makespan, while satisfying all precedences described by the Directed Acyclic Graph of the complete workflow.
 
-In  [Example D3]() we combine:
+In  [Example D3](examples/D3_RCPSP.ipynb) we combine:
 
 - resource constraints,
 - precedence relations,
 - time-indexed formulation,
 - disjunctive approach.
 
-The formulation is taken from Section @sec-math
+The formulation is taken from Section @sec-math.
 
 
 
@@ -193,7 +193,35 @@ Though, for interoperability, we should privilege the data model format, describ
 
 ## S1. Two-Stage Stochastic
 
-TBC
+### Scenario Tree
+
+When the probability distributions for the random parameters (events) are discrete, there are only a
+finite number of outcomes in each stage. With each random parameter fixed to one of its possible
+outcomes, one can create a scenario representing one possible realization of the future. Enumeration of
+all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario
+being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to
+values assumed by random parameters in the model.
+
+We illustrate the construction of a scenario tree with a stochastic version of the well-known
+Newsvendor inventory problem. In this problem, we must decide how much to order initially and then
+at a later time, how much of any unsold product to return before the end of the planning horizon. There is a
+shortage penalty when there are lost sales and a carrying cost for left over units. The decision process
+takes place under uncertain demand and uncertain price per returned item:
+
+1. In stage 0, the order quantity has to be decided (under uncertain demand).
+2. In stage 1, at the beginning, the demand is revealed. A recourse decision, at the end of stage
+1, is the number of units to be returned to the publisher (for an uncertain refund price)
+3. In stage 2 at the beginning, the refund price is announced by the publisher. The price per
+returned item can be either:
+  -  Positive (i.e. publisher accepts them at a high price which covers the cost of shipping and handling) or
+  - Negative (i.e. publisher accepts them at a low price which doesn’t cover the cost of shipping and handling).
+4. The objective is to maximize the total expected profit at the end of planning horizon (stage 2).
+
+::: {#fig-slp0}
+![](graphics/LINGO-scenario-tree.png){width=85%}
+
+Scenario tree for 2 stage newsvendor problem.
+:::
 
 ## S2. Multi-Stage Stochastic
 
