@@ -356,7 +356,10 @@ window.Quarto = {
   <li><a href="#d1.-simplified-supply-chain-examples" id="toc-d1.-simplified-supply-chain-examples" class="nav-link active" data-scroll-target="#d1.-simplified-supply-chain-examples">D1. Simplified Supply Chain Examples</a></li>
   <li><a href="#d2.-simplified-scheduling-examples" id="toc-d2.-simplified-scheduling-examples" class="nav-link" data-scroll-target="#d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</a></li>
   <li><a href="#d3.-simplified-rcpsp-example" id="toc-d3.-simplified-rcpsp-example" class="nav-link" data-scroll-target="#d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</a></li>
-  <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a></li>
+  <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a>
+  <ul class="collapse">
+  <li><a href="#benchmark-using-cplex" id="toc-benchmark-using-cplex" class="nav-link" data-scroll-target="#benchmark-using-cplex">Benchmark using CPLEX</a></li>
+  </ul></li>
   <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a>
   <ul class="collapse">
   <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
@@ -591,8 +594,12 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"input.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> jsonfile: </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    TASKS <span class="op">=</span> json.load(jsonfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Though, for interoperability, we should privilege the data model format, described above in Section <a href="CDT.html" class="quarto-xref"><span>CDT Implementation</span></a>.</p>
+<section id="benchmark-using-cplex" class="level3">
+<h3 class="anchored" data-anchor-id="benchmark-using-cplex">Benchmark using CPLEX</h3>
+<p>In <a href="./CPLEX-MRCPSP.html">Example I1</a> of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease.</p>
 <hr>
 <hr>
+</section>
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s1.-two-stage-stochastic">S1. Two-Stage Stochastic</h2>

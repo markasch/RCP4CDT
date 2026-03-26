@@ -186,6 +186,10 @@ with open("input.json", "r") as jsonfile:
 Though, for interoperability, we should privilege the data model format, described above in Section @sec-CDT. 
 
 
+### Benchmark using CPLEX
+
+In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease. 
+
 ---
 
 ---
