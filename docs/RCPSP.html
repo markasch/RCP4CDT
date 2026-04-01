@@ -58,7 +58,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -315,6 +334,11 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./examples/S3-OPF_risk.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></a>
   </div>
 </li>
@@ -358,11 +382,18 @@ window.Quarto = {
   <li><a href="#d3.-simplified-rcpsp-example" id="toc-d3.-simplified-rcpsp-example" class="nav-link" data-scroll-target="#d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</a></li>
   <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a>
   <ul class="collapse">
-  <li><a href="#benchmark-using-cplex" id="toc-benchmark-using-cplex" class="nav-link" data-scroll-target="#benchmark-using-cplex">Benchmark using CPLEX</a></li>
+  <li><a href="#mrcpsp-benchmark-using-cplex" id="toc-mrcpsp-benchmark-using-cplex" class="nav-link" data-scroll-target="#mrcpsp-benchmark-using-cplex">MRCPSP Benchmark using CPLEX</a></li>
+  </ul></li>
+  <li><a href="#stochastic-cases" id="toc-stochastic-cases" class="nav-link" data-scroll-target="#stochastic-cases">Stochastic Cases</a></li>
+  <li><a href="#s0.-single-stage-stochastic" id="toc-s0.-single-stage-stochastic" class="nav-link" data-scroll-target="#s0.-single-stage-stochastic">S0. Single-Stage Stochastic</a></li>
+  <li><a href="#s0a.-single-stage-newsvendor-problem" id="toc-s0a.-single-stage-newsvendor-problem" class="nav-link" data-scroll-target="#s0a.-single-stage-newsvendor-problem">S0a. Single-Stage Newsvendor Problem</a>
+  <ul class="collapse">
+  <li><a href="#s0b.-allocation-optimization-for-a-data-or-compute-center" id="toc-s0b.-allocation-optimization-for-a-data-or-compute-center" class="nav-link" data-scroll-target="#s0b.-allocation-optimization-for-a-data-or-compute-center">S0b. Allocation Optimization for a Data or Compute Center</a></li>
   </ul></li>
   <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a>
   <ul class="collapse">
   <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
+  <li><a href="#saa" id="toc-saa" class="nav-link" data-scroll-target="#saa">SAA</a></li>
   </ul></li>
   <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a></li>
   <li><a href="#s3.-risk-measures" id="toc-s3.-risk-measures" class="nav-link" data-scroll-target="#s3.-risk-measures">S3. Risk Measures</a></li>
@@ -594,11 +625,37 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"input.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> jsonfile: </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    TASKS <span class="op">=</span> json.load(jsonfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Though, for interoperability, we should privilege the data model format, described above in Section <a href="CDT.html" class="quarto-xref"><span>CDT Implementation</span></a>.</p>
-<section id="benchmark-using-cplex" class="level3">
-<h3 class="anchored" data-anchor-id="benchmark-using-cplex">Benchmark using CPLEX</h3>
+<section id="mrcpsp-benchmark-using-cplex" class="level3">
+<h3 class="anchored" data-anchor-id="mrcpsp-benchmark-using-cplex">MRCPSP Benchmark using CPLEX</h3>
 <p>In <a href="./CPLEX-MRCPSP.html">Example I1</a> of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease.</p>
 <hr>
 <hr>
+</section>
+</section>
+<section id="stochastic-cases" class="level2">
+<h2 class="anchored" data-anchor-id="stochastic-cases">Stochastic Cases</h2>
+<p>Here we present a very complete range of pedagogical examples covering</p>
+<ol type="1">
+<li>Single-Stage cases, based on expectations with comparison of EMV, EVSS and EVPI.</li>
+<li>Two-Stage cases, with recourse decisions.</li>
+<li>Multi-Stage cases.</li>
+</ol>
+<p>These examples are based on the excellent presentations of <span class="citation" data-cites="PZGK2025book">Postek et al. (<a href="index.html#ref-PZGK2025book" role="doc-biblioref">2025</a>)</span> and its associated <a href="https://mobook.github.io/MO-book/">website</a>. We have tried to adapt these examples, as far as possible, to the CCDS context.</p>
+</section>
+<section id="s0.-single-stage-stochastic" class="level2">
+<h2 class="anchored" data-anchor-id="s0.-single-stage-stochastic">S0. Single-Stage Stochastic</h2>
+<p>Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section <a href="th-stochastic.html#sec-stoch" class="quarto-xref"><span>Stochastic, multistage programming</span></a>.</p>
+<p>The most basic way of accounting for randomness is to consider the average or expected value of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the objective, such as <span class="math display">\[
+\min_x \mathbb{E}_z \left[ f(x,z) \right],\]</span> where <span class="math inline">\(x\)</span> is the decision variable, and <span class="math inline">\(z\)</span> is a random variable.</p>
+</section>
+<section id="s0a.-single-stage-newsvendor-problem" class="level2">
+<h2 class="anchored" data-anchor-id="s0a.-single-stage-newsvendor-problem">S0a. Single-Stage Newsvendor Problem</h2>
+<p>The newsvendor problem is a cornerstone of stochastic optimization and can be applied to many different contexts. We suppose that a product (e.g.&nbsp;newspapers) can be purchased for a given cost, <span class="math inline">\(c,\)</span> but the sales at price <span class="math inline">\(r\)</span> depend on some uncertain demand <span class="math inline">\(d_s,\)</span> where <span class="math inline">\(s\)</span> is a possible scenario, and finally there may be a salvage value <span class="math inline">\(w\)</span> that is refunded for unsold items.</p>
+<p>The problem is to determine how many items to purchase. The dilemma is that the scenario (say, weather) will not be known until after the order is placed. Ordering enough items to meet demand for a good scenario (weather) results in a financial penalty on returned goods if the scenario (weather) is poor. On the other hand, ordering just enough items to satisfy demand on a poor scenario (weather) leaves “money on the table” if the scenario (weather) is good.</p>
+<p>First, we will consider a single-stage formulation, which will be generalized below to a two-stage case.</p>
+<section id="s0b.-allocation-optimization-for-a-data-or-compute-center" class="level3">
+<h3 class="anchored" data-anchor-id="s0b.-allocation-optimization-for-a-data-or-compute-center">S0b. Allocation Optimization for a Data or Compute Center</h3>
+<p>This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.</p>
 </section>
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">
@@ -606,10 +663,18 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <section id="scenario-tree" class="level3">
 <h3 class="anchored" data-anchor-id="scenario-tree">Scenario Tree</h3>
 <p>When the probability distributions for the random parameters (events) are discrete, there are only a finite number of outcomes in each stage. With each random parameter fixed to one of its possible outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.</p>
-<p>We illustrate the construction of a scenario tree with a stochastic version of the well-known Newsvendor inventory problem. In this problem, we must decide how much to order initially and then at a later time, how much of any unsold product to return before the end of the planning horizon. There is a shortage penalty when there are lost sales and a carrying cost for left over units. The decision process takes place under uncertain demand and uncertain price per returned item:</p>
+</section>
+<section id="saa" class="level3">
+<h3 class="anchored" data-anchor-id="saa">SAA</h3>
+<p>In <a href="./examples/S1a_2stage_server_farm.html">Example S1a</a> we use the statistical average approximation (SAA) to sample from contnous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources.</p>
+</section>
+</section>
+<section id="s2.-multi-stage-stochastic" class="level2">
+<h2 class="anchored" data-anchor-id="s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</h2>
+<p>We illustrate the construction of a multi-stage scenario tree with another stochastic version of the Newsvendor inventory problem. In this case, we must decide how much to order initially and then at a later time, how much of any unsold product to return before the end of the planning horizon. There is a shortage penalty when there are lost sales and a carrying cost for leftover (unsold) units. The decision process takes place under uncertain demand and uncertain price per returned item. This is a three-stage. problem.</p>
 <ol type="1">
 <li>In stage 0, the order quantity has to be decided (under uncertain demand).</li>
-<li>In stage 1, at the beginning, the demand is revealed. A recourse decision, at the end of stage 1, is the number of units to be returned to the publisher (for an uncertain refund price)</li>
+<li>In stage 1, at the beginning, the demand is revealed. A recourse decision, at the end of stage 1, is the number of units to be returned to the publisher (for an uncertain refund price).</li>
 <li>In stage 2 at the beginning, the refund price is announced by the publisher. The price per returned item can be either:</li>
 </ol>
 <ul>
@@ -625,15 +690,10 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <img src="graphics/LINGO-scenario-tree.png" class="img-fluid figure-img" style="width:85.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slp0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Scenario tree for 2 stage newsvendor problem.
+Figure&nbsp;2: Scenario tree for 3-stage newsvendor problem, where the first stage has three scenarios (high with <span class="math inline">\(p=0.4,\)</span> medium with <span class="math inline">\(p=0.3,\)</span> low with <span class="math inline">\(p=0.3\)</span> ) and the second stage has two (positive with <span class="math inline">\(p=0.3,\)</span> negative with <span class="math inline">\(p=0.7\)</span>).
 </figcaption>
 </figure>
 </div>
-</section>
-</section>
-<section id="s2.-multi-stage-stochastic" class="level2">
-<h2 class="anchored" data-anchor-id="s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</h2>
-<p>TBC</p>
 </section>
 <section id="s3.-risk-measures" class="level2">
 <h2 class="anchored" data-anchor-id="s3.-risk-measures">S3. Risk Measures</h2>
@@ -646,6 +706,11 @@ Figure&nbsp;2: Scenario tree for 2 stage newsvendor problem.
 </ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-PZGK2025book" class="csl-entry" role="listitem">
+Postek, Krzysztof, Alessandro Zocca, Joaquim Gromicho, and Jeffrey Kantor. 2025. <em><span class="nocase">Hands-On Mathematical Optimization with Python</span></em>. Cambridge University Press. <a href="https://doi.org/10.1017/9781009493512">https://doi.org/10.1017/9781009493512</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

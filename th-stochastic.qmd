@@ -78,7 +78,7 @@ $$\begin{align*}
 where $d$ is the (uncertain) resource demand, $s$ is the (uncertain) resource supply, the random vector $\xi=(q,d,s,R,M)$ and $y=y(\xi).$ The expectation is taken with respect to the joint probability distribution function^[Either continuous or discrete, it is derived either from theory or observations, or both.] of $\xi.$  In the terminology of state-space, we can consider $x$ as the _state_ variable, and $y$  as the _control_ variable.
 
 To treat the occurrence of infeasibility, where the first-stage solution
-does not satisfy the second-stage constraints, e.g. $Cy\nleqslant d,$
+does not satisfy the second-stage constraints, e.g. $Cy\ngeqslant d,$
 we  introduce a _recourse_ action $z$  that supplies
 the deficit $d-Cy$ at some penalty cost. Then the second-stage problem becomes
 $$\begin{align*}
@@ -121,7 +121,7 @@ or policy.
 ## Chance Constraints
 
 When the uncertainty is in the constraints, we can ensure that they hold with a certain probability. Suppose the constraints are of the form
-$$ A(z) x - b(z) \le 0 ,
+$$ A(z) x  \le  b(z) ,
 $$
 where $x$ is the decision variable and $z$ is the random variable. Then the _chance constraint_ can be
 $$ \mathrm{P} \left( a_i(z)^{\top} x - b_i(z) \le 0, \; \forall \; i=1,\ldots, m \right) \ge 1 - \epsilon
@@ -130,7 +130,7 @@ for some $\epsilon \in (0,1).$
 
 ## Risk Measures
 
-Risk measures attempt to combine the two previous ones: expectations, and probabilities of constraint violations. One example is given by
+Risk measures attempt to combine the two approaches: expectations, and probabilities of constraint violations. One example is given by
 $$
  \max_{x\ge 0} \mathrm{E}_z f(x,z) - \kappa \mathrm{Var} \left( f(x,z) \right),
 $$

@@ -186,13 +186,46 @@ with open("input.json", "r") as jsonfile:
 Though, for interoperability, we should privilege the data model format, described above in Section @sec-CDT. 
 
 
-### Benchmark using CPLEX
+### MRCPSP Benchmark using CPLEX
 
 In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease. 
 
 ---
 
 ---
+
+## Stochastic Cases
+
+Here we present a very complete range of pedagogical examples covering
+
+1. Single-Stage cases, based on expectations with comparison of EMV, EVSS and EVPI.
+2. Two-Stage cases, with recourse decisions.
+3. Multi-Stage cases.
+
+These examples are based on the excellent presentations of @PZGK2025book and its associated [website](https://mobook.github.io/MO-book/). We have tried to adapt these examples, as far as possible, to the CCDS context.
+
+## S0. Single-Stage Stochastic
+
+Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section @sec-stoch.
+
+The most basic way of accounting for randomness is to consider the average or expected value of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the objective, such as
+$$
+ \min_x \mathbb{E}_z \left[ f(x,z) \right],$$
+where $x$ is the decision variable, and $z$ is a random variable.
+
+## S0a. Single-Stage Newsvendor Problem
+
+The newsvendor problem is a cornerstone of stochastic optimization and can be applied to many different contexts. We suppose that a product (e.g. newspapers) can be purchased for a given cost, $c,$ but the sales at price $r$ depend on some uncertain demand $d_s,$ where $s$ is a possible scenario, and finally there may be a salvage value $w$ that is refunded for unsold items.
+
+The problem is to determine how many items to purchase. The dilemma is that the scenario (say, weather) will not be known until after the order is placed. Ordering enough items to meet demand for a good scenario (weather)  results in a financial penalty on returned goods if the scenario (weather) is poor. On the other hand, ordering just enough items to satisfy demand on a poor scenario (weather)  leaves “money on the table” if the scenario (weather) is good.
+
+First, we will consider a single-stage formulation, which will be generalized below to a two-stage case.
+
+
+### S0b. Allocation Optimization for a Data or Compute Center
+
+This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
+
 
 
 ## S1. Two-Stage Stochastic
@@ -201,20 +234,22 @@ In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-t
 
 When the probability distributions for the random parameters (events) are discrete, there are only a
 finite number of outcomes in each stage. With each random parameter fixed to one of its possible
-outcomes, one can create a scenario representing one possible realization of the future. Enumeration of
-all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario
-being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to
-values assumed by random parameters in the model.
+outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.
 
-We illustrate the construction of a scenario tree with a stochastic version of the well-known
-Newsvendor inventory problem. In this problem, we must decide how much to order initially and then
-at a later time, how much of any unsold product to return before the end of the planning horizon. There is a
-shortage penalty when there are lost sales and a carrying cost for left over units. The decision process
-takes place under uncertain demand and uncertain price per returned item:
+### SAA
+
+In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from contnous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources.
+
+
+## S2. Multi-Stage Stochastic
+
+We illustrate the construction of a multi-stage scenario tree with another stochastic version of the
+Newsvendor inventory problem. In this case, we must decide how much to order initially and then
+at a later time, how much of any unsold product to return before the end of the planning horizon. There is a shortage penalty when there are lost sales and a carrying cost for leftover (unsold) units. The decision process takes place under uncertain demand and uncertain price per returned item. This is a three-stage. problem.
 
 1. In stage 0, the order quantity has to be decided (under uncertain demand).
 2. In stage 1, at the beginning, the demand is revealed. A recourse decision, at the end of stage
-1, is the number of units to be returned to the publisher (for an uncertain refund price)
+1, is the number of units to be returned to the publisher (for an uncertain refund price).
 3. In stage 2 at the beginning, the refund price is announced by the publisher. The price per
 returned item can be either:
   -  Positive (i.e. publisher accepts them at a high price which covers the cost of shipping and handling) or
@@ -224,12 +259,9 @@ returned item can be either:
 ::: {#fig-slp0}
 ![](graphics/LINGO-scenario-tree.png){width=85%}
 
-Scenario tree for 2 stage newsvendor problem.
+Scenario tree for 3-stage newsvendor problem, where the first stage has three scenarios (high with $p=0.4,$ medium with $p=0.3,$ low  with $p=0.3$ ) and the second stage has two (positive  with $p=0.3,$ negative  with $p=0.7$).
 :::
 
-## S2. Multi-Stage Stochastic
-
-TBC
 
 ## S3. Risk Measures
 
