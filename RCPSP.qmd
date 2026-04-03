@@ -198,7 +198,7 @@ In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-t
 
 Here we present a very complete range of pedagogical examples covering
 
-1. Single-Stage cases, based on expectations with comparison of EMV, EVSS and EVPI.
+1. Single-Stage cases, based on expectations with comparison of EVM, EVSS and EVPI.
 2. Two-Stage cases, with recourse decisions.
 3. Multi-Stage cases.
 
@@ -206,11 +206,11 @@ These examples are based on the excellent presentations of @PZGK2025book and its
 
 ## S0. Single-Stage Stochastic
 
-Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section @sec-stoch.
+Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section @sec-stoch. This context brings out the important concepts of the following scenarios: Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI). Then, we can fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.
 
-The most basic way of accounting for randomness is to consider the average or expected value of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the objective, such as
+The most basic way of accounting for randomness is to consider the average, or expected value, of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the objective, 
 $$
- \min_x \mathbb{E}_z \left[ f(x,z) \right],$$
+ \min_x \mathbb{E}_z \left[ f(x,z) \right],$$ {#eq-stoch}
 where $x$ is the decision variable, and $z$ is a random variable.
 
 ## S0a. Single-Stage Newsvendor Problem
@@ -219,12 +219,27 @@ The newsvendor problem is a cornerstone of stochastic optimization and can be ap
 
 The problem is to determine how many items to purchase. The dilemma is that the scenario (say, weather) will not be known until after the order is placed. Ordering enough items to meet demand for a good scenario (weather)  results in a financial penalty on returned goods if the scenario (weather) is poor. On the other hand, ordering just enough items to satisfy demand on a poor scenario (weather)  leaves “money on the table” if the scenario (weather) is good.
 
-First, we will consider a single-stage formulation, which will be generalized below to a two-stage case.
+In <mark>terms of the CCDS</mark>, we can reformulate the newsvendor as an optimal _inventory_ problem, where we need to allocate $x$ to satisfy (uncertain) demand $d$ with three associated costs:
+
+- $c$ allocation cost,
+- $b$ back penalty (shortage) cost,
+- $h$ holding (surplus) cost.
+
+The objective here is to minimize the total cost,
+$$ G(x,d) = cx +b[d-x]_+ + h[x-d]_+
+$$
+where $[\cdot]_+ \doteq \max(\cdot\, , 0).$
+
+Note, if $d$ is considered to be a random variable, then we obtain the objective of @eq-stoch.
+
+First, we will consider a single-stage formulation, which will be generalized below to a two-stage case. Here we consider a discrete distribution for the sales (demand)---see [Example S0a](examples/S0a_1stage_discrete.ipynb).
 
 
 ### S0b. Allocation Optimization for a Data or Compute Center
 
-This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
+This is another example of an inventory optimization (newsvendor) problem, where we want to buy an optimal quantity of stock, to cover an uncertain (future) demand.
+
+In [Example S0b](examples/S0b_1stage_continuous.ipynb) we compare different, continuous distributions for the demand (sales).
 
 
 
@@ -238,7 +253,7 @@ outcomes, one can create a scenario representing one possible realization of the
 
 ### SAA
 
-In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from contnous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources.
+In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
 
 
 ## S2. Multi-Stage Stochastic

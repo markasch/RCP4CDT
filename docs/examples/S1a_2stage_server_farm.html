@@ -357,6 +357,7 @@ window.Quarto = {
   <ul>
   <li><a href="#problem-formulation" id="toc-problem-formulation" class="nav-link active" data-scroll-target="#problem-formulation">Problem Formulation</a>
   <ul class="collapse">
+  <li><a href="#problem-notation" id="toc-problem-notation" class="nav-link" data-scroll-target="#problem-notation">Problem notation</a></li>
   <li><a href="#saa-method" id="toc-saa-method" class="nav-link" data-scroll-target="#saa-method">SAA method</a></li>
   </ul></li>
   </ul>
@@ -400,6 +401,9 @@ window.Quarto = {
 <p>We want either to design a new server (or storage) farm, or just allocate from an existing one, to meet uncertain future compute (or data) needs. We suppose that we have a limited budget, and limited power (or space) capacities to meet the demand.</p>
 <p>We have a general estimation of the next-month demand for each resource and the distributions they follow. For the sake of simplicity, we will ignore future months after next month, though it is relatively simple to formulate a multi-stage stochastic program to handle this case.</p>
 <p>In this example, our first-stage decision (the here-and-now decision) is the number of each resource to buy, or allocate. The second-stage (recourse) decision is the number of cloud-compute (or storage) to buy (or allocate) in case of insufficient availability. Our goal is to minimize the operational cost of the server (or storage, or both) farm.</p>
+<section id="problem-notation" class="level3">
+<h3 class="anchored" data-anchor-id="problem-notation">Problem notation</h3>
+<p>Let <span class="math inline">\(x\)</span> denote the number of resources to buy/allocate. We suppose thate there are three resources here. Each resource has an installation/allocation cost, <span class="math inline">\(c,\)</span> and has a space/power requirement <span class="math inline">\(s.\)</span> The total space available is <span class="math inline">\(S\)</span> and the total budget is <span class="math inline">\(B.\)</span></p>
 <p>Our goal is to minimize the total operational cost of the server farm, which can be written as</p>
 <p><span class="math display">\[\begin{align*}
 \textrm{minimize} &amp; \,\, c^{\top}x + \mathrm{E}\left[Q(x;\xi)\right], \\
@@ -409,10 +413,11 @@ window.Quarto = {
 \end{align*}\]</span> where <span class="math inline">\(Q(x;\xi)\)</span> is the optimal value of the second-stage problem <span class="math display">\[\begin{align*}
 \min_{y\ge0} &amp; \,\,r^{\top}y\\
 \textrm{s.t.} &amp; \,\,x + y  \ge d(\xi).\\
-\end{align*}\]</span></p>
+\end{align*}\]</span> where <span class="math inline">\(r\)</span> is the resource cost, and the demands <span class="math inline">\(d(\xi)\)</span> are supposed Gaussian, with known means and variances.</p>
+</section>
 <section id="saa-method" class="level3">
 <h3 class="anchored" data-anchor-id="saa-method">SAA method</h3>
-<p>To solve the problem above, we will implement a technique called sample average approximation (SAA). This method involves generating a large number <span class="math inline">\(K\)</span> of potential realizations (scenarios) of the random variable through Monte Carlo sampling and treating each realization as an individual sub-problem. This means that instead of just having 1one set of second-stage variables, we will have <span class="math inline">\(K\)</span> variables and the expectation of our second-stage value is the average value over our realizations. With this, our formulation changes to,</p>
+<p>To solve the problem above, we will implement a technique called <em>sample average approximation</em> (SAA). This method involves generating a large number <span class="math inline">\(K\)</span> of potential realizations (scenarios) of the random variable through Monte Carlo sampling and treating each realization as an individual sub-problem. This means that instead of just having one set of second-stage variables, we will have <span class="math inline">\(K\)</span> variables and the expectation of our second-stage value is the average value over the realizations. With this, our formulation changes to,</p>
 <p><span class="math display">\[\begin{align*}
 \textrm{minimize} &amp; \,\, c^{\top}x +\frac{1}{K}\sum_{k=1}^K Q_k(x;\xi), \\
 \textrm{subject to} &amp; \,\, s^{\top}x \le S,\\
