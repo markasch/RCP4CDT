@@ -2,9 +2,9 @@
 
 ## Some History...
 
-The development of a framework for CDT process scheduling is rooted in the _job scheduling problems_ that emerged with industrialization and assembly-line work. It is not a coincidence that many of the classical scheduling problems have names like Job Shop Problem or Flow Shop Problem. Back then and now the targets are the same: execute complex jobs that might need treatment on different machines in a defined sequential orders with certain degrees of efficiency. Efficiency in this context can be defined in a number of ways. It might be the total time needed to execute a set of jobs, the compliance of given deadlines, the minimization of overall costs or a combination of all the above.
+The development of a framework for CCDS process scheduling is rooted in the _job scheduling problems_ that emerged with industrialization and assembly-line work. It is not a coincidence that many of the classical scheduling problems have names like Job Shop Problem or Flow Shop Problem. Back then and now the targets are the same: execute complex jobs that might need treatment on different machines in a defined sequential orders with certain degrees of efficiency. Efficiency in this context can be defined in a number of ways. It might be the total time needed to execute a set of jobs, the compliance of given deadlines, the minimization of overall costs or a combination of all the above.
 
-There are two ways to view the the Continuum Digital Twin^[CDT]:
+There are two ways to view the the Cognitive Continuum Digital Shadow^[CCDS]:
 
 1. Facility- or Machine-centered view.
 2. Job-centered view.
@@ -14,17 +14,17 @@ The first is best modelled by a _supply chain_ model.  The second is principally
 ::: {#fig-SC_SCHED}
 ![](graphics/sc-sched.svg){width=100%}
 
-Two different viewponts of the CDT: a supply chain model (left) and a scheduling model (right). DC = data center, CC = compute center, J = job.
+Two different viewponts of the CCDS: a supply chain model (left) and a scheduling model (right). DC = data center, CC = compute center, J = job.
 :::
 
-We propose a _combined_ model for the CDT, composed of a Supply Chain Network Design^[SCND] coupled with a Resource Constrained Process Scheduling^[RCPSP]. In such a hierarchical system, the supply chain model allocates jobs to the best facilities, and the scheduling model then (optimally) sequences jobs among facilities and within a given facility. Supply chain optimization emphasizes "where" (facility choice, data transfer mode). Scheduling emphasizes "when" and "in what order."
+We propose a _combined_ model for the CCDS, composed of a Supply Chain Network Design^[SCND] coupled with a Resource Constrained Process Scheduling^[RCPSP]. In such a hierarchical system, the supply chain model allocates jobs to the best facilities, and the scheduling model then (optimally) sequences jobs among facilities and within a given facility. Supply chain optimization emphasizes "where" (facility choice, data transfer mode). Scheduling emphasizes "when" and "in what order."
 
 
 Recall the basic problem: given a directed graph of $N$ data storage, transfer and processing jobs $\mathscr{J},$[$\mathscr{J}=\{ J_1, J_2, \ldots J_N\},$]{.column-margin} find an optimal allocation $A$ and a feasible schedule $S.$ Further details below.
 
 ## Supply Chains with Scheduling
 
-Let us begin by defining supply chains and scheduling in the context of the CDT.
+Let us begin by defining supply chains and scheduling in the context of the CCDS.
 
 ::: {#def-supp}
 ## Supply Chain
@@ -77,13 +77,13 @@ flowchart LR
     classDef thirdclass stroke:#00f
 
 ```
-Machine-centered view: Supply chain model for the CDT. For a given job, the dataset (stored in one of two Datacentres, $\mathrm{DC}_1$ or $\mathrm{DC}_2$) can be processed on one of two HPC centres ($\mathrm{HPC}_1$ or $\mathrm{HPC}_2$), and ouput data is sent to (and stored on) one of the two Datacentres, ready as input for the next job. This is repeated for each job in the ordered job list (DAG).
+Machine-centered view: Supply chain model for the CCDS. For a given job, the dataset (stored in one of two Datacentres, $\mathrm{DC}_1$ or $\mathrm{DC}_2$) can be processed on one of two HPC centres ($\mathrm{HPC}_1$ or $\mathrm{HPC}_2$), and ouput data is sent to (and stored on) one of the two Datacentres, ready as input for the next job. This is repeated for each job in the ordered job list (DAG).
 :::
 
 ::: {#fig-CDT_RCP_SC}
 ![](graphics/CDT_RCP_SC.svg){width=40%}
 
-The CDT model is based on RCPSP and SCND.
+The CCDS model is based on RCPSP and SCND.
 :::
 
 

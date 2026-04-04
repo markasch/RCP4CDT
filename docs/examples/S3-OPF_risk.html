@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../usecases.html" rel="next">
-<link href="../examples/D3_RCPSP.html" rel="prev">
+<link href="../examples/S1a_2stage_server_farm.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -270,7 +270,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -308,6 +308,21 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/D3_RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D3: RCPSP Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -396,7 +411,7 @@ window.Quarto = {
 &amp; \quad g \in [0, G_{\max}]
 \end{align}\]</span> where the cost <span class="math display">\[
 C_s = c_g \cdot g + c_{\text{spill}} \cdot r^+_s + c_{\text{shed}} \cdot r^-_s
-\]</span> and <span class="math inline">\(d_s\)</span> is the uncertain demand.</p>
+\]</span> and <span class="math inline">\(d_s\)</span> is the demand realized in scenario <span class="math inline">\(s.\)</span></p>
 <p>The four risk measures <span class="math inline">\(\rho[\cdot]\)</span> and their properties:</p>
 <table class="caption-top table">
 <colgroup>
@@ -441,7 +456,7 @@ C_s = c_g \cdot g + c_{\text{spill}} \cdot r^+_s + c_{\text{shed}} \cdot r^-_s
 </tbody>
 </table>
 <p>Optimization results will be compared for these risk measures.</p>
-<p>In the <mark>CDT context</mark>, we can consider either a HPC center or a data center that has either too much, or not enough capacity to process a given (uncertain) task. In the case of under-capacity this incurs a large cost of deporting the job (or a part of it) to an external center. In the case of over-capacity, this implies idling of the machines, which incurs a lower operational cost (e.g.&nbsp;power, cooling).</p>
+<p>In the <mark>CCDS context</mark>, we can consider either a HPC center or a data center that has either too much, or not enough capacity to process a given (uncertain) task. In the case of under-capacity this incurs a large cost of deporting the job (or a part of it) to an external center. In the case of over-capacity, this implies idling of the machines, which incurs a lower operational cost (e.g.&nbsp;power, cooling).</p>
 <section id="model-explanation" class="level2">
 <h2 class="anchored" data-anchor-id="model-explanation">Model explanation</h2>
 <section id="decision-variables" class="level3">
@@ -468,7 +483,7 @@ C_s = c_g \cdot g + c_{\text{spill}} \cdot r^+_s + c_{\text{shed}} \cdot r^-_s
 <tr class="even">
 <td><span class="math inline">\(r^+_s\)</span></td>
 <td>continuous, <span class="math inline">\(\geq 0\)</span></td>
-<td>Spillage (curtailment) in scenario <span class="math inline">\(s\)</span> (MW). Excess generation that must be wasted when supply exceeds demand.</td>
+<td>Spillage (curtailment) in scenario <span class="math inline">\(s\)</span> (MW). Excess generation that is wasted when supply exceeds demand.</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(r^-_s\)</span></td>
@@ -478,7 +493,7 @@ C_s = c_g \cdot g + c_{\text{spill}} \cdot r^+_s + c_{\text{shed}} \cdot r^-_s
 <tr class="even">
 <td><span class="math inline">\(\eta\)</span></td>
 <td>continuous, free</td>
-<td>CVaR formulation only. The Value-at-Risk threshold — the <span class="math inline">\(\alpha\)</span>-quantile of the cost distribution, optimised jointly with the schedule.</td>
+<td>CVaR formulation only. The Value-at-Risk threshold — the <span class="math inline">\(\alpha\)</span>-quantile of the cost distribution, optimized jointly with the schedule.</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(u_s\)</span></td>
@@ -1243,8 +1258,8 @@ Figure saved to stochastic_dispatch.png</code></pre>
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="../examples/D3_RCPSP.html" class="pagination-link" aria-label="Ex. D3: RCPSP Examples">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D3: RCPSP Examples</span></span>
+      <a href="../examples/S1a_2stage_server_farm.html" class="pagination-link" aria-label="Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

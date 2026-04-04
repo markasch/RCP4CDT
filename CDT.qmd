@@ -1,4 +1,4 @@
-# CDT Implementation {#sec-CDT}
+# CCDS Implementation {#sec-CDT}
 
 Before addressing the simple examples of resource scheduling and the use cases, we describe the overall implementation, as shown in @fig-imp.
 
@@ -21,9 +21,9 @@ The implementation in 4 stages.
 
 ## Input File
 
-This `json` input file contains a _complete_ description of the CDT that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling at national or European levels.
+This `json` input file contains a _complete_ description of the CCDS that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling at national or European levels.
 
-The input file contains all the information regarding the following characteristics of the CDT:
+The input file contains all the information regarding the following characteristics of the CCDS:
 
 - $\mathcal{P} = \{P_1, P_2, \ldots \}$ the list of projects;
 - $\mathcal{J}_i = \{J_1^i, J_2^i, \ldots \}$ the list of jobs per project^[These are of type data transfer, data storage, data processing, etc.];

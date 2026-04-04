@@ -1,7 +1,7 @@
 # Using PYOMO {.unnumbered}
 
 
-This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.
+This section details all the practical aspects of the optimal CCDS scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.
 
 
 ## Basic `pyomo` Linear Programming Example
@@ -48,7 +48,7 @@ We can print out
 
 ## Disjunctions {#sec-disj}
 
-The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:
+The decisions encountered in the CCDS involve discrete, Boolean choices. These can take the following forms:
 
 - Sequencing decisions, where $A$ ends before $B,$ or $B$ ends before $A.$ 
 - Switching decisions, where a facility is used or not.

@@ -292,7 +292,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -437,7 +437,7 @@ window.Quarto = {
 
 
 <p>This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today’s scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude—outstanding examples are <a href="https://www.skao.int/en">SKA</a> and CERN’s <a href="https://home.cern/science/accelerators/future-circular-collider">FCC</a>.</p>
-<p>The chapter is divied into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios. Realistic cases are presented in the Use-Cases chapter.</p>
+<p>The chapter is divided into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios. Realistic cases are presented in the Use-Cases chapter.</p>
 <section id="d1.-simplified-supply-chain-examples" class="level2">
 <h2 class="anchored" data-anchor-id="d1.-simplified-supply-chain-examples">D1. Simplified Supply Chain Examples</h2>
 <p>Putting together:</p>
@@ -570,7 +570,7 @@ flowchart LR
 </section>
 <section id="d4.-simplified-mrcpsp-example" class="level2">
 <h2 class="anchored" data-anchor-id="d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</h2>
-<p>The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CDT context.</p>
+<p>The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CCDS context.</p>
 <p>In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.</p>
 <div id="fig-mrcp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -634,10 +634,10 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"input.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> jsonfile: </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    TASKS <span class="op">=</span> json.load(jsonfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Though, for interoperability, we should privilege the data model format, described above in Section <a href="CDT.html" class="quarto-xref"><span>CDT Implementation</span></a>.</p>
+<p>Though, for interoperability, we should privilege the data model format, described above in Section <a href="CDT.html" class="quarto-xref"><span>CCDS Implementation</span></a>.</p>
 <section id="mrcpsp-benchmark-using-cplex" class="level3">
 <h3 class="anchored" data-anchor-id="mrcpsp-benchmark-using-cplex">MRCPSP Benchmark using CPLEX</h3>
-<p>In <a href="./CPLEX-MRCPSP.html">Example I1</a> of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease.</p>
+<p>In <a href="./CPLEX-MRCPSP.html">Example I1</a> of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CCDS use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease.</p>
 <hr>
 <hr>
 </section>
@@ -1136,8 +1136,8 @@ Postek, Krzysztof, Alessandro Zocca, Joaquim Gromicho, and Jeffrey Kantor. 2025.
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="./CDT.html" class="pagination-link" aria-label="CDT Implementation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">CDT Implementation</span></span>
+      <a href="./CDT.html" class="pagination-link" aria-label="CCDS Implementation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">CCDS Implementation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -2,7 +2,7 @@
 
 This chapter is a collection of sequencing examples that are as close as possible to the CDT, without all the details. The objecive is to prepare a library on which more realistic, and eventually forward-looking examples can be based. Our intention is not only to address today's scheduling problems, but also to prepare the ground for scheduling challenges of the next 5 to 10 years, where data and compute volumes will increase by several orders of magnitude---outstanding examples are [SKA](https://www.skao.int/en) and CERN's [FCC](https://home.cern/science/accelerators/future-circular-collider).
 
-The chapter is divied into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios.  Realistic cases are presented in the Use-Cases chapter.
+The chapter is divided into deterministic (D1 to D4) and stochastic (S1 to S3) scenarios.  Realistic cases are presented in the Use-Cases chapter.
 
 
 
@@ -121,7 +121,7 @@ The formulation is taken from Section @sec-math.
 
 ## D4. Simplified MRCPSP Example
 
-The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CDT context.
+The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CCDS context.
 
 In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
 
@@ -188,7 +188,7 @@ Though, for interoperability, we should privilege the data model format, describ
 
 ### MRCPSP Benchmark using CPLEX
 
-In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CDT use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease. 
+In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CCDS use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease. 
 
 ---
 

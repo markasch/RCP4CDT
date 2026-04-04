@@ -238,7 +238,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -276,6 +276,21 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./examples/D3_RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D3: RCPSP Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -359,9 +374,9 @@ window.Quarto = {
 
 <section id="some-history" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="some-history">Some History…</h2>
-<p>The development of a framework for CDT process scheduling is rooted in the <em>job scheduling problems</em> that emerged with industrialization and assembly-line work. It is not a coincidence that many of the classical scheduling problems have names like Job Shop Problem or Flow Shop Problem. Back then and now the targets are the same: execute complex jobs that might need treatment on different machines in a defined sequential orders with certain degrees of efficiency. Efficiency in this context can be defined in a number of ways. It might be the total time needed to execute a set of jobs, the compliance of given deadlines, the minimization of overall costs or a combination of all the above.</p>
-<p>There are two ways to view the the Continuum Digital Twin<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;CDT</p></div></div><ol type="1">
+<p>The development of a framework for CCDS process scheduling is rooted in the <em>job scheduling problems</em> that emerged with industrialization and assembly-line work. It is not a coincidence that many of the classical scheduling problems have names like Job Shop Problem or Flow Shop Problem. Back then and now the targets are the same: execute complex jobs that might need treatment on different machines in a defined sequential orders with certain degrees of efficiency. Efficiency in this context can be defined in a number of ways. It might be the total time needed to execute a set of jobs, the compliance of given deadlines, the minimization of overall costs or a combination of all the above.</p>
+<p>There are two ways to view the the Cognitive Continuum Digital Shadow<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;CCDS</p></div></div><ol type="1">
 <li>Facility- or Machine-centered view.</li>
 <li>Job-centered view.</li>
 </ol>
@@ -372,16 +387,16 @@ window.Quarto = {
 <img src="graphics/sc-sched.svg" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-SC_SCHED-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Two different viewponts of the CDT: a supply chain model (left) and a scheduling model (right). DC = data center, CC = compute center, J = job.
+Figure&nbsp;1: Two different viewponts of the CCDS: a supply chain model (left) and a scheduling model (right). DC = data center, CC = compute center, J = job.
 </figcaption>
 </figure>
 </div>
-<p>We propose a <em>combined</em> model for the CDT, composed of a Supply Chain Network Design<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> coupled with a Resource Constrained Process Scheduling<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In such a hierarchical system, the supply chain model allocates jobs to the best facilities, and the scheduling model then (optimally) sequences jobs among facilities and within a given facility. Supply chain optimization emphasizes “where” (facility choice, data transfer mode). Scheduling emphasizes “when” and “in what order.”</p>
+<p>We propose a <em>combined</em> model for the CCDS, composed of a Supply Chain Network Design<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> coupled with a Resource Constrained Process Scheduling<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In such a hierarchical system, the supply chain model allocates jobs to the best facilities, and the scheduling model then (optimally) sequences jobs among facilities and within a given facility. Supply chain optimization emphasizes “where” (facility choice, data transfer mode). Scheduling emphasizes “when” and “in what order.”</p>
 <div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;SCND</p></div><div id="fn3"><p><sup>3</sup>&nbsp;RCPSP</p></div></div><div class="page-columns page-full"><p>Recall the basic problem: given a directed graph of <span class="math inline">\(N\)</span> data storage, transfer and processing jobs <span class="math inline">\(\mathscr{J},\)</span> find an optimal allocation <span class="math inline">\(A\)</span> and a feasible schedule <span class="math inline">\(S.\)</span> Further details below.</p><div class="no-row-height column-margin column-container"><span class=""><span class="math inline">\(\mathscr{J}=\{ J_1, J_2, \ldots J_N\},\)</span></span></div></div>
 </section>
 <section id="supply-chains-with-scheduling" class="level2">
 <h2 class="anchored" data-anchor-id="supply-chains-with-scheduling">Supply Chains with Scheduling</h2>
-<p>Let us begin by defining supply chains and scheduling in the context of the CDT.</p>
+<p>Let us begin by defining supply chains and scheduling in the context of the CCDS.</p>
 <div id="def-supp" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1 (Supply Chain)</strong></span> A <em>supply chain</em> is a network (directed graph) of jobs, facilities, data storage, networks, processing and end-product delivery to users. The design poroblem is to optimally allocate an ordered list of data storage and data processing jobs to an optimal choice of storage and processing centres.</p>
 </div>
@@ -451,7 +466,7 @@ Figure&nbsp;2: Job-centered view: A simple directed graph (DAG) for a genomics w
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Machine-centered view: Supply chain model for the CDT. For a given job, the dataset (stored in one of two Datacentres, <span class="math inline">\(\mathrm{DC}_1\)</span> or <span class="math inline">\(\mathrm{DC}_2\)</span>) can be processed on one of two HPC centres (<span class="math inline">\(\mathrm{HPC}_1\)</span> or <span class="math inline">\(\mathrm{HPC}_2\)</span>), and ouput data is sent to (and stored on) one of the two Datacentres, ready as input for the next job. This is repeated for each job in the ordered job list (DAG).
+Figure&nbsp;3: Machine-centered view: Supply chain model for the CCDS. For a given job, the dataset (stored in one of two Datacentres, <span class="math inline">\(\mathrm{DC}_1\)</span> or <span class="math inline">\(\mathrm{DC}_2\)</span>) can be processed on one of two HPC centres (<span class="math inline">\(\mathrm{HPC}_1\)</span> or <span class="math inline">\(\mathrm{HPC}_2\)</span>), and ouput data is sent to (and stored on) one of the two Datacentres, ready as input for the next job. This is repeated for each job in the ordered job list (DAG).
 </figcaption>
 </figure>
 </div>
@@ -461,7 +476,7 @@ Figure&nbsp;3: Machine-centered view: Supply chain model for the CDT. For a give
 <img src="graphics/CDT_RCP_SC.svg" class="img-fluid figure-img" style="width:40.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CDT_RCP_SC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
+Figure&nbsp;4: The CCDS model is based on RCPSP and SCND.
 </figcaption>
 </figure>
 </div>
@@ -521,7 +536,7 @@ Figure&nbsp;4: The CDT model is based on RCPSP and SCND.
 \end{align}\]</span></p>
 <p>The objective function (1) represents the sum of all possible start dates for the final sink job (dummy variable) <span class="math inline">\(x_{n+1,t}.\)</span> We know that only one of these variables will equal 1 for a specific <span class="math inline">\(t.\)</span> Therefore, by minimizing the sum of the product <span class="math inline">\(t \cdot x_{n+1,t},\)</span> we are effectively minimizing the total project duration. Constraint (2) ensures that each activity <span class="math inline">\(i\)</span> has exactly one start date, i.e.&nbsp;a single execution. Constraint (3) guarantees that for any time period <span class="math inline">\(t,\)</span> the schedule does not exceed the capacity <span class="math inline">\(c_r\)</span> for any renewable resource<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> <span class="math inline">\(r.\)</span> Finally, constraint (4) ensures that if an activity <span class="math inline">\(j\)</span> follows another activity <span class="math inline">\(i,\)</span> then activity <span class="math inline">\(j\)</span> must start after the finish time of activity <span class="math inline">\(i,\)</span> which is equal to the start time of activity <span class="math inline">\(i\)</span> plus its duration <span class="math inline">\(p_i.\)</span> This is the precedence constraint.</p>
 <div class="no-row-height column-margin column-container"><div id="fn10"><p><sup>10</sup>&nbsp;Non-renewable resources will be introduced below in the multi-mode formulation.</p></div></div><p><strong>Time-indexed vs.&nbsp;Disjunctive approaches</strong></p>
-<p>Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times that respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models can become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the <a href="CDT.html" class="quarto-xref"><span>CDT Implementation</span></a> section.</p>
+<p>Most common models for the RCPSP rely on time discretization where the scheduling horizon is decomposed into discrete time intervals of unit length. The jobs get allocated to feasible starting times that respect the resource and precedence restrictions. Since the model size expands with increasing scheduling horizon, time-discrete models can become intractable for large time horizons. In this case, we can resort to disjunctive formulations, based on the big-M approach. See examples in the <a href="CDT.html" class="quarto-xref"><span>CCDS Implementation</span></a> section.</p>
 <p><strong>Mutli-Project Multi-Mode RCPSP</strong></p>
 <p>Note that the above formulation is restricted to temporal scheduling on a <em>single</em> machine, and for a single project—a collection of jobs. This formulation can be generalized to deal with multiple machines and multiple projects. In this case, the formulation becomes very similar to that of a supply chain. It is referred to in the literature as the <em>multi-mode resource-constrained multi-project scheduling problem</em>, or MRCMPSP.</p>
 <p><strong>Multi-Mode</strong> The single-mode RCPSP assumed that each activity has only one way to be executed, whereas the multi-mode RCPSP considers multiple ways to execute an activity, which often have tradeoffs in duration, cost, or resource requirement.</p>

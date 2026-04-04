@@ -22,7 +22,7 @@ We will analyze and solve a simple ED problem with 2 generators, each with a cos
 | 2 | 4 | 100 | 400 |
 
 
-In the <mark>CDT context</mark>, this case could describe the allocation, within a compute or a data center, of the demand among several hardware options. Each option, e.g. CPU or GPU, will have its own costs and capacity bounds.
+In the <mark>CCDS context</mark>, this case could describe the allocation, within a compute or a data center, of the demand among several hardware options. Each option, e.g. CPU or GPU, will have its own costs and capacity bounds.
 
 ## Python and Pyomo
 

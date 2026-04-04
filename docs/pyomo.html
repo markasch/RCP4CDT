@@ -270,7 +270,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="./CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -303,6 +303,26 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./examples/D2_sched-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D2: Scheduling Problems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/D3_RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D3: RCPSP Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -382,7 +402,7 @@ window.Quarto = {
 </header>
 
 
-<p>This section details all the practical aspects of the optimal CDT scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.</p>
+<p>This section details all the practical aspects of the optimal CCDS scheduling. We intentionally provide a very general framework, but illustrate it with several simple examples.</p>
 <section id="basic-pyomo-linear-programming-example" class="level2">
 <h2 class="anchored" data-anchor-id="basic-pyomo-linear-programming-example">Basic <code>pyomo</code> Linear Programming Example</h2>
 <p>As an introduction we load the necessary <code>pyomo</code> packages and solve an ultra-simple linear programming example. <span class="math display">\[
@@ -396,7 +416,7 @@ window.Quarto = {
 <li><code>pyomo.environ</code> provides the framework for building the model</li>
 <li><code>SolverFactory</code> allows to call the solver used to solve the optimization problem</li>
 </ul>
-<div id="cd430798" class="cell" data-execution_count="1">
+<div id="d16da931" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyomo.opt <span class="im">import</span> SolverFactory </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -429,7 +449,7 @@ optimal value = 0.67</code></pre>
 </section>
 <section id="sec-disj" class="level2">
 <h2 class="anchored" data-anchor-id="sec-disj">Disjunctions</h2>
-<p>The decisions encountered in the CDT involve discrete, Boolean choices. These can take the following forms:</p>
+<p>The decisions encountered in the CCDS involve discrete, Boolean choices. These can take the following forms:</p>
 <ul>
 <li>Sequencing decisions, where <span class="math inline">\(A\)</span> ends before <span class="math inline">\(B,\)</span> or <span class="math inline">\(B\)</span> ends before <span class="math inline">\(A.\)</span></li>
 <li>Switching decisions, where a facility is used or not.</li>

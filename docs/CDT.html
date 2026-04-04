@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CDT Implementation – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>CCDS Implementation – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -153,7 +153,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="./CDT.html"><span class="chapter-title">CDT Implementation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="./CDT.html"><span class="chapter-title">CCDS Implementation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -273,7 +273,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./CDT.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="./CDT.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -311,6 +311,21 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./examples/D3_RCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D3: RCPSP Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -375,9 +390,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content page-columns page-full column-body" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="./CDT.html"><span class="chapter-title">CDT Implementation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./pyomo.html">Implementation</a></li><li class="breadcrumb-item"><a href="./CDT.html"><span class="chapter-title">CCDS Implementation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-CDT" class="quarto-section-identifier"><span class="chapter-title">CDT Implementation</span></span></h1>
+<h1 class="title"><span id="sec-CDT" class="quarto-section-identifier"><span class="chapter-title">CCDS Implementation</span></span></h1>
 </div>
 
 
@@ -429,8 +444,8 @@ Figure&nbsp;3.1: The implementation in 4 stages.
 </ol>
 <section id="input-file" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="input-file">Input File</h2>
-<p>This <code>json</code> input file contains a <em>complete</em> description of the CDT that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling at national or European levels.</p>
-<p>The input file contains all the information regarding the following characteristics of the CDT:</p>
+<p>This <code>json</code> input file contains a <em>complete</em> description of the CCDS that we want to model for optimization. Thanks to its genericity, it can be readily adapted to a wide diversity of projects, and even to global job scheduling at national or European levels.</p>
+<p>The input file contains all the information regarding the following characteristics of the CCDS:</p>
 <ul>
 <li><span class="math inline">\(\mathcal{P} = \{P_1, P_2, \ldots \}\)</span> the list of projects;</li>
 <li><span class="math inline">\(\mathcal{J}_i = \{J_1^i, J_2^i, \ldots \}\)</span> the list of jobs per project<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>;</li>

@@ -1,6 +1,6 @@
 # Overview {.unnumbered}
 
-The objective of the Exa-AtoW project is to produce operational workflows of exascale and post-exascale workflows. We ilustrate here the scheduling optimization of two full-scale use-cases, as implemented by the CDT: 
+The objective of the Exa-AtoW project is to produce operational workflows of exascale and post-exascale workflows. We ilustrate here the scheduling optimization of two full-scale use-cases, as implemented by the CCDS: 
 
 - DDFFACET
 - NSBAS.
