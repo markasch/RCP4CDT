@@ -370,6 +370,7 @@ window.Quarto = {
   <li><a href="#problem-notation" id="toc-problem-notation" class="nav-link" data-scroll-target="#problem-notation">Problem notation</a></li>
   <li><a href="#saa-method" id="toc-saa-method" class="nav-link" data-scroll-target="#saa-method">SAA method</a></li>
   </ul></li>
+  <li><a href="#discrete-probabilities---scenario-tree-model" id="toc-discrete-probabilities---scenario-tree-model" class="nav-link" data-scroll-target="#discrete-probabilities---scenario-tree-model">Discrete probabilities - Scenario tree model</a></li>
   </ul>
 </nav>
 </nav>
@@ -437,7 +438,7 @@ window.Quarto = {
 \min_{y\ge0} &amp; \,\,r^{\top}y_k\\
 \textrm{s.t.} &amp; \,\,x + y_k  \ge d(\xi_k).\\
 \end{align*}\]</span></p>
-<div id="5171cd60-cdf4-4e59-9ff6-903af979bae6" class="cell" data-execution_count="4">
+<div id="5171cd60-cdf4-4e59-9ff6-903af979bae6" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -520,9 +521,121 @@ window.Quarto = {
 We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="discrete-probabilities---scenario-tree-model" class="level2">
+<h2 class="anchored" data-anchor-id="discrete-probabilities---scenario-tree-model">Discrete probabilities - Scenario tree model</h2>
+<p>Now we suppose that we have three scenarios for the demand, each with an associated probability.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Scenario (<span class="math inline">\(s\)</span>)</th>
+<th style="text-align: center;">Demand (<span class="math inline">\(d_s\)</span>)</th>
+<th style="text-align: center;">Probability (<span class="math inline">\(p_s\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">[60, 6, 12]</td>
+<td style="text-align: center;">0.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Medium</td>
+<td style="text-align: center;">[70, 8, 15]</td>
+<td style="text-align: center;">0.80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">High</td>
+<td style="text-align: center;">[75, 10, 18]</td>
+<td style="text-align: center;">0.10</td>
+</tr>
+</tbody>
+</table>
+<p>A simple modification of the SAA model is needed. We just change the sum over the <span class="math inline">\(K\)</span> scenarios, to a sum over the <span class="math inline">\(S\)</span> discrete events, and modify the resource demands $d() $ to an array of <span class="math inline">\(S\)</span> vectors.</p>
+<div id="54d9f7bd" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ── First Stage Constants ──────────────────────────────────────────────────────</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> np.array([<span class="dv">6</span>, <span class="dv">14</span>, <span class="dv">27</span>]) <span class="co"># Installation (allocation) costs</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="dv">3</span>]) <span class="co"># Space (power) needed</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">1000</span> <span class="co"># Budget available</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Space available</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Second Stage Constants ─────────────────────────────────────────────────────</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="dv">3</span> <span class="co"># Number of scenarios for tree</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>d_xi <span class="op">=</span> np.array([[<span class="dv">60</span>, <span class="dv">6</span>, <span class="dv">12</span>],  <span class="co"># low</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">70</span>, <span class="dv">8</span>, <span class="dv">15</span>],  <span class="co"># medium</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">75</span>, <span class="dv">10</span>, <span class="dv">18</span>]]) <span class="co"># high</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> np.array([<span class="dv">7</span>, <span class="dv">18</span>, <span class="dv">30</span>])    <span class="co"># Costs of each resource</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#p = np.array([1.0 / S] * S)  # Uniform scenario probabilities</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#p = np.array([0.3, 0.5, 0.2 ]) # gives 0, 2, 10 and cost = 1562€</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span> ]) <span class="co"># gives 4, 2, 10 and cost = 829€</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Index Sets ─────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>RESOURCES  <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]   <span class="co"># CPU, GPU, TPU</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>SCENARIOS  <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(S))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Model ──────────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> pyo.ConcreteModel(name<span class="op">=</span><span class="st">"2SP-TREE"</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Variables ──────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>m.x <span class="op">=</span> pyo.Var(RESOURCES, domain<span class="op">=</span>pyo.NonNegativeIntegers)          <span class="co"># First stage</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>m.y <span class="op">=</span> pyo.Var(RESOURCES, SCENARIOS, domain<span class="op">=</span>pyo.NonNegativeIntegers)  <span class="co"># Recourse</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Objective ──────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>m.obj <span class="op">=</span> pyo.Objective(</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">=</span>(</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">sum</span>(c[i] <span class="op">*</span> m.x[i] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">sum</span>(p[s] <span class="op">*</span> <span class="bu">sum</span>(r[i] <span class="op">*</span> m.y[i, s] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> s <span class="kw">in</span> SCENARIOS</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    sense<span class="op">=</span>pyo.minimize</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Constraints ────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">## Installation budget</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>m.budget <span class="op">=</span> pyo.Constraint(</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">=</span><span class="bu">sum</span>(c[i] <span class="op">*</span> m.x[i] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES) <span class="op">&lt;=</span> B</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">## Space (power) available</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>m.space <span class="op">=</span> pyo.Constraint(</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">=</span><span class="bu">sum</span>(p[i] <span class="op">*</span> m.x[i] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES) <span class="op">&lt;=</span> S</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">## Meet demand in every scenario  (x_i + y_{i,s} &gt;= d_{i,s})</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>m.demand <span class="op">=</span> pyo.Constraint(</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    RESOURCES, SCENARIOS,</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    rule<span class="op">=</span><span class="kw">lambda</span> m, i, s: m.x[i] <span class="op">+</span> m.y[i, s] <span class="op">&gt;=</span> d_xi[i, s]</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Solve ──────────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> pyo.SolverFactory(<span class="st">"gurobi"</span>)        <span class="co"># swap for "glpk",  "cbc" or "gurobi" freely</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> solver.solve(m, tee<span class="op">=</span><span class="va">False</span>)        <span class="co"># tee=True for verbose output</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Results ────────────────────────────────────────────────────────────────────</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> results.solver.termination_condition <span class="op">==</span> pyo.TerminationCondition.optimal:</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    x_opt <span class="op">=</span> np.array([pyo.value(m.x[r]) <span class="cf">for</span> r <span class="kw">in</span> RESOURCES])</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    obj_val <span class="op">=</span> pyo.value(m.obj)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"Our server farm will cost €</span><span class="sc">{</span>obj_val<span class="sc">:,.2f}</span><span class="ss">. "</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="ch">\n</span><span class="ss">We should buy/allocate </span><span class="sc">{</span><span class="bu">int</span>(x_opt[<span class="dv">0</span>])<span class="sc">}</span><span class="ss"> CPUs, "</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(x_opt[<span class="dv">1</span>])<span class="sc">}</span><span class="ss"> GPUs, and "</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(x_opt[<span class="dv">2</span>])<span class="sc">}</span><span class="ss"> TPUs."</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Solver did not find an optimal solution:"</span>,</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>          results.solver.termination_condition)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Our server farm will cost €829.20. 
+We should buy/allocate 4 CPUs, 2 GPUs, and 10 TPUs.</code></pre>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

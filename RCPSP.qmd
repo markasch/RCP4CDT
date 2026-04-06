@@ -85,6 +85,8 @@ graph LR
     C --> D["End-users"] 
 ```
 
+Notice the perfect <mark>analogy with the CCDS</mark>. This enables easy transposition of supply chain examples to our contexts of interest.
+
 ## D2. Simplified Scheduling Examples
 
 The scheduling [Example D2](examples/D2_sched-intro.ipynb) covers a lot of ground. We study a classical scheduling problem, where we are given a set of jobs, their release times, their durations and their due times. The objective is to optimize the makespan, or total duration of all the jobs. We also introduce the _total past due_, or lateness/tardiness as an additional objective.

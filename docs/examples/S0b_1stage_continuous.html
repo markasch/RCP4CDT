@@ -401,7 +401,7 @@ window.Quarto = {
 
 
 <p>This problem is a modified version of this <a href="https://mobook.github.io/MO-book/notebooks/09/03-seafood-distribution-center.html">example</a></p>
-<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-09-30T22:59:07.200005Z&quot;,&quot;start_time&quot;:&quot;2022-09-30T22:59:05.267305Z&quot;}}" data-execution_count="1">
+<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-09-30T22:59:07.200005Z&quot;,&quot;start_time&quot;:&quot;2022-09-30T22:59:05.267305Z&quot;}}">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
@@ -424,14 +424,17 @@ window.Quarto = {
 \]</span></p>
 <p>Since we have <span class="math inline">\(x \geq 0\)</span> regardless of the demand <span class="math inline">\(z\)</span>, the feasible set for the decision variable <span class="math inline">\(x\)</span> is not affected by unknown demand.</p>
 <p><strong>NOTE</strong></p>
-<p>This is a single-stage problem.</p>
+<ol type="1">
+<li>As formulated, this is a single-stage problem. However, it is intrinsically 2-stage because of the deterministic term <span class="math inline">\(cx\)</span> in the objective, and could be seen as such.</li>
+<li>In the <mark>CCDS context </mark>, we could consider the purchase (or allocation) of <span class="math inline">\(x\)</span> servers (compute or storage), the uncertain compute or storage demand <span class="math inline">\(z,\)</span> and the holding price <span class="math inline">\(h\)</span> as the OPEX of unused compute or storage servers.</li>
+</ol>
 </section>
 <section id="explicit-analytical-solution" class="level2">
 <h2 class="anchored" data-anchor-id="explicit-analytical-solution">Explicit analytical solution</h2>
 <p>Assume further that the demand for tuna in tons can be modeled as a <em>continuous</em> random variable <span class="math inline">\(z\)</span> with cumulative distribution function <span class="math inline">\(F(\cdot)\)</span>. We consider the following three distributions:</p>
 <ol type="1">
 <li><p>A <a href="https://en.wikipedia.org/wiki/Continuous_uniform_distribution#Cumulative_distribution_function">uniform distribution</a> on the interval <span class="math inline">\([25, 175]\)</span>;</p></li>
-<li><p>A <a href="https://en.wikipedia.org/wiki/Pareto_distribution#Cumulative_distribution_function">Pareto distribution</a> on the interval <span class="math inline">\([50,+\infty)\)</span> with <span class="math inline">\(x_m=50\)</span> and exponent <span class="math inline">\(\alpha=2\)</span>. Recall that the inverse CDF for a Pareto distribution is given by* <span class="math inline">\(F^{-1}(\varepsilon) = \frac{x_m}{(1-\varepsilon)^{1/\alpha}}\)</span>;</p></li>
+<li><p>A <a href="https://en.wikipedia.org/wiki/Pareto_distribution#Cumulative_distribution_function">Pareto distribution</a> on the interval <span class="math inline">\([50,+\infty)\)</span> with <span class="math inline">\(x_m=50\)</span> and exponent <span class="math inline">\(\alpha=2\)</span>. Recall that the inverse CDF for a Pareto distribution is given by <span class="math display">\[F^{-1}(\varepsilon) = \frac{x_m}{(1-\varepsilon)^{1/\alpha}}\]</span></p></li>
 <li><p>A <a href="https://en.wikipedia.org/wiki/Weibull_distribution#Cumulative_distribution_function">Weibull distribution</a> on the interval <span class="math inline">\([0,+\infty)\)</span> with shape parameter <span class="math inline">\(k=2\)</span> and scale parameter <span class="math inline">\(\lambda=113\)</span>.</p></li>
 </ol>
 <p>Note that all the three distributions above have the same expected value, that is <span class="math inline">\(\mathbb E [z] = 100\)</span> tons.</p>
@@ -439,8 +442,9 @@ window.Quarto = {
 <p><span class="math display">\[
 x^* = F^{-1} \left( \frac{p-c}{p+h}\right).
 \]</span></p>
-<p>In the example below, we report the numerical solution corresponding to the parameters <span class="math inline">\(c = 10\)</span>, <span class="math inline">\(p = 25\)</span>, and <span class="math inline">\(h = 3\)</span>, which determine the <em>quantile</em> of interest, <span class="math display">\[q=\frac{p-c}{p+h} \approx 0.5357 .\]</span></p>
-<div id="cell-4" class="cell" data-execution_count="2">
+<p>In the example below, we report the numerical solution corresponding to the parameters <span class="math inline">\(c = 10\)</span>, <span class="math inline">\(p = 25\)</span>, and <span class="math inline">\(h = 3\)</span>, which determine the <em>quantile</em> of interest, <span class="math display">\[q=\frac{p-c}{p+h} \approx 0.5357 .
+\]</span></p>
+<div id="cell-4" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting parameters</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">25</span></span>
@@ -522,7 +526,7 @@ The optimal solution for Weibull distribution is: 98.84 tons</code></pre>
 <p>In this case, the total profit is simply (-purchase + sales - returns) <span class="math display">\[
 f(x,y) = -cx + py - h(x-y)^+,\]</span> where we should find the (trivial) optimal solution (sales = demand), <span class="math display">\[
   x = 100, \quad y = 100, \quad z \doteq(x-y) = 0.\]</span></p>
-<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:100}}" data-outputid="3d8805fe-608a-4e12-bb41-8cc8872d6c28" data-tags="[]" data-execution_count="5">
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:100}}" data-outputid="3d8805fe-608a-4e12-bb41-8cc8872d6c28" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># problem data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">25</span></span>
@@ -593,7 +597,7 @@ Just to check...
 <h2 class="anchored" data-anchor-id="profits-resulting-from-using-average-demand">Profits resulting from using average demand</h2>
 <p>We now assess how well we perform by (naively) taking the average demand as input for each of the three demand distributions above.</p>
 <p>For a fixed decision variable <span class="math inline">\(x=100\)</span>, approximate the expected net profit of the seafood distribution center for each of the three distributions above using the Sample Average Approximation (SAA) method with <span class="math inline">\(N\)</span> points. More specifically, generate <span class="math inline">\(N\)</span> samples from the considered distribution and solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N\)</span> equi-probable scenarios.</p>
-<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:106}}" data-outputid="9e31a393-e49a-4fc6-b11f-0b98702eba71" data-tags="[]" data-execution_count="10">
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:106}}" data-outputid="9e31a393-e49a-4fc6-b11f-0b98702eba71" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NaiveSeafoodStockSAA(N, sample, distributiontype):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Seafood distribution center - Naive solution performance"</span></span>
@@ -674,7 +678,7 @@ Just to check...
 <p>Suppose we do not have an explicit optimal solution, or an average demand hypothesis, as above.</p>
 <p>We can still approximate the optimal solution of stock optimization problem for each of the three distributions above using the Sample Average Approximation method. More specifically, generate <span class="math inline">\(N=5000\)</span> samples from each of the three distributions and then solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N=5000\)</span> scenarios.</p>
 <p>For each of the three distribution, we compare the optimal expected profit with that obtained above, using the average demand, and calculate the <em>value of the stochastic solution</em> (VSS).</p>
-<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:415}}" data-outputid="067043f8-c496-4b31-df1e-fd4da27c4d73" data-execution_count="11">
+<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:415}}" data-outputid="067043f8-c496-4b31-df1e-fd4da27c4d73">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SeafoodStockSAA(N, sample):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Seafood Stock using SAA method"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -785,7 +789,7 @@ Value of the stochastic solution: 919.08-910.55 = 8.54€
 <section id="convergence-of-the-saa-method" class="level2">
 <h2 class="anchored" data-anchor-id="convergence-of-the-saa-method">Convergence of the SAA method</h2>
 <p>The SAA method becomes more precise as the sample size <span class="math inline">\(N\)</span> increases. To illustrate this, we solve the same optimization problem as before but using a different number of samples, with the sample size <span class="math inline">\(N\)</span> increasing from <span class="math inline">\(25\)</span> to <span class="math inline">\(2500\)</span>. As we can see, the approximate solutions converge to the theoretical ones as the sample size increases.</p>
-<div id="cell-13" class="cell" data-tags="[]" data-execution_count="7">
+<div id="cell-13" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shape <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xm <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> <span class="dv">113</span></span>

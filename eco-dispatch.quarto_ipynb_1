@@ -1,0 +1,508 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Ex. T1: Economic Dispatch {.unnumbered}\n",
+        "\n",
+        "## Problem Description\n",
+        "\n",
+        "::: {.callout-tip title=\"Economic Dispatch\"}\n",
+        " The economic dispatch (ED) problem is a classical LP (or QP) problem in power systems operations: given a set of generating units with known cost functions and physical limits, allocate the total power demand among them so as to minimize total generation cost, while satisfying system-wide power balance and individual unit constraints.\n",
+        ":::\n",
+        "\n",
+        "In its canonical linear form, we have\n",
+        "\n",
+        "$$\\min_{p} \\sum_{i=1}^{n} c_i p_i$$\n",
+        "\n",
+        "$$\\text{s.t.} \\quad \\sum_{i=1}^{n} p_i = D, \\qquad p_i^{\\min} \\le p_i \\le p_i^{\\max}, \\quad \\forall i$$\n",
+        "\n",
+        "where $p_i$ is the power output of unit $i$, $c_i$ is its marginal cost (€/MWh), $D$ is the total system demand, and $[p_i^{\\min}, p_i^{\\max}]$ are the unit's generation limits. ED is widely used to optimize energy-mix problems, power markets, microgrid planning, and stochastic dispatch under uncertain conditions, eg. wind, solar.\n",
+        "\n",
+        "We will analyze and solve a simple ED problem with 2 generators, each with a cost and with generation bounds.\n",
+        "\n",
+        "| Unit $i$ | Cost $c_i$ | min output | max output | \n",
+        "|---|---|---|---|---|---|\n",
+        "| 1 | 3 | 50 | 300 |\n",
+        "| 2 | 4 | 100 | 400 |\n",
+        "\n",
+        "\n",
+        "In the <mark>CCDS context</mark>, this case could describe the allocation, within a compute or a data center, of the demand among several hardware options. Each option, e.g. CPU or GPU, will have its own costs and capacity bounds.\n",
+        "\n",
+        "## Python and Pyomo\n",
+        "\n",
+        "Pyomo extends Python to provide a mathematical modelling language to formulate optimization problemss. The official [Pyomo documentation](https://pyomo.readthedocs.io/en/stable/index.html) contains many advanced features of Pyomo that we do not cover here.\n",
+        "\n",
+        "Before using Pyomo, it needs to be imported. By saying import `as pyo` where we are define `pyo` as a shorthand under which to access everything that Pyomo provides. This is best practice: it means that everything coming from Python itself or from other packages is cleanly separated from Pyomo - anytime we need Pyomo, we access it through `pyo`, as shown below."
+      ],
+      "id": "a5425bf5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pyomo.environ as pyo"
+      ],
+      "id": "17f3b76c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Next, we define a variable to hold the model. By convention, we call this `model`. The model itself is created by calling `ConcreteModel()`, which creates an object which is a member of the ConcreteModel class.\n",
+        "\n",
+        "Later on, we will fill this `ConcreteModel` with the variables and constraints."
+      ],
+      "id": "ef1c82b6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model = pyo.ConcreteModel(name=\"Economic dispatch\")"
+      ],
+      "id": "577c1741",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Variables\n",
+        "\n",
+        "Variables, are defined with `Var` objects. We \"attach\" them to the model as follows: `model.variable_name = ...`. Here, `variable_name` is the name of the variable inside the model, and must therefore be unique to the model. For example:\n"
+      ],
+      "id": "7a6ac678"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.p_1 = pyo.Var(within=pyo.NonNegativeReals)\n",
+        "model.p_2 = pyo.Var(within=pyo.NonNegativeReals)"
+      ],
+      "id": "06bb0d8c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "By using `pyo.NonNegativeReals`, we do not need to add extra \"greater than or equal to zero\" constraints on these variables.\n",
+        "\n",
+        "### Objective Function\n",
+        "\n",
+        "Just like we did for the variables, we create a `pyo.Objective` and attach it to our model. We noame it `generation_cost` but any name is possible (for example, you might want to always call the objective the same - `obj` or `objective`).\n",
+        "\n",
+        "We give the objective two arguments:\n",
+        "\n",
+        "* `expr` is the mathematical expression of the objective function\n",
+        "* `sense` is used to specify whether we are looking for a maximum (`pyo.maximize`) or a minimum (`pyo.minimize`) of this function. If `sense` is omitted, minimization is assumed."
+      ],
+      "id": "b6cfb1ee"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.generation_cost = pyo.Objective(\n",
+        "    expr = 3 * model.p_1 + 4 * model.p_2,\n",
+        "    sense = pyo.minimize\n",
+        "    )"
+      ],
+      "id": "5c11e967",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "An alternative way to formulate the objective is to use sets.\n",
+        "    \n",
+        "```{.python}\n",
+        "prices = {\"c_1\": 3, \"c_2\": 4}\n",
+        "power_plant_types = [\"t_1\", \"t_2\"]\n",
+        "model.power_generation = pyo.Var(power_plant_types, within=pyo.NonNegativeReals)\n",
+        "model.generation_cost = pyo.Objective(\n",
+        "    expr = sum(prices[i] * model.power_generation[i] for i in power_plant_types),\n",
+        "    sense = pyo.minimize\n",
+        ")\n",
+        "```\n",
+        "\n",
+        "It makes use of additional features of Python, like the `sum()` function, and a so-called \"comprehension\" that iterates over all elements in the set (`for i in power_plant_types`). With this kind of approach, you can easily build a model with thousands of variables if necessary, which can easily be dealt with in mostly automated ways, like here wher we sum up in the objective function.\n",
+        "\n",
+        "\n",
+        "### Constraints\n",
+        "\n",
+        "Finally, we add the equality and inequality (bound) constraints, again giving each constraint an `expr` which is its mathematical formulation."
+      ],
+      "id": "8ea58a93"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.t1_min = pyo.Constraint(expr=model.p_1 >= 50)\n",
+        "model.t1_max = pyo.Constraint(expr=model.p_1 <= 300)\n",
+        "model.t2_min = pyo.Constraint(expr=model.p_2 >= 100)\n",
+        "model.t2_max = pyo.Constraint(expr=model.p_2 <= 400)\n",
+        "model.demand = pyo.Constraint(expr=model.p_1 + model.p_2 == 500)"
+      ],
+      "id": "e044b5ff",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Solving the Model\n",
+        "\n",
+        "By default, Pyomo captures only a limited amount of information from the solver. Because we later want to look at dual variables, we need to specify this before solving with the following statement--see the [documentation](https://pyomo.readthedocs.io/en/6.7.2/working_models.html#accessing-duals) for details."
+      ],
+      "id": "26e67ec3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)"
+      ],
+      "id": "8ee74ecd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Next, in order to solve the model, we first need to let Pyomo make the connection to a solver - a separate program that knows how to solve a specific kind of optimization problem. In our case, we are solving a linear (LP) problem. Gurobi is a commercial solver that uses the Simplex algorithm to solve such problems, and is free to use for problems with up to 2000 variables and constraints, so we can use it here. "
+      ],
+      "id": "676e6c79"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "solver = pyo.SolverFactory('gurobi')"
+      ],
+      "id": "f21969a3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "If we prefer to use a free, open-source solver for linear problems, we can instead use [GLPK](https://www.gnu.org/software/glpk/):\n",
+        "\n",
+        "```{.python}\n",
+        "solver = pyo.SolverFactory('glpk')\n",
+        "```\n",
+        "\n",
+        "Finally, we can pass our model to the solver, which solves the problem and then passes back the solution to Pyomo (or tells us if something went wrong and no optimal solution was found)."
+      ],
+      "id": "212f9b0f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "solver.solve(model)"
+      ],
+      "id": "57336553",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We observe that `solver.solve(model)` returns very summary information about the model solution. In this case, you can see `'Termination condition': 'optimal'` -- this means the solver found an optimal solution.\n",
+        "\n",
+        "If we do not want to display this information but capture it for later use, we could assign it to a variable, i.e.:"
+      ],
+      "id": "28a1b12a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "result_object = solver.solve(model)"
+      ],
+      "id": "eecdd48e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "If you want to see the output from the solver while it is solving the model, you can set the `tee` argument to `True` - in the above case, you would see the output from Gurobi, giving more detail on what it is doing while solving the problem (e.g. what exact algorithm it is using, etc):"
+      ],
+      "id": "7477a476"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "solver.solve(model, tee=True)"
+      ],
+      "id": "f5236b75",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now that the model is solved, we can display detailed information about it, including the state of the variables, the objective, and the constraints, with `model.display()`:"
+      ],
+      "id": "af4b2e69"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.display()"
+      ],
+      "id": "88592934",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, we can use the Python `print` function to set up a nicer overview of the results we care about most, for example:"
+      ],
+      "id": "ba9c4069"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(f\"Generation costs (objective) = {model.generation_cost()} EUR\")\n",
+        "print(f\"Plant 1 generation = {model.p_1()} MW\")\n",
+        "print(f\"Plant 2 generation = {model.p_2()} MW\")"
+      ],
+      "id": "627d987d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Dual Variables, Shadow Prices and Marginals\n",
+        "\n",
+        "Recall that constraints in the primal problem are associated with variables in the dual problem. The LP optimality condition for the basic ED (ignoring bound constraints) yields the classic _equal incremental cost_ rule,\n",
+        "\n",
+        "$$ c_i = \\lambda \\quad \\forall i \\text{ unconstrained}, $$\n",
+        "\n",
+        "where $\\lambda$ is the dual variable (shadow price) of the balance constraint — precisely the system marginal price (SMP) or locational marginal price (LMP) in nodal pricing markets. This is the LP duality descibed above: $\\lambda$ gives the marginal cost of serving one additional MW of demand.\n",
+        "\n",
+        "The solver solves the dual problem for us at the same time as solving the primal problem. Because we set up the model to extract this information earlier (`model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)`), we can now get the shadow prices of the primal problem by looking up the optimal values of the variables of the dual problem, as follows:\n",
+        "\n",
+        "```python\n",
+        "model.dual[model.my_constraint_name]\n",
+        "```\n",
+        "\n",
+        "We print out the shadow price of some of our constraints:"
+      ],
+      "id": "ce8a81d5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(f\"Shadow price of `demand` = {model.dual[model.demand]}\")\n",
+        "print(f\"Shadow price of `t1_max` = {model.dual[model.t1_max]}\")\n",
+        "print(f\"Shadow price of `t1_min` = {model.dual[model.t1_min]}\")"
+      ],
+      "id": "c453cc75",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Exploring Multiple Parameters\n",
+        "\n",
+        "We want to explore the effect of varying parameters on the overall cost. We create a new version with a mutable parameter, set to the cost of generator 2. Then we can run multiple models, while varying this parameter, and accumulate the results in a list using `pyo.Param(mutable=True)`. "
+      ],
+      "id": "4b7f9821"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model = pyo.ConcreteModel(name=\"Economic dispatch, version 2\")\n",
+        "\n",
+        "##\n",
+        "# This is the key bit: we define a `pyo.Param` which is mutable,\n",
+        "# allowing us to set (and change) its value later\n",
+        "##\n",
+        "model.c_2 = pyo.Param(mutable=True)\n",
+        "\n",
+        "model.p_1 = pyo.Var(within=pyo.NonNegativeReals)\n",
+        "model.p_2 = pyo.Var(within=pyo.NonNegativeReals)\n",
+        "\n",
+        "model.generation_cost = pyo.Objective(\n",
+        "    expr = 3 * model.p_1 + model.c_2 * model.p_2,\n",
+        "    sense = pyo.minimize\n",
+        ")\n",
+        "\n",
+        "model.t1_min = pyo.Constraint(expr=model.p_1 >= 50)\n",
+        "model.t1_max = pyo.Constraint(expr=model.p_1 <= 300)\n",
+        "model.t2_min = pyo.Constraint(expr=model.p_2 >= 100)\n",
+        "model.t2_max = pyo.Constraint(expr=model.p_2 <= 400)\n",
+        "model.demand = pyo.Constraint(expr=model.p_1 + model.p_2 == 500)\n",
+        "\n",
+        "model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)"
+      ],
+      "id": "d0c4baba",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now that we have a parameter in the model, we can solve the model several times with different values for this parameter. First, we define a list of values we want to explore, $c_2 \\in \\{ 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0 \\} $"
+      ],
+      "id": "4edcda50"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "c_2_m = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]"
+      ],
+      "id": "6bc7320e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Next, we are ready to iterate over each value in this list, set the `c_2` parameter to the current value from the list, solve the model, and store three results we care about - the generation cost (objective function value), $p_1$$ power and $p_2$ power generation, into a list that we call `result_accumulator` - since it accumulates results with the Python functionality to append a new entry to an existing list: `result_accumulator.append(...)`."
+      ],
+      "id": "65b227bf"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "result_accumulator = []\n",
+        "\n",
+        "for i in c_2_m:\n",
+        "    model.c_2 = i\n",
+        "    solver.solve(model)\n",
+        "    result_accumulator.append([model.generation_cost(), model.p_1(), model.p_2()])"
+      ],
+      "id": "f5ffafdd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Put all the results into a `pandas` dataframe."
+      ],
+      "id": "18a293fc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "results = pd.DataFrame(result_accumulator, columns=[\"generation cost\", \"power p1\", \"power p2\"], index=c_2_m)\n",
+        "results"
+      ],
+      "id": "7845ed2f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, we can save the results to a file and plot them."
+      ],
+      "id": "e33f41b9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "results.to_csv(\"results.csv\")\n",
+        "results.plot(xlabel=\"cost 2\", ylabel=\"cost (EUR) / power (MW)\", marker='o', linestyle=':')"
+      ],
+      "id": "c8c3e96c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Putting it all together: basic economic dispatch.\n",
+        "\n",
+        "For clarity, we execute the following complete case. All components should be clear from the previous example."
+      ],
+      "id": "16d48f69"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pyomo.environ as pyo\n",
+        "\n",
+        "# Data\n",
+        "units = ['G1', 'G2', 'G3']\n",
+        "cost  = {'G1': 20, 'G2': 35, 'G3': 50}   # €/MWh\n",
+        "p_min = {'G1': 10, 'G2':  5, 'G3':  0}   # MW\n",
+        "p_max = {'G1':100, 'G2': 80, 'G3': 60}   # MW\n",
+        "demand = 180                             # MW\n",
+        "\n",
+        "m = pyo.ConcreteModel()\n",
+        "m.I  = pyo.Set(initialize=units)\n",
+        "m.p  = pyo.Var(m.I, bounds=lambda m, i: (p_min[i], p_max[i]))\n",
+        "\n",
+        "m.cost    = pyo.Objective(expr=sum(cost[i]*m.p[i] for i in m.I), sense=pyo.minimize)\n",
+        "m.balance = pyo.Constraint(expr=sum(m.p[i] for i in m.I) == demand)\n",
+        "\n",
+        "solver = pyo.SolverFactory('glpk')\n",
+        "result = solver.solve(m)\n",
+        "\n",
+        "for i in m.I:\n",
+        "    print(f\"{i}: {pyo.value(m.p[i]):.2f} MW\")\n",
+        "print(f\"Total cost: {pyo.value(m.cost):.2f} €/h\")"
+      ],
+      "id": "0a86b132",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/opt/miniconda3/envs/exa-atow/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
