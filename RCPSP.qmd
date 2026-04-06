@@ -239,25 +239,31 @@ First, we will consider a single-stage formulation, which will be generalized be
 In [Example S0a](examples/S0a_1stage_discrete.ipynb) we consider a discrete distribution for the sales (demand), which depends on three scenarios, each with an associated probability that has been estimated from past experience, or from archived (log) data. 
 
 
-### S0b. Allocation Optimization for a Data or Compute Center
+### S0b. Stock Optimization for a Distribution Center
+
 
 This is another example of an inventory optimization (newsvendor) problem, where we want to buy an optimal quantity of stock, in this case servers or storage capacities, to cover an uncertain (future) demand.
 
-In [Example S0b](examples/S0b_1stage_continuous.ipynb) we compare different, _continuous_ distributions for the demand (sales).
+In [Example S0b](examples/S0b_1stage_continuous.ipynb) we compare three different, _continuous_ distributions for the demand (sales). This problem has an explicit solution in terms of the given probability distribution functions. We compare this solution with a detreministic, average demand solution, and then with an SAA approximation of each distribution. This enables us to compute the VSS.
 
+In <mark>terms of the CCDS</mark>, we could convert this to "Allocation Optimization for a Data or Compute Center".
 
 
 ## S1. Two-Stage Stochastic
+
+
+
+### SAA
+
+In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
 
 ### Scenario Tree
 
 When the probability distributions for the random parameters (events) are discrete, there are only a
 finite number of outcomes in each stage. With each random parameter fixed to one of its possible
-outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.
+outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model. 
 
-### SAA
-
-In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
+A simple, 2-stage case is studied in the second half of  [Example S1a](examples/S1a_2stage_server_farm.ipynb).
 
 
 ## S2. Multi-Stage Stochastic
@@ -284,7 +290,7 @@ Scenario tree for 3-stage newsvendor problem, where the first stage has three sc
 
 ## S3. Risk Measures
 
-As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In this [example](./examples/S3-OPF_risk.ipynb), we analyze a stochastic  energy dispatch problem, and compare the following risk measures:
+As presented in the [Risk Measures](./th-stochastic.qmd#risk-measures) section, there are various ways to include risk in the cost function. In [Example S3](./examples/S3-OPF_risk.ipynb), we analyze a stochastic  energy dispatch problem, and compare the following risk measures:
 
 - mean,
 - CVaR,

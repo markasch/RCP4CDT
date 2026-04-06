@@ -428,7 +428,7 @@ window.Quarto = {
 </section>
 <section id="saa-method" class="level3">
 <h3 class="anchored" data-anchor-id="saa-method">SAA method</h3>
-<p>To solve the problem above, we will implement a technique called <em>sample average approximation</em> (SAA). This method involves generating a large number <span class="math inline">\(K\)</span> of potential realizations (scenarios) of the random variable through Monte Carlo sampling and treating each realization as an individual sub-problem. This means that instead of just having one set of second-stage variables, we will have <span class="math inline">\(K\)</span> variables and the expectation of our second-stage value is the average value over the realizations. With this, our formulation changes to,</p>
+<p>To solve the problem above, we will first implement a technique called <em>sample average approximation</em> (SAA). This method involves generating a large number <span class="math inline">\(K\)</span> of potential realizations (scenarios) of the random variable through Monte Carlo sampling and treating each realization as an individual sub-problem. This means that instead of just having one set of second-stage variables, we will have <span class="math inline">\(K\)</span> variables and the expectation of our second-stage value is the average value over the realizations. With this, our formulation changes to,</p>
 <p><span class="math display">\[\begin{align*}
 \textrm{minimize} &amp; \,\, c^{\top}x +\frac{1}{K}\sum_{k=1}^K Q_k(x;\xi), \\
 \textrm{subject to} &amp; \,\, s^{\top}x \le S,\\
@@ -438,7 +438,7 @@ window.Quarto = {
 \min_{y\ge0} &amp; \,\,r^{\top}y_k\\
 \textrm{s.t.} &amp; \,\,x + y_k  \ge d(\xi_k).\\
 \end{align*}\]</span></p>
-<div id="5171cd60-cdf4-4e59-9ff6-903af979bae6" class="cell">
+<div id="5171cd60-cdf4-4e59-9ff6-903af979bae6" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -553,7 +553,7 @@ We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 </tbody>
 </table>
 <p>A simple modification of the SAA model is needed. We just change the sum over the <span class="math inline">\(K\)</span> scenarios, to a sum over the <span class="math inline">\(S\)</span> discrete events, and modify the resource demands $d() $ to an array of <span class="math inline">\(S\)</span> vectors.</p>
-<div id="54d9f7bd" class="cell" data-execution_count="1">
+<div id="54d9f7bd" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -561,17 +561,17 @@ We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> np.array([<span class="dv">6</span>, <span class="dv">14</span>, <span class="dv">27</span>]) <span class="co"># Installation (allocation) costs</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="dv">3</span>]) <span class="co"># Space (power) needed</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">1000</span> <span class="co"># Budget available</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Space available</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Space (power) available</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Second Stage Constants ─────────────────────────────────────────────────────</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="dv">3</span> <span class="co"># Number of scenarios for tree</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>d_xi <span class="op">=</span> np.array([[<span class="dv">60</span>, <span class="dv">6</span>, <span class="dv">12</span>],  <span class="co"># low</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">70</span>, <span class="dv">8</span>, <span class="dv">15</span>],  <span class="co"># medium</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">75</span>, <span class="dv">10</span>, <span class="dv">18</span>]]) <span class="co"># high</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">75</span>, <span class="dv">10</span>, <span class="dv">18</span>]]).T <span class="co"># high</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> np.array([<span class="dv">7</span>, <span class="dv">18</span>, <span class="dv">30</span>])    <span class="co"># Costs of each resource</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#p = np.array([1.0 / S] * S)  # Uniform scenario probabilities</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#p = np.array([0.3, 0.5, 0.2 ]) # gives 0, 2, 10 and cost = 1562€</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span> ]) <span class="co"># gives 4, 2, 10 and cost = 829€</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="fl">1.0</span> <span class="op">/</span> S] <span class="op">*</span> S)    <span class="co"># gives 60, 6, 12 and cost = 952€ (Uniform scenario probabilities)</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span> ]) <span class="co"># gives 60, 6, 12 and cost = 937€</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span> ]) <span class="co"># gives 70, 8, 15 and cost = 953€</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Index Sets ─────────────────────────────────────────────────────────────────</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>RESOURCES  <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]   <span class="co"># CPU, GPU, TPU</span></span>
@@ -603,7 +603,7 @@ We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">## Space (power) available</span></span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>m.space <span class="op">=</span> pyo.Constraint(</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">=</span><span class="bu">sum</span>(p[i] <span class="op">*</span> m.x[i] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES) <span class="op">&lt;=</span> S</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">=</span><span class="bu">sum</span>(p[i] <span class="op">*</span> m.x[i] <span class="cf">for</span> i <span class="kw">in</span> RESOURCES) <span class="op">&lt;=</span> P</span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">## Meet demand in every scenario  (x_i + y_{i,s} &gt;= d_{i,s})</span></span>
@@ -630,8 +630,8 @@ We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Solver did not find an optimal solution:"</span>,</span>
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>          results.solver.termination_condition)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Our server farm will cost €829.20. 
-We should buy/allocate 4 CPUs, 2 GPUs, and 10 TPUs.</code></pre>
+<pre><code>Our server farm will cost €953.10. 
+We should buy/allocate 70 CPUs, 8 GPUs, and 15 TPUs.</code></pre>
 </div>
 </div>
 

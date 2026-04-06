@@ -398,12 +398,12 @@ window.Quarto = {
   <li><a href="#s0.-single-stage-stochastic" id="toc-s0.-single-stage-stochastic" class="nav-link" data-scroll-target="#s0.-single-stage-stochastic">S0. Single-Stage Stochastic</a></li>
   <li><a href="#s0a.-single-stage-newsvendor-problem" id="toc-s0a.-single-stage-newsvendor-problem" class="nav-link" data-scroll-target="#s0a.-single-stage-newsvendor-problem">S0a. Single-Stage Newsvendor Problem</a>
   <ul class="collapse">
-  <li><a href="#s0b.-allocation-optimization-for-a-data-or-compute-center" id="toc-s0b.-allocation-optimization-for-a-data-or-compute-center" class="nav-link" data-scroll-target="#s0b.-allocation-optimization-for-a-data-or-compute-center">S0b. Allocation Optimization for a Data or Compute Center</a></li>
+  <li><a href="#s0b.-stock-optimization-for-a-distribution-center" id="toc-s0b.-stock-optimization-for-a-distribution-center" class="nav-link" data-scroll-target="#s0b.-stock-optimization-for-a-distribution-center">S0b. Stock Optimization for a Distribution Center</a></li>
   </ul></li>
   <li><a href="#s1.-two-stage-stochastic" id="toc-s1.-two-stage-stochastic" class="nav-link" data-scroll-target="#s1.-two-stage-stochastic">S1. Two-Stage Stochastic</a>
   <ul class="collapse">
-  <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
   <li><a href="#saa" id="toc-saa" class="nav-link" data-scroll-target="#saa">SAA</a></li>
+  <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
   </ul></li>
   <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a></li>
   <li><a href="#s3.-risk-measures" id="toc-s3.-risk-measures" class="nav-link" data-scroll-target="#s3.-risk-measures">S3. Risk Measures</a></li>
@@ -674,21 +674,23 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <p>Note, if <span class="math inline">\(d\)</span> is considered to be a random variable, then we obtain the objective of <a href="#eq-stoch" class="quarto-xref">Equation&nbsp;<span>1</span></a>.</p>
 <p>First, we will consider a single-stage formulation, which will be generalized below to a two-stage case.</p>
 <p>In <a href="./examples/S0a_1stage_discrete.html">Example S0a</a> we consider a discrete distribution for the sales (demand), which depends on three scenarios, each with an associated probability that has been estimated from past experience, or from archived (log) data.</p>
-<section id="s0b.-allocation-optimization-for-a-data-or-compute-center" class="level3">
-<h3 class="anchored" data-anchor-id="s0b.-allocation-optimization-for-a-data-or-compute-center">S0b. Allocation Optimization for a Data or Compute Center</h3>
+<section id="s0b.-stock-optimization-for-a-distribution-center" class="level3">
+<h3 class="anchored" data-anchor-id="s0b.-stock-optimization-for-a-distribution-center">S0b. Stock Optimization for a Distribution Center</h3>
 <p>This is another example of an inventory optimization (newsvendor) problem, where we want to buy an optimal quantity of stock, in this case servers or storage capacities, to cover an uncertain (future) demand.</p>
-<p>In <a href="./examples/S0b_1stage_continuous.html">Example S0b</a> we compare different, <em>continuous</em> distributions for the demand (sales).</p>
+<p>In <a href="./examples/S0b_1stage_continuous.html">Example S0b</a> we compare three different, <em>continuous</em> distributions for the demand (sales). This problem has an explicit solution in terms of the given probability distribution functions. We compare this solution with a detreministic, average demand solution, and then with an SAA approximation of each distribution. This enables us to compute the VSS.</p>
+<p>In <mark>terms of the CCDS</mark>, we could convert this to “Allocation Optimization for a Data or Compute Center”.</p>
 </section>
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s1.-two-stage-stochastic">S1. Two-Stage Stochastic</h2>
-<section id="scenario-tree" class="level3">
-<h3 class="anchored" data-anchor-id="scenario-tree">Scenario Tree</h3>
-<p>When the probability distributions for the random parameters (events) are discrete, there are only a finite number of outcomes in each stage. With each random parameter fixed to one of its possible outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.</p>
-</section>
 <section id="saa" class="level3">
 <h3 class="anchored" data-anchor-id="saa">SAA</h3>
 <p>In <a href="./examples/S1a_2stage_server_farm.html">Example S1a</a> we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.</p>
+</section>
+<section id="scenario-tree" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-tree">Scenario Tree</h3>
+<p>When the probability distributions for the random parameters (events) are discrete, there are only a finite number of outcomes in each stage. With each random parameter fixed to one of its possible outcomes, one can create a scenario representing one possible realization of the future. Enumeration of all possible combinations of outcomes allows us to represent all scenarios in a tree, with each scenario being a path from the root of the tree to one of its leaves. The nodes visited by each path correspond to values assumed by random parameters in the model.</p>
+<p>A simple, 2-stage case is studied in the second half of <a href="./examples/S1a_2stage_server_farm.html">Example S1a</a>.</p>
 </section>
 </section>
 <section id="s2.-multi-stage-stochastic" class="level2">
@@ -719,7 +721,7 @@ Figure&nbsp;2: Scenario tree for 3-stage newsvendor problem, where the first sta
 </section>
 <section id="s3.-risk-measures" class="level2">
 <h2 class="anchored" data-anchor-id="s3.-risk-measures">S3. Risk Measures</h2>
-<p>As presented in the <a href="./th-stochastic.html#risk-measures">Risk Measures</a> section, there are various ways to include risk in the cost function. In this <a href="./examples/S3-OPF_risk.html">example</a>, we analyze a stochastic energy dispatch problem, and compare the following risk measures:</p>
+<p>As presented in the <a href="./th-stochastic.html#risk-measures">Risk Measures</a> section, there are various ways to include risk in the cost function. In <a href="./examples/S3-OPF_risk.html">Example S3</a>, we analyze a stochastic energy dispatch problem, and compare the following risk measures:</p>
 <ul>
 <li>mean,</li>
 <li>CVaR,</li>
