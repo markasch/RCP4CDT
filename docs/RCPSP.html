@@ -655,27 +655,28 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <section id="s0.-single-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s0.-single-stage-stochastic">S0. Single-Stage Stochastic</h2>
 <p>Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section <a href="th-stochastic.html#sec-stoch" class="quarto-xref"><span>Stochastic, multistage programming</span></a>. This context brings out the important concepts of the following scenarios: Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI). Then, we can fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.</p>
-<p>The most basic way of accounting for randomness is to consider the average, or expected value, of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the objective, <span id="eq-stoch"><span class="math display">\[
+<p>The most basic way of accounting for randomness is to consider the average, or expected value, of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the <em>objective</em>, <span id="eq-stoch"><span class="math display">\[
 \min_x \mathbb{E}_z \left[ f(x,z) \right], \tag{1}\]</span></span> where <span class="math inline">\(x\)</span> is the decision variable, and <span class="math inline">\(z\)</span> is a random variable.</p>
 </section>
 <section id="s0a.-single-stage-newsvendor-problem" class="level2">
 <h2 class="anchored" data-anchor-id="s0a.-single-stage-newsvendor-problem">S0a. Single-Stage Newsvendor Problem</h2>
 <p>The newsvendor problem is a cornerstone of stochastic optimization and can be applied to many different contexts. We suppose that a product (e.g.&nbsp;newspapers) can be purchased for a given cost, <span class="math inline">\(c,\)</span> but the sales at price <span class="math inline">\(r\)</span> depend on some uncertain demand <span class="math inline">\(d_s,\)</span> where <span class="math inline">\(s\)</span> is a possible scenario, and finally there may be a salvage value <span class="math inline">\(w\)</span> that is refunded for unsold items.</p>
 <p>The problem is to determine how many items to purchase. The dilemma is that the scenario (say, weather) will not be known until after the order is placed. Ordering enough items to meet demand for a good scenario (weather) results in a financial penalty on returned goods if the scenario (weather) is poor. On the other hand, ordering just enough items to satisfy demand on a poor scenario (weather) leaves “money on the table” if the scenario (weather) is good.</p>
-<p>In <mark>terms of the CCDS</mark>, we can reformulate the newsvendor as an optimal <em>inventory</em> problem, where we need to allocate <span class="math inline">\(x\)</span> to satisfy (uncertain) demand <span class="math inline">\(d\)</span> with three associated costs:</p>
+<p>In <mark>terms of the CCDS</mark>, we can reformulate the newsvendor as an optimal <em>inventory</em> problem, where we need to allocate server/storage capacity <span class="math inline">\(x\)</span> to satisfy (uncertain) demand <span class="math inline">\(d\)</span> with three associated costs:</p>
 <ul>
-<li><span class="math inline">\(c\)</span> allocation cost,</li>
-<li><span class="math inline">\(b\)</span> back penalty (shortage) cost,</li>
-<li><span class="math inline">\(h\)</span> holding (surplus) cost.</li>
+<li>allocation cost <span class="math inline">\(c,\)</span></li>
+<li>back penalty (shortage) cost <span class="math inline">\(b,\)</span></li>
+<li>holding (surplus) cost <span class="math inline">\(h.\)</span></li>
 </ul>
 <p>The objective here is to minimize the total cost, <span class="math display">\[ G(x,d) = cx +b[d-x]_+ + h[x-d]_+
 \]</span> where <span class="math inline">\([\cdot]_+ \doteq \max(\cdot\, , 0).\)</span></p>
 <p>Note, if <span class="math inline">\(d\)</span> is considered to be a random variable, then we obtain the objective of <a href="#eq-stoch" class="quarto-xref">Equation&nbsp;<span>1</span></a>.</p>
-<p>First, we will consider a single-stage formulation, which will be generalized below to a two-stage case. Here we consider a discrete distribution for the sales (demand)—see <a href="./examples/S0a_1stage_discrete.html">Example S0a</a>.</p>
+<p>First, we will consider a single-stage formulation, which will be generalized below to a two-stage case.</p>
+<p>In <a href="./examples/S0a_1stage_discrete.html">Example S0a</a> we consider a discrete distribution for the sales (demand), which depends on three scenarios, each with an associated probability that has been estimated from past experience, or from archived (log) data.</p>
 <section id="s0b.-allocation-optimization-for-a-data-or-compute-center" class="level3">
 <h3 class="anchored" data-anchor-id="s0b.-allocation-optimization-for-a-data-or-compute-center">S0b. Allocation Optimization for a Data or Compute Center</h3>
-<p>This is another example of an inventory optimization (newsvendor) problem, where we want to buy an optimal quantity of stock, to cover an uncertain (future) demand.</p>
-<p>In <a href="./examples/S0b_1stage_continuous.html">Example S0b</a> we compare different, continuous distributions for the demand (sales).</p>
+<p>This is another example of an inventory optimization (newsvendor) problem, where we want to buy an optimal quantity of stock, in this case servers or storage capacities, to cover an uncertain (future) demand.</p>
+<p>In <a href="./examples/S0b_1stage_continuous.html">Example S0b</a> we compare different, <em>continuous</em> distributions for the demand (sales).</p>
 </section>
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">

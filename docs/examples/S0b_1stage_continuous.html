@@ -270,7 +270,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CDT Implementation</span></a>
+  <a href="../CDT.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CCDS Implementation</span></a>
   </div>
 </li>
       </ul>
@@ -401,38 +401,46 @@ window.Quarto = {
 
 
 <p>This problem is a modified version of this <a href="https://mobook.github.io/MO-book/notebooks/09/03-seafood-distribution-center.html">example</a></p>
-<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-09-30T22:59:07.200005Z&quot;,&quot;start_time&quot;:&quot;2022-09-30T22:59:05.267305Z&quot;}}" data-execution_count="7">
+<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-09-30T22:59:07.200005Z&quot;,&quot;start_time&quot;:&quot;2022-09-30T22:59:05.267305Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> <span class="st">'appsi_highs'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>SOLVER <span class="op">=</span> pyo.SolverFactory(solver)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> SOLVER.available(), <span class="ss">f"Solver </span><span class="sc">{</span>solver<span class="sc">}</span><span class="ss"> is not available."</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>Each day a seafood distribution center buys <span class="math inline">\(x\)</span> tons of tuna at the unit cost <span class="math inline">\(c\)</span> per ton. The next day a demand <span class="math inline">\(z\)</span> is observed from the retailers to whom the fish is sold at a unit price <span class="math inline">\(p &gt; c\)</span>. Any leftover tuna needs to be stored in a cold warehouse at a unit holding cost <span class="math inline">\(h\)</span>. The seafood distribution center cannot sell more fish than it has in stock, thus at most <span class="math inline">\(\min\{z, x \}\)</span> tons will be sold which will leave <span class="math inline">\(h(x-z)^+\)</span> tons leftover, where <span class="math inline">\((\cdot)^+\)</span> is the positive residual (that is <span class="math inline">\(a^+:=\max\{0,a\}\)</span>). Accounting for these costs, the net profit is <span class="math inline">\(p \min\{z, x \} - cx - h (x-z)^+.\)</span></p>
-<p>Given a reasonable estimate of the probability distribution <span class="math inline">\(\mathbb P\)</span> of the tuna demand <span class="math inline">\(z\)</span>, to maximize the long-term net profit then we can formulate the following optimization problem:</p>
+<p>Each day a seafood distribution center buys <span class="math inline">\(x\)</span> tons of tuna at the unit cost <span class="math inline">\(c\)</span> per ton. The next day a demand <span class="math inline">\(z\)</span> is observed from the retailers to whom the fish is sold at a unit price <span class="math inline">\(p &gt; c\)</span>. Any leftover tuna needs to be stored in a cold warehouse at a unit holding cost <span class="math inline">\(h\)</span>. The seafood distribution center cannot sell more fish than it has in stock, thus at most <span class="math inline">\(\min\{z, x \}\)</span> tons will be sold which will leave <span class="math inline">\(h(x-z)^+\)</span> tons leftover, where <span class="math inline">\((\cdot)^+\)</span> is the positive residual (that is <span class="math inline">\(a^+:=\max\{0,a\}\)</span>). Accounting for these costs, the net profit is <span class="math display">\[f(x,z) = p \min\{z, x \} - cx - h (x-z)^+.\]</span></p>
+<p>Given a reasonable estimate of the probability distribution <span class="math inline">\(\mathbb P\)</span> of the tuna demand <span class="math inline">\(z\)</span>, to maximize the long-term net profit we can formulate the optimization problem,</p>
 <p><span class="math display">\[
 \begin{align*}
-    \max \quad &amp; \mathbb{E}  [ p \min\{z, x \} - cx - h (x-z)^+ ]\\
+    \max \quad &amp; \mathbb{E}  [ f(x,z)],\\
     \text{s.t.} \quad &amp; x \geq 0.
 \end{align*}
 \]</span></p>
 <p>Since we have <span class="math inline">\(x \geq 0\)</span> regardless of the demand <span class="math inline">\(z\)</span>, the feasible set for the decision variable <span class="math inline">\(x\)</span> is not affected by unknown demand.</p>
+<p><strong>NOTE</strong></p>
+<p>This is a single-stage problem.</p>
 </section>
 <section id="explicit-analytical-solution" class="level2">
 <h2 class="anchored" data-anchor-id="explicit-analytical-solution">Explicit analytical solution</h2>
-<p>Assume further that the demand for tuna in tons can be modeled as a continuous random variable <span class="math inline">\(z\)</span> with cumulative distribution function <span class="math inline">\(F(\cdot)\)</span>. We consider the following three distributions:</p>
+<p>Assume further that the demand for tuna in tons can be modeled as a <em>continuous</em> random variable <span class="math inline">\(z\)</span> with cumulative distribution function <span class="math inline">\(F(\cdot)\)</span>. We consider the following three distributions:</p>
 <ol type="1">
 <li><p>A <a href="https://en.wikipedia.org/wiki/Continuous_uniform_distribution#Cumulative_distribution_function">uniform distribution</a> on the interval <span class="math inline">\([25, 175]\)</span>;</p></li>
 <li><p>A <a href="https://en.wikipedia.org/wiki/Pareto_distribution#Cumulative_distribution_function">Pareto distribution</a> on the interval <span class="math inline">\([50,+\infty)\)</span> with <span class="math inline">\(x_m=50\)</span> and exponent <span class="math inline">\(\alpha=2\)</span>. Recall that the inverse CDF for a Pareto distribution is given by* <span class="math inline">\(F^{-1}(\varepsilon) = \frac{x_m}{(1-\varepsilon)^{1/\alpha}}\)</span>;</p></li>
 <li><p>A <a href="https://en.wikipedia.org/wiki/Weibull_distribution#Cumulative_distribution_function">Weibull distribution</a> on the interval <span class="math inline">\([0,+\infty)\)</span> with shape parameter <span class="math inline">\(k=2\)</span> and scale parameter <span class="math inline">\(\lambda=113\)</span>.</p></li>
 </ol>
-<p>Note that all the three distributions above have the same expected value, that is <span class="math inline">\(\mathbb E z = 100\)</span> tons.</p>
-<p>The optimal solution of the seafood inventory problem using the closed-form formula that features the inverse CDFs/quantile functions <span class="math inline">\(F^{-1}\)</span> of the considered distribution, that is</p>
+<p>Note that all the three distributions above have the same expected value, that is <span class="math inline">\(\mathbb E [z] = 100\)</span> tons.</p>
+<p>The optimal solution of the seafood inventory problem using the closed-form formula for the inverse CDFs/quantile functions <span class="math inline">\(F^{-1}\)</span> of the considered distribution, can quite easily be shown to be</p>
 <p><span class="math display">\[
 x^* = F^{-1} \left( \frac{p-c}{p+h}\right).
 \]</span></p>
-<p>In the example below, we report the numerical solution corresponding to the parameters <span class="math inline">\(c = 10\)</span>, <span class="math inline">\(p = 25\)</span>, and <span class="math inline">\(h = 3\)</span>, which determine the quantile of interest, that is <span class="math inline">\(q=\frac{p-c}{p+h} \approx 0.5357\)</span>.</p>
-<div id="cell-4" class="cell" data-execution_count="8">
+<p>In the example below, we report the numerical solution corresponding to the parameters <span class="math inline">\(c = 10\)</span>, <span class="math inline">\(p = 25\)</span>, and <span class="math inline">\(h = 3\)</span>, which determine the <em>quantile</em> of interest, <span class="math display">\[q=\frac{p-c}{p+h} \approx 0.5357 .\]</span></p>
+<div id="cell-4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting parameters</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">25</span></span>
@@ -440,7 +448,7 @@ x^* = F^{-1} \left( \frac{p-c}{p+h}\right).
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>distributions <span class="op">=</span> {</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Uniform"</span>: stats.uniform(loc<span class="op">=</span><span class="dv">25</span>, scale<span class="op">=</span><span class="dv">150</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pareto"</span>: stats.pareto(scale<span class="op">=</span><span class="dv">50</span>, b<span class="op">=</span><span class="dv">2</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pareto"</span>:  stats.pareto(scale<span class="op">=</span><span class="dv">50</span>, b<span class="op">=</span><span class="dv">2</span>),</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Weibull"</span>: stats.weibull_min(scale<span class="op">=</span><span class="fl">112.838</span>, c<span class="op">=</span><span class="dv">2</span>),</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
@@ -510,8 +518,11 @@ The optimal solution for Weibull distribution is: 98.84 tons</code></pre>
 </section>
 <section id="deterministic-solution-for-average-demand" class="level2">
 <h2 class="anchored" data-anchor-id="deterministic-solution-for-average-demand">Deterministic solution for average demand</h2>
-<p>We now find the optimal solution of the <em>deterministic linear problem model</em> obtained by assuming the demand is constant and equal to the average demand, i.e., <span class="math inline">\(z = \bar{z} = \mathbb E z = 100\)</span>.</p>
-<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:100}}" data-outputid="3d8805fe-608a-4e12-bb41-8cc8872d6c28" data-tags="[]" data-execution_count="9">
+<p>We now compute the optimal solution of the <em>deterministic linear problem model</em> obtained by assuming the demand is constant and equal to the average demand, i.e., <span class="math inline">\(z = \bar{z} = \mathbb E [z] = 100\)</span>.</p>
+<p>In this case, the total profit is simply (-purchase + sales - returns) <span class="math display">\[
+f(x,y) = -cx + py - h(x-y)^+,\]</span> where we should find the (trivial) optimal solution (sales = demand), <span class="math display">\[
+  x = 100, \quad y = 100, \quad z \doteq(x-y) = 0.\]</span></p>
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:100}}" data-outputid="3d8805fe-608a-4e12-bb41-8cc8872d6c28" data-tags="[]" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># problem data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">25</span></span>
@@ -565,17 +576,23 @@ The optimal solution for Weibull distribution is: 98.84 tons</code></pre>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Optimal solution for determistic demand equal to the average demand = </span><span class="sc">{</span>model<span class="sc">.</span>x()<span class="sc">:.1f}</span><span class="ss"> tons"</span></span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Optimal deterministic profit = </span><span class="sc">{</span>model<span class="sc">.</span>total_profit()<span class="sc">:.0f}</span><span class="ss">€"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Optimal deterministic profit = </span><span class="sc">{</span>model<span class="sc">.</span>total_profit()<span class="sc">:.0f}</span><span class="ss">€"</span>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Just to check..."</span>)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-- sales   y = </span><span class="sc">{</span>model<span class="sc">.</span>y()<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-- returns z = </span><span class="sc">{</span>model<span class="sc">.</span>z()<span class="sc">:.1f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimal solution for determistic demand equal to the average demand = 100.0 tons
-Optimal deterministic profit = 1500€</code></pre>
+Optimal deterministic profit = 1500€
+Just to check...
+-- sales   y = 100.0
+-- returns z = 0.0</code></pre>
 </div>
 </div>
 </section>
 <section id="profits-resulting-from-using-average-demand" class="level2">
 <h2 class="anchored" data-anchor-id="profits-resulting-from-using-average-demand">Profits resulting from using average demand</h2>
-<p>We now assess how well we perform by taking the average demand as input for each of the three demand distributions above.</p>
-<p>For a fixed decision variable <span class="math inline">\(x=100\)</span>, approximate the expected net profit of the seafood distribution center for each of the three distributions above using the Sample Average Approximation method with <span class="math inline">\(N=2500\)</span> points. More specifically, generate <span class="math inline">\(N=2500\)</span> samples from the considered distribution and solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N=2500\)</span> scenarios.</p>
+<p>We now assess how well we perform by (naively) taking the average demand as input for each of the three demand distributions above.</p>
+<p>For a fixed decision variable <span class="math inline">\(x=100\)</span>, approximate the expected net profit of the seafood distribution center for each of the three distributions above using the Sample Average Approximation (SAA) method with <span class="math inline">\(N\)</span> points. More specifically, generate <span class="math inline">\(N\)</span> samples from the considered distribution and solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N\)</span> equi-probable scenarios.</p>
 <div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:106}}" data-outputid="9e31a393-e49a-4fc6-b11f-0b98702eba71" data-tags="[]" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NaiveSeafoodStockSAA(N, sample, distributiontype):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel(</span>
@@ -654,7 +671,9 @@ Optimal deterministic profit = 1500€</code></pre>
 </section>
 <section id="approximating-the-solution-using-sample-average-approximation-method" class="level2">
 <h2 class="anchored" data-anchor-id="approximating-the-solution-using-sample-average-approximation-method">Approximating the solution using Sample Average Approximation method</h2>
-<p>We now approximate the optimal solution of stock optimization problem for each of the three distributions above using the Sample Average Approximation method. More specifically, generate <span class="math inline">\(N=5000\)</span> samples from each of the three distributions and then solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N=5000\)</span> scenarios. For each of the three distribution, we compare the optimal expected profit with that obtained before and calculate the value of the stochastic solution (VSS).</p>
+<p>Suppose we do not have an explicit optimal solution, or an average demand hypothesis, as above.</p>
+<p>We can still approximate the optimal solution of stock optimization problem for each of the three distributions above using the Sample Average Approximation method. More specifically, generate <span class="math inline">\(N=5000\)</span> samples from each of the three distributions and then solve the extensive form of the stochastic linear problem resulting from those <span class="math inline">\(N=5000\)</span> scenarios.</p>
+<p>For each of the three distribution, we compare the optimal expected profit with that obtained above, using the average demand, and calculate the <em>value of the stochastic solution</em> (VSS).</p>
 <div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:415}}" data-outputid="067043f8-c496-4b31-df1e-fd4da27c4d73" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SeafoodStockSAA(N, sample):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Seafood Stock using SAA method"</span>)</span>
@@ -760,11 +779,13 @@ Value of the stochastic solution: 919.08-910.55 = 8.54€
 </code></pre>
 </div>
 </div>
+<p><strong>OBSERVATIONS</strong></p>
+<p>We note that, for each of the three distributions, the fully stochastic solution obtained by SAA gives a purchase quantity, <span class="math inline">\(x,\)</span> that yields an improved profit. In other words, it is always better to use the full probability distribution (if available), rather than just the average (mean) value for the demand.</p>
 </section>
 <section id="convergence-of-the-saa-method" class="level2">
 <h2 class="anchored" data-anchor-id="convergence-of-the-saa-method">Convergence of the SAA method</h2>
 <p>The SAA method becomes more precise as the sample size <span class="math inline">\(N\)</span> increases. To illustrate this, we solve the same optimization problem as before but using a different number of samples, with the sample size <span class="math inline">\(N\)</span> increasing from <span class="math inline">\(25\)</span> to <span class="math inline">\(2500\)</span>. As we can see, the approximate solutions converge to the theoretical ones as the sample size increases.</p>
-<div id="cell-12" class="cell" data-tags="[]" data-execution_count="7">
+<div id="cell-13" class="cell" data-tags="[]" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shape <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xm <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> <span class="dv">113</span></span>
