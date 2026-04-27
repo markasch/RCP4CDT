@@ -204,7 +204,19 @@ Here we present a very complete range of pedagogical examples covering
 2. Two-Stage cases, with recourse decisions.
 3. Multi-Stage cases.
 
-These examples are based on the excellent presentations of @PZGK2025book and its associated [website](https://mobook.github.io/MO-book/). We have tried to adapt these examples, as far as possible, to the CCDS context.
+These examples are based on the excellent presentations of @PZGK2025book and its associated [website](https://mobook.github.io/MO-book/). We have tried to adapt these examples, as far as possible, to the <mark>CCDS context</mark>.
+
+We recall the form of the objective function for each of the three cases.
+
+- Single-stage:
+  $$\min_x \mathbb{E}_z \left[ Q(x,z) \right],$$
+where $x$ is the decision variable, and $z$ is a random variable.
+- Two-stage:
+  $$\min_x  c^{\top}x + \mathbb{E}_z \left[ Q(x,z) \right],$$
+where $c$ is the deterministic cost.
+- Multi-stage:
+ $$\min_x  c^{\top}x + \sum_{i=1}^S \mathbb{E}_z \left[ Q(x_i,z) \right],$$
+where $S$ is the number of scenarios.
 
 ## S0. Single-Stage Stochastic
 
@@ -250,8 +262,6 @@ In <mark>terms of the CCDS</mark>, we could convert this to "Allocation Optimiza
 
 
 ## S1. Two-Stage Stochastic
-
-
 
 ### SAA
 

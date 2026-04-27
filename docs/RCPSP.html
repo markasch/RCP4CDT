@@ -334,12 +334,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  <a href="./examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -651,7 +651,13 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <li>Two-Stage cases, with recourse decisions.</li>
 <li>Multi-Stage cases.</li>
 </ol>
-<p>These examples are based on the excellent presentations of <span class="citation" data-cites="PZGK2025book">Postek et al. (<a href="index.html#ref-PZGK2025book" role="doc-biblioref">2025</a>)</span> and its associated <a href="https://mobook.github.io/MO-book/">website</a>. We have tried to adapt these examples, as far as possible, to the CCDS context.</p>
+<p>These examples are based on the excellent presentations of <span class="citation" data-cites="PZGK2025book">Postek et al. (<a href="index.html#ref-PZGK2025book" role="doc-biblioref">2025</a>)</span> and its associated <a href="https://mobook.github.io/MO-book/">website</a>. We have tried to adapt these examples, as far as possible, to the <mark>CCDS context</mark>.</p>
+<p>We recall the form of the objective function for each of the three cases.</p>
+<ul>
+<li>Single-stage: <span class="math display">\[\min_x \mathbb{E}_z \left[ Q(x,z) \right],\]</span> where <span class="math inline">\(x\)</span> is the decision variable, and <span class="math inline">\(z\)</span> is a random variable.</li>
+<li>Two-stage: <span class="math display">\[\min_x  c^{\top}x + \mathbb{E}_z \left[ Q(x,z) \right],\]</span> where <span class="math inline">\(c\)</span> is the deterministic cost.</li>
+<li>Multi-stage: <span class="math display">\[\min_x  c^{\top}x + \sum_{i=1}^S \mathbb{E}_z \left[ Q(x_i,z) \right],\]</span> where <span class="math inline">\(S\)</span> is the number of scenarios.</li>
+</ul>
 </section>
 <section id="s0.-single-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s0.-single-stage-stochastic">S0. Single-Stage Stochastic</h2>
