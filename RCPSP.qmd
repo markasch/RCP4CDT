@@ -121,9 +121,9 @@ The formulation is taken from Section @sec-math.
 
 
 
-## D4. Simplified MRCPSP Example
+## D4. MRCPSP Examples
 
-The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CCDS context.
+The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the <mark>CCDS context</mark>.
 
 In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.
 
@@ -191,6 +191,31 @@ Though, for interoperability, we should privilege the data model format, describ
 ### MRCPSP Benchmark using CPLEX
 
 In [Example I1](CPLEX-MRCPSP.qmd) of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CCDS use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease. 
+
+### Simplfied MRCPSP Example
+
+In [Example D4](examples/D4_MRCPSP.ipynb), we consider a scheduling problem with 5 tasks, 2 modes, 1 renewable resource, and 1 non-renewable resource. We use the time-indexed Pritsker formulation, and minimize the makespan. Note that we could consider a disjunctive (big-M) formulation, but since the problem size is small and easily solved, this is not necessary.
+
+Here is the resulting schedule, in flowchart form.
+
+```{mermaid}
+flowchart LR
+    S(((Start)))
+    E(((End)))
+    T1["Task 1<br/>m=2, d=6"]
+    T2["Task 2<br/>m=2, d=2"]
+    T3["Task 3<br/>m=2, d=5"]
+    T4["Task 4<br/>m=2, d=2"]
+    T5["Task 5<br/>m=1, d=2"]
+    S --> T1
+    S --> T2
+    S --> T3
+    T1 --> T4
+    T2 --> T5
+    T3 --> T5
+    T4 --> E
+    T5 --> E
+```
 
 ---
 

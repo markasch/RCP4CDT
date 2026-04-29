@@ -34,9 +34,11 @@ book:
         - examples/D1b_SC_4_stage.ipynb
         - examples/D2_sched-intro.ipynb
         - examples/D3_RCPSP.ipynb
+        - examples/D4_MRCPSP.ipynb
         - examples/S0a_1stage_discrete.ipynb
         - examples/S0b_1stage_continuous.ipynb
         - examples/S1a_2stage_server_farm.ipynb
+        - examples/S2_multi_stage_discrete.ipynb
         - examples/S3-OPF_risk.ipynb
     - part: Use-cases
       chapters:

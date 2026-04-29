@@ -334,6 +334,11 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a>
   </div>
 </li>
@@ -345,6 +350,11 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./examples/S2_multi_stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S2: Multi-Stage Stochastic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -390,9 +400,10 @@ window.Quarto = {
   <li><a href="#d1.-simplified-supply-chain-examples" id="toc-d1.-simplified-supply-chain-examples" class="nav-link active" data-scroll-target="#d1.-simplified-supply-chain-examples">D1. Simplified Supply Chain Examples</a></li>
   <li><a href="#d2.-simplified-scheduling-examples" id="toc-d2.-simplified-scheduling-examples" class="nav-link" data-scroll-target="#d2.-simplified-scheduling-examples">D2. Simplified Scheduling Examples</a></li>
   <li><a href="#d3.-simplified-rcpsp-example" id="toc-d3.-simplified-rcpsp-example" class="nav-link" data-scroll-target="#d3.-simplified-rcpsp-example">D3. Simplified RCPSP Example</a></li>
-  <li><a href="#d4.-simplified-mrcpsp-example" id="toc-d4.-simplified-mrcpsp-example" class="nav-link" data-scroll-target="#d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</a>
+  <li><a href="#d4.-mrcpsp-examples" id="toc-d4.-mrcpsp-examples" class="nav-link" data-scroll-target="#d4.-mrcpsp-examples">D4. MRCPSP Examples</a>
   <ul class="collapse">
   <li><a href="#mrcpsp-benchmark-using-cplex" id="toc-mrcpsp-benchmark-using-cplex" class="nav-link" data-scroll-target="#mrcpsp-benchmark-using-cplex">MRCPSP Benchmark using CPLEX</a></li>
+  <li><a href="#simplfied-mrcpsp-example" id="toc-simplfied-mrcpsp-example" class="nav-link" data-scroll-target="#simplfied-mrcpsp-example">Simplfied MRCPSP Example</a></li>
   </ul></li>
   <li><a href="#stochastic-cases" id="toc-stochastic-cases" class="nav-link" data-scroll-target="#stochastic-cases">Stochastic Cases</a></li>
   <li><a href="#s0.-single-stage-stochastic" id="toc-s0.-single-stage-stochastic" class="nav-link" data-scroll-target="#s0.-single-stage-stochastic">S0. Single-Stage Stochastic</a></li>
@@ -569,9 +580,9 @@ flowchart LR
 </ul>
 <p>The formulation is taken from Section <a href="theory.html#sec-math" class="quarto-xref"><span>Mathematical Formulation - Deterministic Model</span></a>.</p>
 </section>
-<section id="d4.-simplified-mrcpsp-example" class="level2">
-<h2 class="anchored" data-anchor-id="d4.-simplified-mrcpsp-example">D4. Simplified MRCPSP Example</h2>
-<p>The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the CCDS context.</p>
+<section id="d4.-mrcpsp-examples" class="level2">
+<h2 class="anchored" data-anchor-id="d4.-mrcpsp-examples">D4. MRCPSP Examples</h2>
+<p>The final extension is to add multiple modes, or machines, for the execution of each task in the workflow. In other words, there is an additional choice to be made between, say, a fast but expensive machine, and a slower but cheaper one. This is the connection between the resource schedule and the supply chain viewpoint that best characterizes cross-facility workflows in the <mark>CCDS context</mark>.</p>
 <p>In this example we have 4 jobs, 2 possible modes, 1 renewable resource and no non-renewable resources. Jobs 2 and 3 can be executed in mode 1 or in mode 2.</p>
 <div id="fig-mrcp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -639,6 +650,38 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 <section id="mrcpsp-benchmark-using-cplex" class="level3">
 <h3 class="anchored" data-anchor-id="mrcpsp-benchmark-using-cplex">MRCPSP Benchmark using CPLEX</h3>
 <p>In <a href="./CPLEX-MRCPSP.html">Example I1</a> of the Implementation section, we solve a 30-task example with 3 modes, 2 renewable resources and 2 non-renewable resources. This is certainly a bit beyond actual CCDS use-cases, but illustrates the capability of good optimization codes to address far more complex workflows with relative ease.</p>
+</section>
+<section id="simplfied-mrcpsp-example" class="level3">
+<h3 class="anchored" data-anchor-id="simplfied-mrcpsp-example">Simplfied MRCPSP Example</h3>
+<p>In <a href="./examples/D4_MRCPSP.html">Example D4</a>, we consider a scheduling problem with 5 tasks, 2 modes, 1 renewable resource, and 1 non-renewable resource. We use the time-indexed Pritsker formulation, and minimize the makespan. Note that we could consider a disjunctive (big-M) formulation, but since the problem size is small and easily solved, this is not necessary.</p>
+<p>Here is the resulting schedule, in flowchart form.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    S(((Start)))
+    E(((End)))
+    T1["Task 1&lt;br/&gt;m=2, d=6"]
+    T2["Task 2&lt;br/&gt;m=2, d=2"]
+    T3["Task 3&lt;br/&gt;m=2, d=5"]
+    T4["Task 4&lt;br/&gt;m=2, d=2"]
+    T5["Task 5&lt;br/&gt;m=1, d=2"]
+    S --&gt; T1
+    S --&gt; T2
+    S --&gt; T3
+    T1 --&gt; T4
+    T2 --&gt; T5
+    T3 --&gt; T5
+    T4 --&gt; E
+    T5 --&gt; E
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 <hr>
 <hr>
 </section>

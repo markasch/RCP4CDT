@@ -6,8 +6,8 @@
 <script src="slides_earth_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="slides_earth_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="slides_earth_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="slides_earth_files/libs/quarto-html/quarto-syntax-highlighting-68c8bffd90dad8f2b55c52d7b6410dc0.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26">
+<link href="slides_earth_files/libs/quarto-html/quarto-syntax-highlighting-fb6aac2467e4833bec6e937f35198872.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.0">
 
   <title>slides_earth</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="slides_earth_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="slides_earth_files/libs/revealjs/dist/reveal.css">
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -93,7 +96,7 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="slides_earth_files/libs/revealjs/dist/theme/quarto-ca91ae645a6b1d7dc11d51f577b35878.css">
+  <link rel="stylesheet" href="slides_earth_files/libs/revealjs/dist/theme/quarto-cfd24ccfe8ec066755db0528a85ea3fc.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
@@ -296,7 +299,7 @@ Figure&nbsp;1: Two viewponts of the CDT: a <em>facility-centered</em> supply cha
 </p></section>
 <section id="formulation-mrcpsp" class="slide level2 theme-slide5 smaller">
 <h2>Formulation: MRCPSP</h2>
-<p><span class="math display">\begin{align}
+<span class="math display">\begin{align}
 \min \quad &amp;  \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J} t\cdot x_{J1,t} + \text{other terms}\\
 \text{s.t.} \quad &amp;
 \sum_{m=1}^{M_j}  \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J} x_{jm,t}  = 1,  \,\,\, j=1,\ldots, J , \\
@@ -304,13 +307,13 @@ Figure&nbsp;1: Two viewponts of the CDT: a <em>facility-centered</em> supply cha
 &amp; \sum_{j=2}^{J-1} \sum_{m=1}^{M_j} k_{jmr}^{\rho} \sum_{q=\max\{t,\mathrm{EF}_j\} }^{\min \{ t+p_{jm}-1,\mathrm{LF}_j \}}  x_{jm,q} \le K_r^{\rho}, \,\,\,  r\in R^{\rho}, \, t=1,\ldots, \bar{T}, \\
 &amp; \sum_{j=2}^{J-1} \sum_{m=1}^{M_j} k_{jmr}^{\nu}   \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J}  x_{jm,t} \le K_r^{\nu}, \,\,\, r\in R^{\nu}, \\
 &amp; x_{jm,t}  \in \{0,1\}, \,\,\, j=1,\ldots,J, \, m=1,\ldots ,M_j, \, t =0,\ldots, \bar{T},
-\end{align}</span></p>
+\end{align}</span>
 </section>
 <section id="formulation-mrcpsp-binary-decision-variable" class="slide level2 theme-slide5 center">
 <h2>Formulation: MRCPSP Binary Decision Variable</h2>
 <p>For every activity/job <span class="math inline">j,</span> in mode <span class="math inline">m</span> and for every feasible completion time <span class="math inline">t \in [\mathrm{EF}_j, \mathrm{LF}_j],</span> <span class="math display">
   x_{jm,t} = \begin{cases} 1, \quad \text{if activity $j,$ in mode $m,$ finishes at time $t,$} \\ 0, \quad  \text{otherwise.}  \end{cases}
-</span></p>
+</span> for <span class="math inline">j \in \mathscr{J},</span> <span class="math inline">m \in \mathcal{M},</span> and <span class="math inline">t \in [\mathrm{EF}_j, \mathrm{LF}_j].</span></p>
 </section>
 <section class="slide level2">
 
@@ -697,7 +700,7 @@ Figure&nbsp;5: PYOMO implementation for the knapsack problem.
              &amp; x_1, x_2 \geq 0
 \end{array}
 </span></p>
-<div id="0d3adbaa" class="cell" data-execution_count="1">
+<div id="f6a6887d" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo </span>
@@ -733,7 +736,7 @@ optimal value = 0.67</code></pre>
 </section>
 <section id="live-coding-examples--silly" class="slide level2 theme-slide2">
 <h2>Live Coding Examples -silly</h2>
-<div id="c09abed9" class="cell" data-execution_count="2">
+<div id="a1fe67d1" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>

@@ -36,7 +36,7 @@
         "\n",
         "Before using Pyomo, it needs to be imported. By saying import `as pyo` where we are define `pyo` as a shorthand under which to access everything that Pyomo provides. This is best practice: it means that everything coming from Python itself or from other packages is cleanly separated from Pyomo - anytime we need Pyomo, we access it through `pyo`, as shown below."
       ],
-      "id": "a5425bf5"
+      "id": "ff84deeb"
     },
     {
       "cell_type": "code",
@@ -44,7 +44,7 @@
       "source": [
         "import pyomo.environ as pyo"
       ],
-      "id": "17f3b76c",
+      "id": "28fc9ffa",
       "execution_count": null,
       "outputs": []
     },
@@ -56,7 +56,7 @@
         "\n",
         "Later on, we will fill this `ConcreteModel` with the variables and constraints."
       ],
-      "id": "ef1c82b6"
+      "id": "eb48d05b"
     },
     {
       "cell_type": "code",
@@ -64,7 +64,7 @@
       "source": [
         "model = pyo.ConcreteModel(name=\"Economic dispatch\")"
       ],
-      "id": "577c1741",
+      "id": "bcf3af69",
       "execution_count": null,
       "outputs": []
     },
@@ -76,7 +76,7 @@
         "\n",
         "Variables, are defined with `Var` objects. We \"attach\" them to the model as follows: `model.variable_name = ...`. Here, `variable_name` is the name of the variable inside the model, and must therefore be unique to the model. For example:\n"
       ],
-      "id": "7a6ac678"
+      "id": "d8fa7122"
     },
     {
       "cell_type": "code",
@@ -85,7 +85,7 @@
         "model.p_1 = pyo.Var(within=pyo.NonNegativeReals)\n",
         "model.p_2 = pyo.Var(within=pyo.NonNegativeReals)"
       ],
-      "id": "06bb0d8c",
+      "id": "58d959d7",
       "execution_count": null,
       "outputs": []
     },
@@ -104,7 +104,7 @@
         "* `expr` is the mathematical expression of the objective function\n",
         "* `sense` is used to specify whether we are looking for a maximum (`pyo.maximize`) or a minimum (`pyo.minimize`) of this function. If `sense` is omitted, minimization is assumed."
       ],
-      "id": "b6cfb1ee"
+      "id": "e3e3347b"
     },
     {
       "cell_type": "code",
@@ -115,7 +115,7 @@
         "    sense = pyo.minimize\n",
         "    )"
       ],
-      "id": "5c11e967",
+      "id": "a4b6efa8",
       "execution_count": null,
       "outputs": []
     },
@@ -142,7 +142,7 @@
         "\n",
         "Finally, we add the equality and inequality (bound) constraints, again giving each constraint an `expr` which is its mathematical formulation."
       ],
-      "id": "8ea58a93"
+      "id": "28f121b0"
     },
     {
       "cell_type": "code",
@@ -154,7 +154,7 @@
         "model.t2_max = pyo.Constraint(expr=model.p_2 <= 400)\n",
         "model.demand = pyo.Constraint(expr=model.p_1 + model.p_2 == 500)"
       ],
-      "id": "e044b5ff",
+      "id": "0fc18d19",
       "execution_count": null,
       "outputs": []
     },
@@ -166,7 +166,7 @@
         "\n",
         "By default, Pyomo captures only a limited amount of information from the solver. Because we later want to look at dual variables, we need to specify this before solving with the following statement--see the [documentation](https://pyomo.readthedocs.io/en/6.7.2/working_models.html#accessing-duals) for details."
       ],
-      "id": "26e67ec3"
+      "id": "fc5f50f0"
     },
     {
       "cell_type": "code",
@@ -174,7 +174,7 @@
       "source": [
         "model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)"
       ],
-      "id": "8ee74ecd",
+      "id": "e79eb215",
       "execution_count": null,
       "outputs": []
     },
@@ -184,7 +184,7 @@
       "source": [
         "Next, in order to solve the model, we first need to let Pyomo make the connection to a solver - a separate program that knows how to solve a specific kind of optimization problem. In our case, we are solving a linear (LP) problem. Gurobi is a commercial solver that uses the Simplex algorithm to solve such problems, and is free to use for problems with up to 2000 variables and constraints, so we can use it here. "
       ],
-      "id": "676e6c79"
+      "id": "4d9e2775"
     },
     {
       "cell_type": "code",
@@ -192,7 +192,7 @@
       "source": [
         "solver = pyo.SolverFactory('gurobi')"
       ],
-      "id": "f21969a3",
+      "id": "6c82f5d1",
       "execution_count": null,
       "outputs": []
     },
@@ -208,7 +208,7 @@
         "\n",
         "Finally, we can pass our model to the solver, which solves the problem and then passes back the solution to Pyomo (or tells us if something went wrong and no optimal solution was found)."
       ],
-      "id": "212f9b0f"
+      "id": "28d000df"
     },
     {
       "cell_type": "code",
@@ -216,7 +216,7 @@
       "source": [
         "solver.solve(model)"
       ],
-      "id": "57336553",
+      "id": "5dcd98da",
       "execution_count": null,
       "outputs": []
     },
@@ -228,7 +228,7 @@
         "\n",
         "If we do not want to display this information but capture it for later use, we could assign it to a variable, i.e.:"
       ],
-      "id": "28a1b12a"
+      "id": "30c3b885"
     },
     {
       "cell_type": "code",
@@ -236,7 +236,7 @@
       "source": [
         "result_object = solver.solve(model)"
       ],
-      "id": "eecdd48e",
+      "id": "c22d5bb2",
       "execution_count": null,
       "outputs": []
     },
@@ -246,7 +246,7 @@
       "source": [
         "If you want to see the output from the solver while it is solving the model, you can set the `tee` argument to `True` - in the above case, you would see the output from Gurobi, giving more detail on what it is doing while solving the problem (e.g. what exact algorithm it is using, etc):"
       ],
-      "id": "7477a476"
+      "id": "52cc4dc5"
     },
     {
       "cell_type": "code",
@@ -254,7 +254,7 @@
       "source": [
         "solver.solve(model, tee=True)"
       ],
-      "id": "f5236b75",
+      "id": "fdec5fd5",
       "execution_count": null,
       "outputs": []
     },
@@ -264,7 +264,7 @@
       "source": [
         "Now that the model is solved, we can display detailed information about it, including the state of the variables, the objective, and the constraints, with `model.display()`:"
       ],
-      "id": "af4b2e69"
+      "id": "4968e8c4"
     },
     {
       "cell_type": "code",
@@ -272,7 +272,7 @@
       "source": [
         "model.display()"
       ],
-      "id": "88592934",
+      "id": "1d5c909c",
       "execution_count": null,
       "outputs": []
     },
@@ -282,7 +282,7 @@
       "source": [
         "Finally, we can use the Python `print` function to set up a nicer overview of the results we care about most, for example:"
       ],
-      "id": "ba9c4069"
+      "id": "ca66464e"
     },
     {
       "cell_type": "code",
@@ -292,7 +292,7 @@
         "print(f\"Plant 1 generation = {model.p_1()} MW\")\n",
         "print(f\"Plant 2 generation = {model.p_2()} MW\")"
       ],
-      "id": "627d987d",
+      "id": "de14da07",
       "execution_count": null,
       "outputs": []
     },
@@ -316,7 +316,7 @@
         "\n",
         "We print out the shadow price of some of our constraints:"
       ],
-      "id": "ce8a81d5"
+      "id": "03cf66ca"
     },
     {
       "cell_type": "code",
@@ -326,7 +326,7 @@
         "print(f\"Shadow price of `t1_max` = {model.dual[model.t1_max]}\")\n",
         "print(f\"Shadow price of `t1_min` = {model.dual[model.t1_min]}\")"
       ],
-      "id": "c453cc75",
+      "id": "2e4edd75",
       "execution_count": null,
       "outputs": []
     },
@@ -338,7 +338,7 @@
         "\n",
         "We want to explore the effect of varying parameters on the overall cost. We create a new version with a mutable parameter, set to the cost of generator 2. Then we can run multiple models, while varying this parameter, and accumulate the results in a list using `pyo.Param(mutable=True)`. "
       ],
-      "id": "4b7f9821"
+      "id": "ec630408"
     },
     {
       "cell_type": "code",
@@ -368,7 +368,7 @@
         "\n",
         "model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)"
       ],
-      "id": "d0c4baba",
+      "id": "4970a884",
       "execution_count": null,
       "outputs": []
     },
@@ -378,7 +378,7 @@
       "source": [
         "Now that we have a parameter in the model, we can solve the model several times with different values for this parameter. First, we define a list of values we want to explore, $c_2 \\in \\{ 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0 \\} $"
       ],
-      "id": "4edcda50"
+      "id": "4767d5c3"
     },
     {
       "cell_type": "code",
@@ -386,7 +386,7 @@
       "source": [
         "c_2_m = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]"
       ],
-      "id": "6bc7320e",
+      "id": "dff113a0",
       "execution_count": null,
       "outputs": []
     },
@@ -396,7 +396,7 @@
       "source": [
         "Next, we are ready to iterate over each value in this list, set the `c_2` parameter to the current value from the list, solve the model, and store three results we care about - the generation cost (objective function value), $p_1$$ power and $p_2$ power generation, into a list that we call `result_accumulator` - since it accumulates results with the Python functionality to append a new entry to an existing list: `result_accumulator.append(...)`."
       ],
-      "id": "65b227bf"
+      "id": "aafe04c1"
     },
     {
       "cell_type": "code",
@@ -409,7 +409,7 @@
         "    solver.solve(model)\n",
         "    result_accumulator.append([model.generation_cost(), model.p_1(), model.p_2()])"
       ],
-      "id": "f5ffafdd",
+      "id": "eff1df8a",
       "execution_count": null,
       "outputs": []
     },
@@ -419,7 +419,7 @@
       "source": [
         "Put all the results into a `pandas` dataframe."
       ],
-      "id": "18a293fc"
+      "id": "1b82fc2c"
     },
     {
       "cell_type": "code",
@@ -430,7 +430,7 @@
         "results = pd.DataFrame(result_accumulator, columns=[\"generation cost\", \"power p1\", \"power p2\"], index=c_2_m)\n",
         "results"
       ],
-      "id": "7845ed2f",
+      "id": "38aed5f2",
       "execution_count": null,
       "outputs": []
     },
@@ -440,7 +440,7 @@
       "source": [
         "Finally, we can save the results to a file and plot them."
       ],
-      "id": "e33f41b9"
+      "id": "86885bd8"
     },
     {
       "cell_type": "code",
@@ -449,7 +449,7 @@
         "results.to_csv(\"results.csv\")\n",
         "results.plot(xlabel=\"cost 2\", ylabel=\"cost (EUR) / power (MW)\", marker='o', linestyle=':')"
       ],
-      "id": "c8c3e96c",
+      "id": "7d013d85",
       "execution_count": null,
       "outputs": []
     },
@@ -461,7 +461,7 @@
         "\n",
         "For clarity, we execute the following complete case. All components should be clear from the previous example."
       ],
-      "id": "16d48f69"
+      "id": "85165a83"
     },
     {
       "cell_type": "code",
@@ -490,7 +490,7 @@
         "    print(f\"{i}: {pyo.value(m.p[i]):.2f} MW\")\n",
         "print(f\"Total cost: {pyo.value(m.cost):.2f} €/h\")"
       ],
-      "id": "0a86b132",
+      "id": "cb514c4e",
       "execution_count": null,
       "outputs": []
     }

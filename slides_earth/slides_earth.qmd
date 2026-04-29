@@ -80,7 +80,7 @@ Two viewponts of the CDT: a _facility-centered_ supply chain model (left) and a 
 
 ## Formulation: MRCPSP {.theme-slide5 .smaller}
 
-
+```{=tex}
 \begin{align}
 \min \quad &  \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J} t\cdot x_{J1,t} + \text{other terms}\\
 \text{s.t.} \quad & 
@@ -90,6 +90,7 @@ Two viewponts of the CDT: a _facility-centered_ supply chain model (left) and a 
 & \sum_{j=2}^{J-1} \sum_{m=1}^{M_j} k_{jmr}^{\nu}   \sum_{t=\mathrm{EF}_J}^{\mathrm{LF}_J}  x_{jm,t} \le K_r^{\nu}, \,\,\, r\in R^{\nu}, \\
 & x_{jm,t}  \in \{0,1\}, \,\,\, j=1,\ldots,J, \, m=1,\ldots ,M_j, \, t =0,\ldots, \bar{T}, 
 \end{align}
+```
 
 ## Formulation: MRCPSP Binary Decision Variable {.theme-slide5 .center}
 
