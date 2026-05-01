@@ -288,6 +288,36 @@ In <mark>terms of the CCDS</mark>, we could convert this to "Allocation Optimiza
 
 ## S1. Two-Stage Stochastic
 
+Recall the formulation of the two-stage stochastic program (2SP),
+$$
+ \min_{\mathbf{x}}  \mathbf{c}^{\top} \mathbf{x} + \mathbb{E}_{\mathbf{\xi}} \left[ Q(\mathbf{x},\mathbf{\xi}) \right],
+ \quad \mathbf{x} \in \mathcal{X},
+$$
+where 
+
+- $\mathbf{c} \in \mathbb{R}^n$ is the first-stage cost vector,
+- $\mathbf{x} \in \mathbb{R}^n$ is the first-stage decision vector,
+- $\mathbf{\xi}$ is the vector of random parameters, following a probability distribution (discrete or continuous) $\mathbb{P}$ with support $\Xi,$
+- the value function $Q \colon \mathcal{X} \times \Xi \rightarrow \mathbb{R}$ returns the cost of optimal second-stage (recourse) decisions under realization $\mathbf{\xi}$ given the first-stage decisions of $\mathbf{x}.$
+
+In many cases, since $Q(\mathbf{x},\mathbf{\xi})$  is obtained by solving a MIP, evaluating the expected value function $\mathbb{E}_{\mathbf{\xi}} \left[ Q(\mathbf{x},\mathbf{\xi}) \right]$ is theoretically intractable, since it requires exhaustive (infinite) sampling. To obtain a more tractable formulation, the extensive form (EF) is used. We use a set of $S$ scenarios, $\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S,$ sampled from the probability distribution $\mathbb{P},$ to obtain
+$$
+\mathrm{EF}(\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S) = 
+\min_{\mathbf{x}}  \mathbf{c}^{\top} \mathbf{x} + \sum_{s=1}^{S} p_s  Q(\mathbf{x},\mathbf{\xi}_s),  \quad \mathbf{x} \in \mathcal{X},
+$$ 
+where $p_s$ is the probability of scenario $\mathbf{\xi}_s$ being realized. If the recourse value function
+$$
+ Q(\mathbf{x},\mathbf{\xi}) = \min_{\mathbf{y}} F(\mathbf{y},\mathbf{\xi}), \quad \mathbf{y} \in \mathcal{Y},
+$$
+then $\mathrm{EF}(\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S)$ can be written as a _deterministic_ optimization problem,
+$$
+  \min_{\mathbf{x},\mathbf{y}} 
+  \mathbf{c}^{\top} \mathbf{x} + \sum_{s=1}^{S} p_s  F(\mathbf{y}_s,\mathbf{\xi}_s),  \quad \mathbf{x} \in \mathcal{X},
+  \; \mathbf{y} \in \mathcal{Y(\mathbf{x},\mathbf{\xi}_s)}, \; \forall s=1,\ldots, S.
+$$
+
+The computational complexity of this problem grows linearly with the number of scenarios, which itself grows exponentially. As a result, the EF model is more challenging to solve when compared to a standard LP case, in particular at large scale. However, the cases encountered below in the examples, and in the CCDS, remain relatively small, and thus tractable.
+
 ### SAA
 
 In  [Example S1a](examples/S1a_2stage_server_farm.ipynb) we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.
@@ -322,6 +352,24 @@ returned item can be either:
 Scenario tree for 3-stage newsvendor problem, where the first stage has three scenarios (high with $p=0.4,$ medium with $p=0.3,$ low  with $p=0.3$ ) and the second stage has two (positive  with $p=0.3,$ negative  with $p=0.7$).
 :::
 
+### Multi-Stage for Genomics Workflow
+
+We now consider a slightly simplified, but nonetheless realistic example of a genomics workflow. Suppose that we have four jobs to perform: 
+
+- preprocessing ($J_1$), 
+- alignment ($J_2$), 
+- variant calling ($J_3$), and 
+- annotation ($J_4$). 
+
+These have the follwing DAG structure:
+
+::: {#fig-slp1}
+![](graphics/genomics-DAG.drawio.jpg){width=35%}
+
+DAG for 4-task genomics workflow.
+:::
+
+The descriptions of the jobs, their resulting datasets and the CPU times needed for processing are resumed in the [notebook](examples/S2_multi_stage_discrete.ipynb).
 
 ## S3. Risk Measures
 

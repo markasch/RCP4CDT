@@ -68,7 +68,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../examples/S3-OPF_risk.html" rel="next">
+<link href="../examples/S2_multi_stage_discrete.html" rel="next">
 <link href="../examples/S0b_1stage_continuous.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -312,17 +312,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  <a href="../examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S2_multi_stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S2: Multi-Stage Stochastic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -552,7 +562,7 @@ We should buy/allocate 56 CPUs, 4 GPUs, and 8 TPUs.</code></pre>
 </tr>
 </tbody>
 </table>
-<p>A simple modification of the SAA model is needed. We just change the sum over the <span class="math inline">\(K\)</span> scenarios, to a sum over the <span class="math inline">\(S\)</span> discrete events, and modify the resource demands $d() $ to an array of <span class="math inline">\(S\)</span> vectors.</p>
+<p>A simple modification of the SAA model is needed. We just change the sum over the <span class="math inline">\(K\)</span> scenarios, to a sum over the <span class="math inline">\(S\)</span> discrete events, and modify the resource demands <span class="math inline">\(d(\xi)\)</span> to an array of <span class="math inline">\(S\)</span> vectors.</p>
 <div id="54d9f7bd" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
@@ -1041,13 +1051,13 @@ We should buy/allocate 70 CPUs, 8 GPUs, and 15 TPUs.</code></pre>
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="../examples/S0b_1stage_continuous.html" class="pagination-link" aria-label="Ex. S0b: Stock optimization for seafood distribution center">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></span>
+      <a href="../examples/S0b_1stage_continuous.html" class="pagination-link" aria-label="Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../examples/S3-OPF_risk.html" class="pagination-link" aria-label="Ex. S3: Energy Dispatch Problem - Risk Measures">
-        <span class="nav-page-text"><span class="chapter-title">Ex. S3: Energy Dispatch Problem - Risk Measures</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../examples/S2_multi_stage_discrete.html" class="pagination-link" aria-label="Ex. S2: Multi-Stage Stochastic">
+        <span class="nav-page-text"><span class="chapter-title">Ex. S2: Multi-Stage Stochastic</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

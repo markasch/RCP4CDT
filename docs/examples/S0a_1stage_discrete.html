@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../examples/S0b_1stage_continuous.html" rel="next">
-<link href="../examples/D3_RCPSP.html" rel="prev">
+<link href="../examples/D4_MRCPSP.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -153,7 +153,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/S0a_1stage_discrete.html"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/S0a_1stage_discrete.html"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -315,17 +315,27 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a>
+  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></a>
+  <a href="../examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S0b_1stage_continuous.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/S2_multi_stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S2: Multi-Stage Stochastic</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -383,7 +393,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/S0a_1stage_discrete.html"><span class="chapter-title">Ex. S0a: 1-Stage Pop-up shop</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/S0a_1stage_discrete.html"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></h1>
 </div>
@@ -902,19 +912,19 @@ Expected profit: 10220.0</code></pre>
 <p>These results verify our expectation that</p>
 <p><span class="math display">\[
 \begin{align*}
-EVM \leq EVSS \leq EVPI
+\text{EVM} \leq \text{EVSS} \leq \text{EVPI}
 \end{align*}
 \]</span></p>
 <p>The value of the stochastic solution</p>
 <p><span class="math display">\[
 \begin{align*}
-VSS = EVSS - EVM = 581
+\text{VSS} = \text{EVSS} - \text{EVM} = 581
 \end{align*}
 \]</span></p>
 <p>The value of perfect information</p>
 <p><span class="math display">\[
 \begin{align*}
-VPI = EVPI - EVSS = 1,300
+\text{VPI} = \text{EVPI} - \text{EVSS} = 1,300
 \end{align*}
 \]</span></p>
 <p>As one might have expected, there is a cost that results from lack of knowledge about an uncertain future.</p>
@@ -1325,13 +1335,13 @@ VPI = EVPI - EVSS = 1,300
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="../examples/D3_RCPSP.html" class="pagination-link" aria-label="Ex. D3: RCPSP Examples">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D3: RCPSP Examples</span></span>
+      <a href="../examples/D4_MRCPSP.html" class="pagination-link" aria-label="Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../examples/S0b_1stage_continuous.html" class="pagination-link" aria-label="Ex. S0b: Stock optimization for seafood distribution center">
-        <span class="nav-page-text"><span class="chapter-title">Ex. S0b: Stock optimization for seafood distribution center</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../examples/S0b_1stage_continuous.html" class="pagination-link" aria-label="Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.">
+        <span class="nav-page-text"><span class="chapter-title">Ex. S0b: 1-Stage Continuous Distribution Stochasic Optimization, SAA.</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

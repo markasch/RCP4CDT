@@ -416,7 +416,10 @@ window.Quarto = {
   <li><a href="#saa" id="toc-saa" class="nav-link" data-scroll-target="#saa">SAA</a></li>
   <li><a href="#scenario-tree" id="toc-scenario-tree" class="nav-link" data-scroll-target="#scenario-tree">Scenario Tree</a></li>
   </ul></li>
-  <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a></li>
+  <li><a href="#s2.-multi-stage-stochastic" id="toc-s2.-multi-stage-stochastic" class="nav-link" data-scroll-target="#s2.-multi-stage-stochastic">S2. Multi-Stage Stochastic</a>
+  <ul class="collapse">
+  <li><a href="#multi-stage-for-genomics-workflow" id="toc-multi-stage-for-genomics-workflow" class="nav-link" data-scroll-target="#multi-stage-for-genomics-workflow">Multi-Stage for Genomics Workflow</a></li>
+  </ul></li>
   <li><a href="#s3.-risk-measures" id="toc-s3.-risk-measures" class="nav-link" data-scroll-target="#s3.-risk-measures">S3. Risk Measures</a></li>
   </ul>
 </nav>
@@ -732,6 +735,27 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 </section>
 <section id="s1.-two-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s1.-two-stage-stochastic">S1. Two-Stage Stochastic</h2>
+<p>Recall the formulation of the two-stage stochastic program (2SP), <span class="math display">\[
+\min_{\mathbf{x}}  \mathbf{c}^{\top} \mathbf{x} + \mathbb{E}_{\mathbf{\xi}} \left[ Q(\mathbf{x},\mathbf{\xi}) \right],
+\quad \mathbf{x} \in \mathcal{X},
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\mathbf{c} \in \mathbb{R}^n\)</span> is the first-stage cost vector,</li>
+<li><span class="math inline">\(\mathbf{x} \in \mathbb{R}^n\)</span> is the first-stage decision vector,</li>
+<li><span class="math inline">\(\mathbf{\xi}\)</span> is the vector of random parameters, following a probability distribution (discrete or continuous) <span class="math inline">\(\mathbb{P}\)</span> with support <span class="math inline">\(\Xi,\)</span></li>
+<li>the value function <span class="math inline">\(Q \colon \mathcal{X} \times \Xi \rightarrow \mathbb{R}\)</span> returns the cost of optimal second-stage (recourse) decisions under realization <span class="math inline">\(\mathbf{\xi}\)</span> given the first-stage decisions of <span class="math inline">\(\mathbf{x}.\)</span></li>
+</ul>
+<p>In many cases, since <span class="math inline">\(Q(\mathbf{x},\mathbf{\xi})\)</span> is obtained by solving a MIP, evaluating the expected value function <span class="math inline">\(\mathbb{E}_{\mathbf{\xi}} \left[ Q(\mathbf{x},\mathbf{\xi}) \right]\)</span> is theoretically intractable, since it requires exhaustive (infinite) sampling. To obtain a more tractable formulation, the extensive form (EF) is used. We use a set of <span class="math inline">\(S\)</span> scenarios, <span class="math inline">\(\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S,\)</span> sampled from the probability distribution <span class="math inline">\(\mathbb{P},\)</span> to obtain <span class="math display">\[
+\mathrm{EF}(\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S) =
+\min_{\mathbf{x}}  \mathbf{c}^{\top} \mathbf{x} + \sum_{s=1}^{S} p_s  Q(\mathbf{x},\mathbf{\xi}_s),  \quad \mathbf{x} \in \mathcal{X},
+\]</span> where <span class="math inline">\(p_s\)</span> is the probability of scenario <span class="math inline">\(\mathbf{\xi}_s\)</span> being realized. If the recourse value function <span class="math display">\[
+Q(\mathbf{x},\mathbf{\xi}) = \min_{\mathbf{y}} F(\mathbf{y},\mathbf{\xi}), \quad \mathbf{y} \in \mathcal{Y},
+\]</span> then <span class="math inline">\(\mathrm{EF}(\mathbf{\xi}_1, \ldots, \mathbf{\xi}_S)\)</span> can be written as a <em>deterministic</em> optimization problem, <span class="math display">\[
+  \min_{\mathbf{x},\mathbf{y}}
+  \mathbf{c}^{\top} \mathbf{x} + \sum_{s=1}^{S} p_s  F(\mathbf{y}_s,\mathbf{\xi}_s),  \quad \mathbf{x} \in \mathcal{X},
+  \; \mathbf{y} \in \mathcal{Y(\mathbf{x},\mathbf{\xi}_s)}, \; \forall s=1,\ldots, S.
+\]</span></p>
+<p>The computational complexity of this problem grows linearly with the number of scenarios, which itself grows exponentially. As a result, the EF model is more challenging to solve when compared to a standard LP case, in particular at large scale. However, the cases encountered below in the examples, and in the CCDS, remain relatively small, and thus tractable.</p>
 <section id="saa" class="level3">
 <h3 class="anchored" data-anchor-id="saa">SAA</h3>
 <p>In <a href="./examples/S1a_2stage_server_farm.html">Example S1a</a> we use the statistical average approximation (SAA) to sample from continuous distributions in a 2-stage stochastic optimization for the design or allocation of computing resources. This is another example of an inventory optimization (newsvendor) problem, where we want to invest in an optimal number of resources, to cover an uncertain (future) demand.</p>
@@ -767,6 +791,28 @@ Figure&nbsp;2: Scenario tree for 3-stage newsvendor problem, where the first sta
 </figcaption>
 </figure>
 </div>
+<section id="multi-stage-for-genomics-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="multi-stage-for-genomics-workflow">Multi-Stage for Genomics Workflow</h3>
+<p>We now consider a slightly simplified, but nonetheless realistic example of a genomics workflow. Suppose that we have four jobs to perform:</p>
+<ul>
+<li>preprocessing (<span class="math inline">\(J_1\)</span>),</li>
+<li>alignment (<span class="math inline">\(J_2\)</span>),</li>
+<li>variant calling (<span class="math inline">\(J_3\)</span>), and</li>
+<li>annotation (<span class="math inline">\(J_4\)</span>).</li>
+</ul>
+<p>These have the follwing DAG structure:</p>
+<div id="fig-slp1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slp1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="graphics/genomics-DAG.drawio.jpg" class="img-fluid figure-img" style="width:35.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slp1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: DAG for 4-task genomics workflow.
+</figcaption>
+</figure>
+</div>
+<p>The descriptions of the jobs, their resulting datasets and the CPU times needed for processing are resumed in the <a href="./examples/S2_multi_stage_discrete.html">notebook</a>.</p>
+</section>
 </section>
 <section id="s3.-risk-measures" class="level2">
 <h2 class="anchored" data-anchor-id="s3.-risk-measures">S3. Risk Measures</h2>

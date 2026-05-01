@@ -142,10 +142,10 @@ A risk measure $\rho$ combines the expected value $\mathrm{E}_z f(x,z)$ with ano
 
 The most common risk measures are:
 
-1. The mean-variance model, $$ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . $$
-2. The value-at-risk (VaR),   $$\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),$$ where $$\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .$$
-3. The conditional value-at-risk (CVaR),  $$\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),$$ where $$\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .$$
-4. Exponential risk aversion, $$\rho(Z) = \inf_{\gamma > 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). $$
+1. The _mean-variance_ model, $$ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . $$
+2. The _value-at-risk_ (VaR),   $$\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),$$ where $$\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .$$
+3. The _conditional value-at-risk_ (CVaR),  $$\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),$$ where $$\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .$$
+4. _Exponential risk aversion_, $$\rho(Z) = \inf_{\gamma > 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). $$
 
 Note that  $\mathrm{VaR}_{\alpha} (Z)$ can be rewritten as  $\mathrm{P} (Z \le \epsilon ) \ge \alpha.$ Finally, selecting the "right" function $\rho$ depends on the modeling and optimization goals one has in mind.
 
