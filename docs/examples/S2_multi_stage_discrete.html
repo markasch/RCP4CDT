@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -73,6 +108,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../site_libs/quarto-contrib/quarto-project/fredguth/tufte/styles.css">
 </head>
@@ -248,7 +312,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
+  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -307,7 +371,20 @@ ul.task-list li input[type="checkbox"] {
   </li>
     </ul>
     </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#workflow-dag" id="toc-workflow-dag" class="nav-link active" data-scroll-target="#workflow-dag">Workflow DAG</a></li>
+  <li><a href="#stage-information-structure" id="toc-stage-information-structure" class="nav-link" data-scroll-target="#stage-information-structure">Stage / information structure</a></li>
+  <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">Models</a></li>
+  <li><a href="#reported-metrics" id="toc-reported-metrics" class="nav-link" data-scroll-target="#reported-metrics">Reported metrics</a></li>
+  <li><a href="#the-scenario-tree" id="toc-the-scenario-tree" class="nav-link" data-scroll-target="#the-scenario-tree">The scenario tree</a></li>
+  <li><a href="#cost-model" id="toc-cost-model" class="nav-link" data-scroll-target="#cost-model">Cost model</a></li>
+  <li><a href="#extensive-form-scenario-indexing-with-explicit-nonanticipativity" id="toc-extensive-form-scenario-indexing-with-explicit-nonanticipativity" class="nav-link" data-scroll-target="#extensive-form-scenario-indexing-with-explicit-nonanticipativity">Extensive form — scenario indexing with explicit non‑anticipativity</a></li>
+  <li><a href="#numerical-results" id="toc-numerical-results" class="nav-link" data-scroll-target="#numerical-results">Numerical results</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -336,8 +413,638 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>The multi-stage stochastic scheduling problem is a straightfoward extension of the two-stage cases that we have studied previously. It provides the possibility to model a more complex decision-making process, where uncertain, exogenous inputs act on the system at each stage of its evolution.</p>
+<p>We formulate the Multistage Stochastic Optimization for a Genomics Workflow.</p>
+<section id="workflow-dag" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-dag">Workflow DAG</h2>
+<pre><code>    job1  --&gt;  job2  +--&gt; job3
+                     +--&gt; job4</code></pre>
+<p>Each job j is assigned to one of two computing centers c in {1, 2}:</p>
+<ul>
+<li>Center 1 : low cost rate, but uncertain availability;</li>
+<li>Center 2 : higher cost rate, always available.</li>
+</ul>
+<p>If a job is sent to center 1 and center 1 turns out to be unavailable when the job runs, the job is forcibly rerouted to center 2 and incurs a <em>penalty</em> on top of the nominal center‑2 rate. The penalty take sinto account the operational cost of last‑minute migration: queue waits, data movement, restart overhead. It is assumed that the cost of the penalty is known in advance (cost = penalty_factor * rate2 * load).</p>
+</section>
+<section id="stage-information-structure" class="level2">
+<h2 class="anchored" data-anchor-id="stage-information-structure">Stage / information structure</h2>
+<ul>
+<li>Stage 1 – assign job 1 (HERE-AND-NOW, before any availability is known)</li>
+<li>Stage 2 – assign job 2, knowing the realized availability a1</li>
+<li>Stage 3 – assign job 3 and job 4, knowing (a1, a2)</li>
+</ul>
+<p>The realized availability a3 of stage-3 is observed AFTER the stage-3 decisions, so it shows up only in the cost.</p>
+<p>Availability is modelled as a 2-state Markov chain to make the multi- stage structure non-trivial (under iid, the stochastic and mean-value solutions coincide and VSS = 0).</p>
+<pre><code>P(a1 = 1)                = pi0
+P(a_t = 1 | a_{t-1} = 1) = p11      (sticky available)
+P(a_t = 1 | a_{t-1} = 0) = p01      (sticky unavailable)</code></pre>
+</section>
+<section id="models" class="level2">
+<h2 class="anchored" data-anchor-id="models">Models</h2>
+<pre><code>RP   multistage Recourse Problem with non-anticipativity --&gt; EVSS
+PI   Perfect Information per scenario --&gt; EVPI
+EV   Expected-Value (deterministic) problem using marginal probs --&gt; EVM</code></pre>
+</section>
+<section id="reported-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="reported-metrics">Reported metrics</h2>
+<pre><code>VPI = EVSS - EVPI    (value of Perfect Information)
+VSS = EVM  - EVSS    (value of the Stochastic Solution)</code></pre>
+<p>The decision maker assigns each job to a center <em>before</em> observing whether center 1 will be available when that job runs. The information available at the time of each decision is the realised availability of center 1 at all earlier stages.</p>
+<p><strong>Numerical values:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(L_j\)</span></td>
+<td>computational load of job <span class="math inline">\(j\)</span> (CPU‑h)</td>
+<td><span class="math inline">\(L_1=10,\;L_2=8,\;L_3=6,\;L_4=12\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r_1, r_2\)</span></td>
+<td>unit rates of centers 1 and 2 ($/CPU‑h)</td>
+<td><span class="math inline">\(1.0,\;2.5\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>reroute penalty multiplier</td>
+<td><span class="math inline">\(1.6\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\pi_0\)</span></td>
+<td><span class="math inline">\(\mathbb{P}(a_1=1)\)</span></td>
+<td><span class="math inline">\(0.6\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_{11}\)</span></td>
+<td><span class="math inline">\(\mathbb{P}(a_{t+1}=1\mid a_t=1)\)</span></td>
+<td><span class="math inline">\(0.8\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p_{01}\)</span></td>
+<td><span class="math inline">\(\mathbb{P}(a_{t+1}=1\mid a_t=0)\)</span></td>
+<td><span class="math inline">\(0.2\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Define the binary availability variables <span class="math inline">\(a_t\in\{0,1\}\)</span> for <span class="math inline">\(t\in\mathcal{T}\)</span> with <span class="math inline">\(a_t=1\)</span> meaning “center 1 available during stage <span class="math inline">\(t.\)</span>”</p>
+<p>The stochastic process <span class="math inline">\((a_1,a_2,a_3)\)</span> is a 2‑state Markov chain with parameters <span class="math inline">\((\pi_0,p_{11},p_{01})\)</span>. On the probability space <span class="math inline">\((\Omega,\mathcal{F},\mathbb{P})\)</span> it generates the filtration</p>
+<p><span class="math display">\[\mathcal{F}_0=\{\emptyset,\Omega\},\qquad \mathcal{F}_t=\sigma(a_1,\dots,a_t),\quad t=1,2,3.\]</span></p>
+<p>The decision at stage <span class="math inline">\(t\)</span> is taken under the information <span class="math inline">\(\mathcal{F}_{t-1}\)</span>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Stage <span class="math inline">\(t\)</span></th>
+<th>Job(s) decided</th>
+<th>Information set</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>job 1</td>
+<td><span class="math inline">\(\mathcal{F}_0\)</span> — none</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>job 2</td>
+<td><span class="math inline">\(\mathcal{F}_1=\sigma(a_1)\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>jobs 3, 4</td>
+<td><span class="math inline">\(\mathcal{F}_2=\sigma(a_1,a_2)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The third realization <span class="math inline">\(a_3\)</span> is observed only after the stage‑3 decisions and enters the model purely through the realized cost.</p>
+</section>
+<section id="the-scenario-tree" class="level2">
+<h2 class="anchored" data-anchor-id="the-scenario-tree">The scenario tree</h2>
+<p>Because the chain has two states and three stages, the scenario tree has a single root, branches with multiplicity 2 at each non‑leaf node, and <span class="math inline">\(|\mathcal{S}|=2^3=8\)</span> leaves.</p>
+<p>Let <span class="math inline">\(\mathcal{N}\)</span> be the node set, <span class="math inline">\(\mathcal{N}_t\)</span> its stage‑<span class="math inline">\(t\)</span> slice, and write <span class="math inline">\(a(n)\)</span> for the parent of <span class="math inline">\(n\)</span> and <span class="math inline">\(\pi_n\)</span> for its unconditional probability. The tree has</p>
+<p><span class="math display">\[|\mathcal{N}_1|=1,\qquad |\mathcal{N}_2|=2,\qquad |\mathcal{N}_3|=4,\qquad |\mathcal{L}|=8.\]</span></p>
+<p>For a leaf <span class="math inline">\(\ell\)</span> corresponding to scenario <span class="math inline">\(s=(a_1^s,a_2^s,a_3^s)\)</span>, write <span class="math inline">\(n_t(\ell)\)</span> for its stage‑<span class="math inline">\(t\)</span> ancestor. The scenario probability is</p>
+<p><span class="math display">\[p_s \;=\; \mathbb{P}(a_1=a_1^s)\,\mathbb{P}(a_2=a_2^s\mid a_1=a_1^s)\,\mathbb{P}(a_3=a_3^s\mid a_2=a_2^s),\]</span></p>
+<p>which evaluates, for our parameters, to:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Scenario <span class="math inline">\((a_1,a_2,a_3)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(p_s\)</span></th>
+<th style="text-align: center;">details</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\((1,1,1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.384\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p(a_1=1)\cdot p(a_2=1\mid a_1=1)\cdot p(a_3=1\mid a_2=1)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\((1,1,0)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.096\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p(a_1=1)\cdot p(a_2=1\mid a_1=1)\cdot p(a_3=0\mid a_2=1)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\((1,0,1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.024\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\((1,0,0)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.096\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\((0,1,1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.064\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\((0,1,0)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.016\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\((0,0,1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.064\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\((0,0,0)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0.256\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p(a_1=0)\cdot p(a_2=0\mid a_1=0)\cdot p(a_3=0\mid a_2=0)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>where, for example, <span class="math display">\[p(a_1=1)\cdot p(a_2=1\mid a_1=1)\cdot p(a_3=1\mid a_2=1)=0.6 \times 0.8\times 0.8 = 0.384,\]</span> <span class="math display">\[p(a_1=0)\cdot p(a_2=0\mid a_1=0)\cdot p(a_3=0\mid a_2=0)=0.4 \times (1-0.2)\times (1-0.2) = 0.256. \]</span></p>
+<p>The eight probabilities sum to one and the strong persistence in the chain (<span class="math inline">\(p_{11}=0.8\)</span>, <span class="math inline">\(p_{00}=0.8\)</span>) makes the corner scenarios <span class="math inline">\((1,1,1)\)</span> and <span class="math inline">\((0,0,0)\)</span> disproportionately likely.</p>
+</section>
+<section id="cost-model" class="level2">
+<h2 class="anchored" data-anchor-id="cost-model">Cost model</h2>
+<p>Define the realized cost of running job <span class="math inline">\(j\)</span> on center <span class="math inline">\(c\)</span> when stage‑<span class="math inline">\(\tau(j)\)</span> availability of center 1 is <span class="math inline">\(a\)</span></p>
+<p><span class="math display">\[\kappa(j,c,a)\;=\;\begin{cases}
+r_1 L_j &amp; c=1,\;a=1 \\
+\alpha\,r_2 L_j &amp; c=1,\;a=0 \\
+r_2 L_j &amp; c=2.
+\end{cases}\]</span></p>
+<p>For the numerical instance, the per‑job cost matrix becomes</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Job <span class="math inline">\(j\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\kappa(j,1,1)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\kappa(j,1,0)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\kappa(j,2,\cdot)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">48</td>
+<td style="text-align: center;">30</td>
+</tr>
+</tbody>
+</table>
+<p>The crucial inequalities <span class="math inline">\(r_1 L_j &lt; r_2 L_j &lt; \alpha r_2 L_j\)</span> hold for every <span class="math inline">\(j\)</span>: center 1 <em>granted</em> is strictly cheapest, center 2 is the safe middle, and center 1 <em>rerouted</em> is strictly worst. This monotonicity is what gives the optimal policy its threshold character.</p>
+</section>
+<section id="extensive-form-scenario-indexing-with-explicit-nonanticipativity" class="level2">
+<h2 class="anchored" data-anchor-id="extensive-form-scenario-indexing-with-explicit-nonanticipativity">Extensive form — scenario indexing with explicit non‑anticipativity</h2>
+<p>The formulation duplicates variables per scenario and adds equality constraints. Let <span class="math inline">\(x_{j,c,s}\in[0,1]\)</span> for <span class="math inline">\(j\in\mathcal{J}\)</span>, <span class="math inline">\(c\in\mathcal{C}\)</span>, <span class="math inline">\(s\in\mathcal{S}.\)</span> Define the equivalence relation on scenarios</p>
+<p><span class="math display">\[s\;\sim_t\;s'\quad\iff\quad (a_1^s,\dots,a_{t-1}^s)=(a_1^{s'},\dots,a_{t-1}^{s'}),\]</span></p>
+<p>i.e.&nbsp;<span class="math inline">\(s\)</span> and <span class="math inline">\(s'\)</span> are indistinguishable using only the information available at the start of stage <span class="math inline">\(t\)</span>. The deterministic equivalent is</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{x}\quad &amp; \sum_{s\in\mathcal{S}} p_s \sum_{j,c}\kappa\!\bigl(j,c,a^s_{\tau(j)}\bigr)\,x_{j,c,s} \\
+\text{s.t.}\quad &amp; \sum_{c}x_{j,c,s}=1, &amp;&amp; \forall j,s, \\
+&amp; x_{j,c,s}=x_{j,c,s'}, &amp;&amp; \forall j,c,\;\forall s\sim_{\tau(j)} s' \quad(\text{non-anticipativity})\\
+&amp; 0\le x_{j,c,s}\le 1.
+\end{aligned}
+\]</span></p>
+<div id="51cb55bf-5a1b-4521-b165-bb8a7e2ea79e" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> prod</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------- data</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>JOBS    <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>CENTERS <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>LOAD    <span class="op">=</span> {<span class="dv">1</span>: <span class="fl">10.0</span>, <span class="dv">2</span>: <span class="fl">8.0</span>, <span class="dv">3</span>: <span class="fl">6.0</span>, <span class="dv">4</span>: <span class="fl">12.0</span>}     <span class="co"># CPU-hours per job</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>RATE    <span class="op">=</span> {<span class="dv">1</span>: <span class="fl">1.0</span>,  <span class="dv">2</span>: <span class="fl">2.5</span>}                      <span class="co"># $ / CPU-hour</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>PENALTY_FACTOR <span class="op">=</span> <span class="fl">1.6</span>                             <span class="co"># reroute penalty</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>STAGE   <span class="op">=</span> {<span class="dv">1</span>: <span class="dv">1</span>, <span class="dv">2</span>: <span class="dv">2</span>, <span class="dv">3</span>: <span class="dv">3</span>, <span class="dv">4</span>: <span class="dv">3</span>}               <span class="co"># job -&gt; stage</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Markov chain on availability</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>PI0 <span class="op">=</span> <span class="fl">0.60</span>         <span class="co"># P(a_1 = 1)</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>P11 <span class="op">=</span> <span class="fl">0.80</span>         <span class="co"># P(a_t = 1 | a_{t-1} = 1)</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>P01 <span class="op">=</span> <span class="fl">0.20</span>         <span class="co"># P(a_t = 1 | a_{t-1} = 0)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------------------------- scenario tree -------</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>SCEN <span class="op">=</span> <span class="bu">list</span>(itertools.product([<span class="dv">0</span>, <span class="dv">1</span>], repeat<span class="op">=</span><span class="dv">3</span>))      <span class="co"># (a1, a2, a3)</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scen_prob(s):</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    a1, a2, a3 <span class="op">=</span> s</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    p1 <span class="op">=</span> PI0       <span class="cf">if</span> a1 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">-</span> PI0</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    p2 <span class="op">=</span> (P11 <span class="cf">if</span> a2 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">-</span> P11) <span class="cf">if</span> a1 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> (P01 <span class="cf">if</span> a2 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">-</span> P01)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    p3 <span class="op">=</span> (P11 <span class="cf">if</span> a3 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">-</span> P11) <span class="cf">if</span> a2 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> (P01 <span class="cf">if</span> a3 <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">-</span> P01)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> p1 <span class="op">*</span> p2 <span class="op">*</span> p3</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>PROB <span class="op">=</span> {s: scen_prob(s) <span class="cf">for</span> s <span class="kw">in</span> SCEN}</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(<span class="bu">sum</span>(PROB.values()) <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Marginal P(a_t = 1) for the EV problem</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>P_MARG <span class="op">=</span> {<span class="dv">1</span>: PI0}</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>P_MARG[<span class="dv">2</span>] <span class="op">=</span> PI0 <span class="op">*</span> P11 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> PI0) <span class="op">*</span> P01</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>P_MARG[<span class="dv">3</span>] <span class="op">=</span> P_MARG[<span class="dv">2</span>] <span class="op">*</span> P11 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> P_MARG[<span class="dv">2</span>]) <span class="op">*</span> P01</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------- realized cost helper ----</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> realized_cost(j, c, a_t):</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Cost when job j is assigned to center c and stage availability is a_t."""</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> c <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> RATE[<span class="dv">2</span>] <span class="op">*</span> LOAD[j]</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># c == 1, two cases on availability</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> RATE[<span class="dv">1</span>] <span class="op">*</span> LOAD[j] <span class="cf">if</span> a_t <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> PENALTY_FACTOR <span class="op">*</span> RATE[<span class="dv">2</span>] <span class="op">*</span> LOAD[j]</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================== RP ===</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_RP():</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Multistage SP with explicit non-anticipativity constraints."""</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"RP"</span>)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># declare a Pyomo Set with dimen=3 so the 3-tuple is a single index</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    m.S <span class="op">=</span> pyo.Set(initialize<span class="op">=</span>SCEN, dimen<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    m.x <span class="op">=</span> pyo.Var(JOBS, CENTERS, m.S, domain<span class="op">=</span>pyo.Binary)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one center per (job, scenario)</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    m.Assign <span class="op">=</span> pyo.ConstraintList()</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> JOBS:</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>            m.Assign.add(<span class="bu">sum</span>(m.x[j, c, s] <span class="cf">for</span> c <span class="kw">in</span> CENTERS) <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---- non-anticipativity ----</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 1 (job 1): identical across all scenarios</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    s_ref <span class="op">=</span> SCEN[<span class="dv">0</span>]</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    m.NA1 <span class="op">=</span> pyo.ConstraintList()</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> CENTERS:</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> s <span class="op">!=</span> s_ref:</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>                m.NA1.add(m.x[<span class="dv">1</span>, c, s] <span class="op">==</span> m.x[<span class="dv">1</span>, c, s_ref])</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 2 (job 2): depends only on a1</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    m.NA2 <span class="op">=</span> pyo.ConstraintList()</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a1 <span class="kw">in</span> (<span class="dv">0</span>, <span class="dv">1</span>):</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> [s <span class="cf">for</span> s <span class="kw">in</span> SCEN <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> a1]</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>        ref <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> c <span class="kw">in</span> CENTERS:</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> s <span class="kw">in</span> group[<span class="dv">1</span>:]:</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>                m.NA2.add(m.x[<span class="dv">2</span>, c, s] <span class="op">==</span> m.x[<span class="dv">2</span>, c, ref])</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage 3 (jobs 3 and 4): depend only on (a1, a2)</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>    m.NA3 <span class="op">=</span> pyo.ConstraintList()</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a1, a2 <span class="kw">in</span> itertools.product([<span class="dv">0</span>, <span class="dv">1</span>], repeat<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> [s <span class="cf">for</span> s <span class="kw">in</span> SCEN <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> a1 <span class="kw">and</span> s[<span class="dv">1</span>] <span class="op">==</span> a2]</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>        ref <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> (<span class="dv">3</span>, <span class="dv">4</span>):</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> c <span class="kw">in</span> CENTERS:</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> s <span class="kw">in</span> group[<span class="dv">1</span>:]:</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>                    m.NA3.add(m.x[j, c, s] <span class="op">==</span> m.x[j, c, ref])</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expected total cost</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> obj_rule(m):</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>        total <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>            cost_s <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j <span class="kw">in</span> JOBS:</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>                a_t <span class="op">=</span> s[STAGE[j] <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> c <span class="kw">in</span> CENTERS:</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>                    cost_s <span class="op">+=</span> realized_cost(j, c, a_t) <span class="op">*</span> m.x[j, c, s]</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>            total <span class="op">+=</span> PROB[s] <span class="op">*</span> cost_s</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> total</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>    m.Obj <span class="op">=</span> pyo.Objective(rule<span class="op">=</span>obj_rule, sense<span class="op">=</span>pyo.minimize)</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================== WS ===</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_WS(s):</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Wait-and-see (perfect information) for a single scenario."""</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> pyo.ConcreteModel(<span class="ss">f"WS_</span><span class="sc">{</span>s<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>    m.x <span class="op">=</span> pyo.Var(JOBS, CENTERS, domain<span class="op">=</span>pyo.Binary)</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>    m.Assign <span class="op">=</span> pyo.Constraint(</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        JOBS, rule<span class="op">=</span><span class="kw">lambda</span> m, j: <span class="bu">sum</span>(m.x[j, c] <span class="cf">for</span> c <span class="kw">in</span> CENTERS) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>    m.Obj <span class="op">=</span> pyo.Objective(</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>        expr<span class="op">=</span><span class="bu">sum</span>(</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>            realized_cost(j, c, s[STAGE[j] <span class="op">-</span> <span class="dv">1</span>]) <span class="op">*</span> m.x[j, c]</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j <span class="kw">in</span> JOBS <span class="cf">for</span> c <span class="kw">in</span> CENTERS</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>        sense<span class="op">=</span>pyo.minimize,</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="co"># ============================================================== EV ===</span></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_EV():</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Expected-value problem: replace random availability by its</span></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="co">    marginal probability and minimise the resulting deterministic cost.</span></span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"EV"</span>)</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>    m.x <span class="op">=</span> pyo.Var(JOBS, CENTERS, domain<span class="op">=</span>pyo.Binary)</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>    m.Assign <span class="op">=</span> pyo.Constraint(</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>        JOBS, rule<span class="op">=</span><span class="kw">lambda</span> m, j: <span class="bu">sum</span>(m.x[j, c] <span class="cf">for</span> c <span class="kw">in</span> CENTERS) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> exp_cost(j, c):</span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> c <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> RATE[<span class="dv">2</span>] <span class="op">*</span> LOAD[j]</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> P_MARG[STAGE[j]]</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> p <span class="op">*</span> RATE[<span class="dv">1</span>] <span class="op">*</span> LOAD[j] <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> p) <span class="op">*</span> PENALTY_FACTOR <span class="op">*</span> RATE[<span class="dv">2</span>] <span class="op">*</span> LOAD[j]</span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>    m.Obj <span class="op">=</span> pyo.Objective(</span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>        expr<span class="op">=</span><span class="bu">sum</span>(exp_cost(j, c) <span class="op">*</span> m.x[j, c] <span class="cf">for</span> j <span class="kw">in</span> JOBS <span class="cf">for</span> c <span class="kw">in</span> CENTERS),</span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>        sense<span class="op">=</span>pyo.minimize,</span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> m</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="co"># =========================================================== driver ==</span></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>    solver <span class="op">=</span> pyo.SolverFactory(<span class="st">"glpk"</span>)</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---------- RP ----------</span></span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    rp <span class="op">=</span> build_RP()</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    solver.solve(rp)</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>    rp_val <span class="op">=</span> pyo.value(rp.Obj)</span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>    rp_rows <span class="op">=</span> []</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>        cost_s <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>        assign <span class="op">=</span> {}</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> JOBS:</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>            assign[j] <span class="op">=</span> <span class="bu">next</span>(c <span class="cf">for</span> c <span class="kw">in</span> CENTERS <span class="cf">if</span> pyo.value(rp.x[j, c, s]) <span class="op">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>            cost_s <span class="op">+=</span> realized_cost(j, assign[j], s[STAGE[j] <span class="op">-</span> <span class="dv">1</span>])</span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>        rp_rows.append({</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>            <span class="st">"scenario (a1,a2,a3)"</span>: s,</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>            <span class="st">"prob"</span>: PROB[s],</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>{<span class="ss">f"job</span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">"</span>: <span class="ss">f"C</span><span class="sc">{</span>assign[j]<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> j <span class="kw">in</span> JOBS},</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cost"</span>: cost_s,</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---------- WS per scenario ----------</span></span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>    ws_rows <span class="op">=</span> []</span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>    ws_exp <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a>        m <span class="op">=</span> build_WS(s)</span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a>        solver.solve(m)</span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>        c_val <span class="op">=</span> pyo.value(m.Obj)</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a>        ws_exp <span class="op">+=</span> PROB[s] <span class="op">*</span> c_val</span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>        assign <span class="op">=</span> {j: <span class="bu">next</span>(c <span class="cf">for</span> c <span class="kw">in</span> CENTERS <span class="cf">if</span> pyo.value(m.x[j, c]) <span class="op">&gt;</span> <span class="fl">0.5</span>) <span class="cf">for</span> j <span class="kw">in</span> JOBS}</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>        ws_rows.append({</span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>            <span class="st">"scenario (a1,a2,a3)"</span>: s,</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>            <span class="st">"prob"</span>: PROB[s],</span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>{<span class="ss">f"job</span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">"</span>: <span class="ss">f"C</span><span class="sc">{</span>assign[j]<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> j <span class="kw">in</span> JOBS},</span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cost"</span>: c_val,</span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---------- EV / EEV ----------</span></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>    ev <span class="op">=</span> build_EV()</span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>    solver.solve(ev)</span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>    ev_val   <span class="op">=</span> pyo.value(ev.Obj)</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    ev_assign <span class="op">=</span> {j: <span class="bu">next</span>(c <span class="cf">for</span> c <span class="kw">in</span> CENTERS <span class="cf">if</span> pyo.value(ev.x[j, c]) <span class="op">&gt;</span> <span class="fl">0.5</span>) <span class="cf">for</span> j <span class="kw">in</span> JOBS}</span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>    eev_exp <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>    eev_rows <span class="op">=</span> []</span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> SCEN:</span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>        cost_s <span class="op">=</span> <span class="bu">sum</span>(realized_cost(j, ev_assign[j], s[STAGE[j] <span class="op">-</span> <span class="dv">1</span>]) <span class="cf">for</span> j <span class="kw">in</span> JOBS)</span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>        eev_exp <span class="op">+=</span> PROB[s] <span class="op">*</span> cost_s</span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>        eev_rows.append({</span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a>            <span class="st">"scenario (a1,a2,a3)"</span>: s,</span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>            <span class="st">"prob"</span>: PROB[s],</span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>{<span class="ss">f"job</span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">"</span>: <span class="ss">f"C</span><span class="sc">{</span>ev_assign[j]<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> j <span class="kw">in</span> JOBS},</span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cost"</span>: cost_s,</span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---------- pretty print ----------</span></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>    df_rp  <span class="op">=</span> pd.DataFrame(rp_rows)</span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>    df_ws  <span class="op">=</span> pd.DataFrame(ws_rows)</span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>    df_eev <span class="op">=</span> pd.DataFrame(eev_rows)</span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>    pd.set_option(<span class="st">"display.width"</span>, <span class="dv">120</span>)</span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>    pd.set_option(<span class="st">"display.float_format"</span>, <span class="kw">lambda</span> v: <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:8.4f}</span><span class="ss">"</span>)</span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>    bar <span class="op">=</span> <span class="st">"="</span> <span class="op">*</span> <span class="dv">78</span></span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> <span class="st">"-"</span> <span class="op">*</span> <span class="dv">78</span></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(bar)</span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" MULTISTAGE STOCHASTIC OPTIMIZATION  --  GENOMICS WORKFLOW"</span>)</span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(bar)</span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Jobs           : </span><span class="sc">{</span>JOBS<span class="sc">}</span><span class="ss">    loads (CPU-h) = </span><span class="sc">{</span>LOAD<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Centers        : C1 rate </span><span class="sc">{</span>RATE[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">/h,  C2 rate </span><span class="sc">{</span>RATE[<span class="dv">2</span>]<span class="sc">}</span><span class="ss">/h,"</span></span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"  reroute penalty x</span><span class="sc">{</span>PENALTY_FACTOR<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Markov chain   : pi0=</span><span class="sc">{</span>PI0<span class="sc">}</span><span class="ss">, P(1|1)=</span><span class="sc">{</span>P11<span class="sc">}</span><span class="ss">, P(1|0)=</span><span class="sc">{</span>P01<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Marginal P(a_t=1): "</span></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>          <span class="op">+</span> <span class="st">", "</span>.join(<span class="ss">f"t</span><span class="sc">{</span>t<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>P_MARG[t]<span class="sc">:.3f}</span><span class="ss">"</span> <span class="cf">for</span> t <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)))</span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Scenarios      : </span><span class="sc">{</span><span class="bu">len</span>(SCEN)<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" 1. WAIT-AND-SEE  (perfect information per scenario)"</span>)</span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df_ws.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">  E[WS] = sum_s p_s * WS(s) = </span><span class="sc">{</span>ws_exp<span class="sc">:.4f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" 2. RECOURSE PROBLEM  RP  (multistage stochastic optimum)"</span>)</span>
+<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df_rp.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">  RP  (objective value) = </span><span class="sc">{</span>rp_val<span class="sc">:.4f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" 3. MEAN-VALUE  EV  / EEV  (deterministic, then evaluated)"</span>)</span>
+<span id="cb5-243"><a href="#cb5-243" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  EV optimum (deterministic, marginal probs) = </span><span class="sc">{</span>ev_val<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  EV first-stage policy : "</span></span>
+<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a>          <span class="op">+</span> <span class="st">", "</span>.join(<span class="ss">f"job</span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">-&gt;C</span><span class="sc">{</span>ev_assign[j]<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> j <span class="kw">in</span> JOBS))</span>
+<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df_eev.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">  EEV (EV policy evaluated under SP) = </span><span class="sc">{</span>eev_exp<span class="sc">:.4f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-250"><a href="#cb5-250" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">" 4. STOCHASTIC PROGRAMMING METRICS"</span>)</span>
+<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sub)</span>
+<span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  E[WS]            = </span><span class="sc">{</span>ws_exp<span class="sc">:10.4f}</span><span class="ss">    (lower bound on RP)"</span>)</span>
+<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  RP               = </span><span class="sc">{</span>rp_val<span class="sc">:10.4f}</span><span class="ss">    (true SP optimum)"</span>)</span>
+<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  EEV              = </span><span class="sc">{</span>eev_exp<span class="sc">:10.4f}</span><span class="ss">    (using mean-value plan)"</span>)</span>
+<span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  VPI = RP - E[WS] = </span><span class="sc">{</span>rp_val <span class="op">-</span> ws_exp<span class="sc">:10.4f}</span><span class="ss">    (value of perfect information)"</span>)</span>
+<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  VSS = EEV - RP   = </span><span class="sc">{</span>eev_exp <span class="op">-</span> rp_val<span class="sc">:10.4f}</span><span class="ss">    (value of stochastic solution)"</span>)</span>
+<span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(bar)</span>
+<span id="cb5-259"><a href="#cb5-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-260"><a href="#cb5-260" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ---------- export ----------</span></span>
+<span id="cb5-261"><a href="#cb5-261" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pd.ExcelWriter(<span class="st">"./genomics_results.xlsx"</span>) <span class="im">as</span> xw:</span>
+<span id="cb5-262"><a href="#cb5-262" aria-hidden="true" tabindex="-1"></a>        df_ws.to_excel(xw, sheet_name<span class="op">=</span><span class="st">"WS"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-263"><a href="#cb5-263" aria-hidden="true" tabindex="-1"></a>        df_rp.to_excel(xw, sheet_name<span class="op">=</span><span class="st">"RP"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-264"><a href="#cb5-264" aria-hidden="true" tabindex="-1"></a>        df_eev.to_excel(xw, sheet_name<span class="op">=</span><span class="st">"EV"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-265"><a href="#cb5-265" aria-hidden="true" tabindex="-1"></a>        pd.DataFrame([</span>
+<span id="cb5-266"><a href="#cb5-266" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"metric"</span>: <span class="st">"E[WS]"</span>, <span class="st">"value"</span>: ws_exp},</span>
+<span id="cb5-267"><a href="#cb5-267" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"metric"</span>: <span class="st">"RP"</span>,    <span class="st">"value"</span>: rp_val},</span>
+<span id="cb5-268"><a href="#cb5-268" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"metric"</span>: <span class="st">"EEV"</span>,   <span class="st">"value"</span>: eev_exp},</span>
+<span id="cb5-269"><a href="#cb5-269" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"metric"</span>: <span class="st">"VPI"</span>,  <span class="st">"value"</span>: rp_val <span class="op">-</span> ws_exp},</span>
+<span id="cb5-270"><a href="#cb5-270" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"metric"</span>: <span class="st">"VSS"</span>,   <span class="st">"value"</span>: eev_exp <span class="op">-</span> rp_val},</span>
+<span id="cb5-271"><a href="#cb5-271" aria-hidden="true" tabindex="-1"></a>        ]).to_excel(xw, sheet_name<span class="op">=</span><span class="st">"metrics"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="a00f12ed-dc6d-4ec7-a7ad-b47e71596797" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#if __name__ == "__main__":</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>==============================================================================
+ MULTISTAGE STOCHASTIC OPTIMIZATION  --  GENOMICS WORKFLOW
+==============================================================================
+  Jobs           : [1, 2, 3, 4]    loads (CPU-h) = {1: 10.0, 2: 8.0, 3: 6.0, 4: 12.0}
+  Centers        : C1 rate 1.0/h,  C2 rate 2.5/h,  reroute penalty x1.6
+  Markov chain   : pi0=0.6, P(1|1)=0.8, P(1|0)=0.2
+  Marginal P(a_t=1): t1=0.600, t2=0.560, t3=0.536
+  Scenarios      : 8
+
+------------------------------------------------------------------------------
+ 1. WAIT-AND-SEE  (perfect information per scenario)
+------------------------------------------------------------------------------
+scenario (a1,a2,a3)     prob job1 job2 job3 job4     cost
+          (0, 0, 0)   0.2560   C2   C2   C2   C2  90.0000
+          (0, 0, 1)   0.0640   C2   C2   C1   C1  63.0000
+          (0, 1, 0)   0.0160   C2   C1   C2   C2  78.0000
+          (0, 1, 1)   0.0640   C2   C1   C1   C1  51.0000
+          (1, 0, 0)   0.0960   C1   C2   C2   C2  75.0000
+          (1, 0, 1)   0.0240   C1   C2   C1   C1  48.0000
+          (1, 1, 0)   0.0960   C1   C1   C2   C2  63.0000
+          (1, 1, 1)   0.3840   C1   C1   C1   C1  36.0000
+
+  E[WS] = sum_s p_s * WS(s) = 59.8080
+
+------------------------------------------------------------------------------
+ 2. RECOURSE PROBLEM  RP  (multistage stochastic optimum)
+------------------------------------------------------------------------------
+scenario (a1,a2,a3)     prob job1 job2 job3 job4     cost
+          (0, 0, 0)   0.2560   C1   C2   C2   C2 105.0000
+          (0, 0, 1)   0.0640   C1   C2   C2   C2 105.0000
+          (0, 1, 0)   0.0160   C1   C2   C1   C1 132.0000
+          (0, 1, 1)   0.0640   C1   C2   C1   C1  78.0000
+          (1, 0, 0)   0.0960   C1   C1   C2   C2  87.0000
+          (1, 0, 1)   0.0240   C1   C1   C2   C2  87.0000
+          (1, 1, 0)   0.0960   C1   C1   C1   C1  90.0000
+          (1, 1, 1)   0.3840   C1   C1   C1   C1  36.0000
+
+  RP  (objective value) = 73.6080
+
+------------------------------------------------------------------------------
+ 3. MEAN-VALUE  EV  / EEV  (deterministic, then evaluated)
+------------------------------------------------------------------------------
+  EV optimum (deterministic, marginal probs) = 83.6160
+  EV first-stage policy : job1-&gt;C1, job2-&gt;C1, job3-&gt;C1, job4-&gt;C1
+scenario (a1,a2,a3)     prob job1 job2 job3 job4     cost
+          (0, 0, 0)   0.2560   C1   C1   C1   C1 144.0000
+          (0, 0, 1)   0.0640   C1   C1   C1   C1  90.0000
+          (0, 1, 0)   0.0160   C1   C1   C1   C1 120.0000
+          (0, 1, 1)   0.0640   C1   C1   C1   C1  66.0000
+          (1, 0, 0)   0.0960   C1   C1   C1   C1 114.0000
+          (1, 0, 1)   0.0240   C1   C1   C1   C1  60.0000
+          (1, 1, 0)   0.0960   C1   C1   C1   C1  90.0000
+          (1, 1, 1)   0.3840   C1   C1   C1   C1  36.0000
+
+  EEV (EV policy evaluated under SP) = 83.6160
+
+------------------------------------------------------------------------------
+ 4. STOCHASTIC PROGRAMMING METRICS
+------------------------------------------------------------------------------
+  E[WS]            =    59.8080    (lower bound on RP)
+  RP               =    73.6080    (true SP optimum)
+  EEV              =    83.6160    (using mean-value plan)
+  VPI = RP - E[WS] =    13.8000    (value of perfect information)
+  VSS = EEV - RP   =    10.0080    (value of stochastic solution)
+==============================================================================</code></pre>
+</div>
+</div>
+</section>
+<section id="numerical-results" class="level2">
+<h2 class="anchored" data-anchor-id="numerical-results">Numerical results</h2>
+<p>Solving with GLPK on the instance defined above yields:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathbb{E}[\mathrm{WS}]\)</span> (perfect information)</td>
+<td style="text-align: right;"><span class="math inline">\(59.81\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathrm{RP}\)</span> (multistage stochastic optimum)</td>
+<td style="text-align: right;"><span class="math inline">\(73.61\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathrm{EEV}\)</span> (mean‑value plan, evaluated under the SP)</td>
+<td style="text-align: right;"><span class="math inline">\(83.62\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathrm{VPI}=\mathrm{RP}-\mathbb{E}[\mathrm{WS}]\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(13.80\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathrm{VSS}=\mathrm{EEV}-\mathrm{RP}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(10.01\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The optimal RP policy is the threshold policy:</p>
+<ul>
+<li>job 1 always goes to center 1;</li>
+<li>job 2 follows <span class="math inline">\(a_1\)</span>;</li>
+<li>jobs 3 and 4 follow <span class="math inline">\(a_2.\)</span></li>
+</ul>
+<p>The mean‑value plan, in contrast, sends <em>every</em> job to center 1 — which happens to match RP at stage 1 but is wrong at stages 2 and 3, costing roughly 13% in expectation.</p>
+<p>The perfect information (wait-and-see) solutions reveal an important contrast: with full information, even job 1 sometimes goes to center 2 (any scenario starting with <span class="math inline">\(a_1=0\)</span>). When you know in advance that center 1 is unavailable, paying the rerouting penalty is strictly worse than choosing center 2 outright. RP cannot replicate this because the job‑1 decision must be made before <span class="math inline">\(a_1\)</span> is observed, which is precisely what the VPI of <span class="math inline">\(13.80\)</span> measures.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

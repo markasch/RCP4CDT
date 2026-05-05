@@ -296,7 +296,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
+  <a href="./examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -499,10 +499,10 @@ Figure&nbsp;1: A multistage decision process with uncertainty. Uncertain, exogen
 </div>
 <p>The most common risk measures are:</p>
 <ol type="1">
-<li>The mean-variance model, <span class="math display">\[ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . \]</span></li>
-<li>The value-at-risk (VaR), <span class="math display">\[\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .\]</span></li>
-<li>The conditional value-at-risk (CVaR), <span class="math display">\[\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .\]</span></li>
-<li>Exponential risk aversion, <span class="math display">\[\rho(Z) = \inf_{\gamma &gt; 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). \]</span></li>
+<li>The <em>mean-variance</em> model, <span class="math display">\[ \rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{Var} (Z) . \]</span></li>
+<li>The <em>value-at-risk</em> (VaR), <span class="math display">\[\rho(Z) = \mathrm{E}(Z) - \kappa \mathrm{VaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{VaR}_{\alpha} (Z) = \inf \{ t \colon   \mathrm{P}(Z \le t ) \ge \alpha \} .\]</span></li>
+<li>The <em>conditional value-at-risk</em> (CVaR), <span class="math display">\[\rho(Z) = \mathrm{CVaR}_{\alpha} (Z),\]</span> where <span class="math display">\[\mathrm{CVaR}_{\alpha} (Z) = \mathrm{E} \{ Z \vert Z \ge \mathrm{VaR}_{\alpha} (Z)  \} .\]</span></li>
+<li><em>Exponential risk aversion</em>, <span class="math display">\[\rho(Z) = \inf_{\gamma &gt; 0} \frac{1}{\gamma} \log \mathrm{E} \left( \exp(\gamma Z) \right). \]</span></li>
 </ol>
 <p>Note that <span class="math inline">\(\mathrm{VaR}_{\alpha} (Z)\)</span> can be rewritten as <span class="math inline">\(\mathrm{P} (Z \le \epsilon ) \ge \alpha.\)</span> Finally, selecting the “right” function <span class="math inline">\(\rho\)</span> depends on the modeling and optimization goals one has in mind.</p>
 </section>

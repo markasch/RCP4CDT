@@ -339,7 +339,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a>
+  <a href="./examples/S0a_1stage_discrete.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, EVSS, EVPI</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -349,7 +349,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization for a Server Farm</span></a>
+  <a href="./examples/S1a_2stage_server_farm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. S1a: Two-Stage Stochastic Optimization</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -707,7 +707,13 @@ j &amp; S_{j}&amp; m &amp; d_{jm} &amp; k^{\rho}_{jm1} &amp; R^{\rho} &amp; K^{\
 </section>
 <section id="s0.-single-stage-stochastic" class="level2">
 <h2 class="anchored" data-anchor-id="s0.-single-stage-stochastic">S0. Single-Stage Stochastic</h2>
-<p>Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section <a href="th-stochastic.html#sec-stoch" class="quarto-xref"><span>Stochastic, multistage programming</span></a>. This context brings out the important concepts of the following scenarios: Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI). Then, we can fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.</p>
+<p>Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section <a href="th-stochastic.html#sec-stoch" class="quarto-xref"><span>Stochastic, multistage programming</span></a>. This context brings out the important concepts of the following scenarios (see <a href="./examples/S0a_1stage_discrete.html">Example S0a</a> for the definitions): Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI), where <span class="math display">\[ \mathrm{EVM} \le \mathrm{EVSS} \le \mathrm{EVPI}.
+\]</span> Based on these, there are two quantities that can then be used to fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.</p>
+<ul>
+<li>Value of the stochastic solution <span class="math display">\[\mathrm{VSS} = \mathrm{EVSS} - \mathrm{EVM}\]</span></li>
+<li>Value of perfect information <span class="math display">\[\mathrm{VPI} =  \mathrm{EVPI} - \mathrm{EVSS}\]</span></li>
+</ul>
+<p>These two quantities give the motivation for stochastic programming. VPI measures the value of knowing the future with <em>certainty</em>, while VSS assesses the value of knowing and using <em>distributions</em> on future outcomes. Their values are useful metrics for deciding whether to undertake the additional efforts required by stochastic optimization.</p>
 <p>The most basic way of accounting for randomness is to consider the average, or expected value, of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the <em>objective</em>, <span id="eq-stoch"><span class="math display">\[
 \min_x \mathbb{E}_z \left[ f(x,z) \right], \tag{1}\]</span></span> where <span class="math inline">\(x\)</span> is the decision variable, and <span class="math inline">\(z\)</span> is a random variable.</p>
 </section>
@@ -804,14 +810,39 @@ Figure&nbsp;2: Scenario tree for 3-stage newsvendor problem, where the first sta
 <div id="fig-slp1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-slp1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="graphics/genomics-DAG.drawio.jpg" class="img-fluid figure-img" style="width:35.0%">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    T1["Job 1&lt;br/&gt;Preproc"]
+    T2["Job 2&lt;br/&gt;Alignment"]
+    T3["Job 3&lt;br/&gt;Variant"]
+    T4["Job 4&lt;br/&gt;Annotation"]
+    T1 --&gt; T2
+    T2 --&gt; T3
+    T2 --&gt; T4
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slp1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: DAG for 4-task genomics workflow.
 </figcaption>
 </figure>
 </div>
-<p>The descriptions of the jobs, their resulting datasets and the CPU times needed for processing are resumed in the <a href="./examples/S2_multi_stage_discrete.html">notebook</a>.</p>
+<p>There are (at least) two ways of addressing this problem.</p>
+<ol type="1">
+<li>As a resource allocation problem, with uncertainty.</li>
+<li>As a Markov chain, where availability of resources at stage <span class="math inline">\(t+1\)</span> depends on stage <span class="math inline">\(t.\)</span></li>
+</ol>
+<p>In both cases, we end up with a stochastic recourse problem, expressed in extensive form based on all possible scenarios—supposing that we have a discrete probability description of the workflow.</p>
+<p>The uncertainty concerns the availability of the compute facilities. This can be readily generalized to cover data center availability, or reliability. For this, we only need to add a term to the objective function, and an additonal availability constraint.</p>
+<p>This <a href="./examples/S2_multi_stage_discrete.html">notebook</a> describes the Markov chain context.</p>
 </section>
 </section>
 <section id="s3.-risk-measures" class="level2">

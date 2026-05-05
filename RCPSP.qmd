@@ -245,7 +245,17 @@ where $S$ is the number of scenarios.
 
 ## S0. Single-Stage Stochastic
 
-Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section @sec-stoch. This context brings out the important concepts of the following scenarios: Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI). Then, we can fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.
+Before embarking on two- and multi-stage cases, it is very instructive to study the context of a single stage, without a preceding deterministic stage as was presented in the theoretical section @sec-stoch. This context brings out the important concepts of the following scenarios (see [Example S0a](examples/S0a_1stage_discrete.ipynb) for the definitions): Expected Value for the Mean (EVM), Expected Value of the Stochastic Solution (EVSS), and Expected Value with Perfect Information (EVPI), where
+$$ \mathrm{EVM} \le \mathrm{EVSS} \le \mathrm{EVPI}.
+$$
+Based on these, there are two quantities that can then be used to fully appreciate the importance of different stochastic models, and their comparison with deterministic ones.
+
+- Value of the stochastic solution
+   $$\mathrm{VSS} = \mathrm{EVSS} - \mathrm{EVM}$$
+- Value of perfect information
+  $$\mathrm{VPI} =  \mathrm{EVPI} - \mathrm{EVSS}$$
+
+These two quantities give the motivation for stochastic programming. VPI measures the value of knowing the future with _certainty_, while VSS assesses the value of knowing and using _distributions_ on future outcomes. Their values are useful metrics for deciding whether to undertake the additional efforts required by stochastic optimization.
 
 The most basic way of accounting for randomness is to consider the average, or expected value, of a given uncertain quantity. For constraints, expectations are not useful, because protection against the average outcome generally produces a low level of protection. For that reason, we consider problems in which the expectation appears only in the _objective_, 
 $$
@@ -364,12 +374,30 @@ We now consider a slightly simplified, but nonetheless realistic example of a ge
 These have the follwing DAG structure:
 
 ::: {#fig-slp1}
-![](graphics/genomics-DAG.drawio.jpg){width=35%}
-
+```{mermaid}
+flowchart LR
+    T1["Job 1<br/>Preproc"]
+    T2["Job 2<br/>Alignment"]
+    T3["Job 3<br/>Variant"]
+    T4["Job 4<br/>Annotation"]
+    T1 --> T2
+    T2 --> T3
+    T2 --> T4
+```
 DAG for 4-task genomics workflow.
 :::
 
-The descriptions of the jobs, their resulting datasets and the CPU times needed for processing are resumed in the [notebook](examples/S2_multi_stage_discrete.ipynb).
+There are (at least) two ways of addressing this problem.
+
+1. As a resource allocation problem, with uncertainty.
+2. As a Markov chain, where availability of resources at stage $t+1$ depends on stage $t.$
+
+In both cases, we end up with a stochastic recourse problem, expressed in extensive form based on all possible scenarios---supposing that we have a discrete probability description of the workflow.
+
+The uncertainty concerns the availability of the compute facilities. This can be readily generalized to cover data center availability, or reliability. For this, we only need to add a term to the objective function, and an additonal availability constraint.
+
+This [notebook](examples/S2_multi_stage_discrete.ipynb) describes the Markov chain context. 
+
 
 ## S3. Risk Measures
 

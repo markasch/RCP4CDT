@@ -312,7 +312,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
+  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,10 +421,10 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="problem-formulation">Problem Formulation</h2>
 <p>We want either to design a new server (or storage) farm, or just allocate from an existing one, to meet uncertain future compute (or data) needs. We suppose that we have a limited budget, and limited power (or space) capacities to meet the demand.</p>
 <p>We have a general estimation of the next-month demand for each resource and the distributions they follow. For the sake of simplicity, we will ignore future months after next month, though it is relatively simple to formulate a multi-stage stochastic program to handle this case.</p>
-<p>In this example, our first-stage decision (the here-and-now decision) is the number of each resource to buy, or allocate. The second-stage (recourse) decision is the number of cloud-compute (or storage) to buy (or allocate) in case of insufficient availability. Our goal is to minimize the operational cost of the server (or storage, or both) farm.</p>
+<p>In this example, our first-stage decision (the here-and-now decision) is the number of each resource to buy, or allocate. The second-stage (recourse) decision is the amount of additional cloud-compute (or storage) to buy (or allocate) in case of insufficient availability. Our goal is to minimize the operational cost of the server (or storage, or both) farm.</p>
 <section id="problem-notation" class="level3">
 <h3 class="anchored" data-anchor-id="problem-notation">Problem notation</h3>
-<p>Let <span class="math inline">\(x\)</span> denote the number of resources to buy/allocate. We suppose thate there are three resources here. Each resource has an installation/allocation cost, <span class="math inline">\(c,\)</span> and has a space/power requirement <span class="math inline">\(s.\)</span> The total space available is <span class="math inline">\(S\)</span> and the total budget is <span class="math inline">\(B.\)</span></p>
+<p>Let <span class="math inline">\(x\)</span> denote the number of resources to buy/allocate. We suppose thate there are three resources here. Each resource has an installation/allocation cost, <span class="math inline">\(c,\)</span> and a space/power requirement <span class="math inline">\(s.\)</span> The total space available is <span class="math inline">\(S\)</span> and the total budget is <span class="math inline">\(B.\)</span></p>
 <p>Our goal is to minimize the total operational cost of the server farm, which can be written as</p>
 <p><span class="math display">\[\begin{align*}
 \textrm{minimize} &amp; \,\, c^{\top}x + \mathrm{E}\left[Q(x;\xi)\right], \\

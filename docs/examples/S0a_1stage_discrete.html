@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI – Optimal Scheduling for Cross-Facility Workflows</title>
+<title>Ex. S0a: 1-Stage Discrete Stochastic with EVM, EVSS, EVPI – Optimal Scheduling for Cross-Facility Workflows</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -315,7 +315,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
+  <a href="../examples/D4_MRCPSP.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -380,8 +380,8 @@ window.Quarto = {
   <ul>
   <li><a href="#the-problem-maximizing-the-net-profit-of-a-pop-up-shop" id="toc-the-problem-maximizing-the-net-profit-of-a-pop-up-shop" class="nav-link active" data-scroll-target="#the-problem-maximizing-the-net-profit-of-a-pop-up-shop">The problem: Maximizing the net profit of a pop-up shop</a></li>
   <li><a href="#expected-value-for-the-mean-scenario-evm" id="toc-expected-value-for-the-mean-scenario-evm" class="nav-link" data-scroll-target="#expected-value-for-the-mean-scenario-evm">Expected value for the mean scenario (EVM)</a></li>
-  <li><a href="#value-of-the-stochastic-solution-vss" id="toc-value-of-the-stochastic-solution-vss" class="nav-link" data-scroll-target="#value-of-the-stochastic-solution-vss">Value of the stochastic solution (VSS)</a></li>
-  <li><a href="#expected-value-with-perfect-information-evpi" id="toc-expected-value-with-perfect-information-evpi" class="nav-link" data-scroll-target="#expected-value-with-perfect-information-evpi">Expected value with perfect information (EVPI)</a></li>
+  <li><a href="#expected-value-of-the-stochastic-solution-evss" id="toc-expected-value-of-the-stochastic-solution-evss" class="nav-link" data-scroll-target="#expected-value-of-the-stochastic-solution-evss">Expected Value of the Stochastic Solution (EVSS)</a></li>
+  <li><a href="#expected-value-with-perfect-information-evpi" id="toc-expected-value-with-perfect-information-evpi" class="nav-link" data-scroll-target="#expected-value-with-perfect-information-evpi">Expected Value with Perfect Information (EVPI)</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
@@ -395,7 +395,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../RCPSP.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/S0a_1stage_discrete.html"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, VSS, EVPI</span></h1>
+<h1 class="title"><span class="chapter-title">Ex. S0a: 1-Stage Discrete Stochastic with EVM, EVSS, EVPI</span></h1>
 </div>
 
 
@@ -472,6 +472,7 @@ window.Quarto = {
 <p>The problem is to determine how many items to order for the pop-up shop.</p>
 <p>The dilemma is that the weather will not be known until after the order is placed. Ordering enough items to meet demand for a good weather day results in a financial penalty on returned goods if the weather is poor. On the other hand, ordering just enough items to satisfy demand on a poor weather day leaves “money on the table” if the weather is good.</p>
 <p>How many items should be ordered for sale?</p>
+<p>In the <mark>CDS context</mark> we could consider, for example, three scenarios for green electricity generation with varying costs. Or simply three demand scenarios for CPU or storage, based on archived utliization records for an HPC center or a data center.</p>
 </section>
 <section id="expected-value-for-the-mean-scenario-evm" class="level2">
 <h2 class="anchored" data-anchor-id="expected-value-for-the-mean-scenario-evm">Expected value for the mean scenario (EVM)</h2>
@@ -488,7 +489,7 @@ window.Quarto = {
 \end{align*}
 \]</span> where <span class="math inline">\(f_s\)</span> is the net profit in scenario <span class="math inline">\(s\)</span> assuming that we ordered <span class="math inline">\(\hat{x}\)</span> items.</p>
 <p>These calculations can be executed using operations on the pandas dataframe. First, we create a pandas DataFrame object to store the scenario data and calculate the expected demand.</p>
-<div id="cell-4" class="cell" data-execution_count="2">
+<div id="cell-6" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -547,7 +548,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Subsequent calculations to obtain the EVM can be done directly within the pandas dataframe holding the scenario data.</p>
-<div id="cell-6" class="cell" data-execution_count="3">
+<div id="cell-8" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"order"</span>]   <span class="op">=</span> expected_demand</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"sold"</span>]    <span class="op">=</span> df[[<span class="st">"demand"</span>, <span class="st">"order"</span>]].<span class="bu">min</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"salvage"</span>] <span class="op">=</span> df[<span class="st">"order"</span>] <span class="op">-</span> df[<span class="st">"sold"</span>]</span>
@@ -611,8 +612,8 @@ window.Quarto = {
 </div>
 <p>No scenario shows a profit loss, which appears to be a satisfactory outcome. However, can we find an order resulting in a higher expected profit?</p>
 </section>
-<section id="value-of-the-stochastic-solution-vss" class="level2">
-<h2 class="anchored" data-anchor-id="value-of-the-stochastic-solution-vss">Value of the stochastic solution (VSS)</h2>
+<section id="expected-value-of-the-stochastic-solution-evss" class="level2">
+<h2 class="anchored" data-anchor-id="expected-value-of-the-stochastic-solution-evss">Expected Value of the Stochastic Solution (EVSS)</h2>
 <p>In order to answer this question, let us formulate the problem in mathematical terms. Let <span class="math inline">\(x\)</span> be a non-negative number representing the number of items that will be ordered, and <span class="math inline">\(y_s\)</span> be the non-negative variable describing the number of items sold in scenario <span class="math inline">\(s\)</span> in the set <span class="math inline">\(S\)</span> comprising all scenarios under consideration. The number <span class="math inline">\(y_s\)</span> of sold items is the lesser of the demand <span class="math inline">\(d_s\)</span> and the order size <span class="math inline">\(x\)</span>, that is</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -632,7 +633,7 @@ f_s &amp; = r y_s + w (x - y_s) - c  x &amp; \forall s \in S
 <p>The expected profit is given by <span class="math inline">\(\mathbb  E[F] = \sum_s p_s f_s\)</span>. Operationally, <span class="math inline">\(y_s\)</span> can be no larger the number of items ordered, <span class="math inline">\(x\)</span>, or the demand under scenario <span class="math inline">\(s\)</span>, <span class="math inline">\(d_s\)</span>. The optimization problem is to find the order size <span class="math inline">\(x\)</span> that maximizes expected profit subject to operational constraints on the decision variables. The variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y_s\)</span> are non-negative integers, while <span class="math inline">\(f_s\)</span> is a real number that can take either positive or negative values. Putting these facts together, the optimization problem to be solved is</p>
 <p><span class="math display">\[
 \begin{align*}
-    \text{EV} = \max \quad &amp; \mathbb  E[F] = \sum_{s\in S} p_s f_s \\
+    \text{EVSS} = \max \quad &amp; \mathbb  E[F] = \sum_{s\in S} p_s f_s \\
     \text{s.t.} \quad
     &amp;f_s = r y_s + w(d_s - y_s) - c x &amp; \forall s \in S\\
     &amp;y_s \leq x &amp; \forall s \in S \\
@@ -642,7 +643,7 @@ f_s &amp; = r y_s + w (x - y_s) - c  x &amp; \forall s \in S
 \end{align*}
 \]</span> where <span class="math inline">\(S\)</span> is the set of all scenarios under consideration.</p>
 <p>We can implement this problem in Pyomo as follows.</p>
-<div id="cell-9" class="cell" data-execution_count="4">
+<div id="cell-11" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>solver <span class="op">=</span> <span class="st">'appsi_highs'</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyomo.environ <span class="im">as</span> pyo</span>
@@ -754,14 +755,14 @@ Expected profit: 8920.0</code></pre>
 </div>
 <p>Optimizing over all scenarios provides an expected profit of 8,920 €, an increase of 581 € over the naive strategy of simply ordering the expected number of items sold. The new optimal solution places a larger order, that is <span class="math inline">\(x=400\)</span>. In poor weather conditions, there will be more returns and lower profit that is more than compensated by the increased profits in good weather conditions.</p>
 <p>The additional value that results from solve of this planning problem is called the <strong>Value of the Stochastic Solution (VSS)</strong>. The value of the stochastic solution is the additional profit compared to ordering to meet the expected demand. In this case,</p>
-<p><span class="math display">\[\text{VSS} = \text{EV} - \text{EVM} = 8,920 - 8,339 = 581.\]</span></p>
+<p><span class="math display">\[\text{VSS} = \text{EVSS} - \text{EVM} = 8,920 - 8,339 = 581.\]</span></p>
 </section>
 <section id="expected-value-with-perfect-information-evpi" class="level2">
-<h2 class="anchored" data-anchor-id="expected-value-with-perfect-information-evpi">Expected value with perfect information (EVPI)</h2>
+<h2 class="anchored" data-anchor-id="expected-value-with-perfect-information-evpi">Expected Value with Perfect Information (EVPI)</h2>
 <p>Maximizing expected profit requires the size of the order be decided before knowing what scenario will unfold. The decision for <span class="math inline">\(x\)</span> has to be made “here and now” with probablistic information about the future, but without specific information on which future will actually transpire.</p>
-<p>Nevertheless, we can perform the hypothetical calculation of what profit would be realized if we could know the future. We are still subject to the variability of weather, what is different is we know what the weather will be at the time the order is placed.</p>
-<p>The resulting value for the expected profit is called the <strong>Expected Value of Perfect Information (EVPI)</strong>. The difference <span class="math inline">\(EVPI - EV\)</span> is the extra profit due to having perfect knowledge of the future.</p>
-<p>To compute the expected profit with perfect information, we let the order variable <span class="math inline">\(x\)</span> be indexed by the subsequent scenario that will unfold. Given decision varaible <span class="math inline">\(x_s\)</span>, the model for EVPI becomes</p>
+<p>Nevertheless, we can perform the <em>hypothetical</em> calculation of what profit would be realized if we could know the future. We are still subject to the variability of weather, what is different is we know what the weather will be at the time the order is placed.</p>
+<p>The resulting value for the expected profit is called the <strong>Expected Value of Perfect Information (EVPI)</strong>. The difference <span class="math inline">\(\text{EVPI} - \text{EVSS}\)</span> is the extra profit due to having “perfect knowledge” of the future.</p>
+<p>To compute the expected profit with perfect information, we let the order variable <span class="math inline">\(x\)</span> be indexed by the subsequent scenario that will unfold. Given decision variable <span class="math inline">\(x_s\)</span>, the model for EVPI becomes</p>
 <p><span class="math display">\[
 \begin{align*}
 \text{EVPI} =  \max_{x_s, y_s} \quad &amp; \mathbb E[f] = \sum_{s\in S} p_s f_s \\
@@ -772,7 +773,7 @@ Expected profit: 8920.0</code></pre>
 \end{align*}
 \]</span></p>
 <p>The following implementation is a variation of the prior Pyomo model, with the only difference that now <span class="math inline">\(x\)</span> is a decision variable indexed by the scenarios.</p>
-<div id="cell-12" class="cell" data-execution_count="5">
+<div id="cell-14" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> PopUpShop_PI(r, c, w, scenarios):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> pyo.ConcreteModel(<span class="st">"Pop-up shop with perfect information"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -880,11 +881,11 @@ Expected profit: 10220.0</code></pre>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>To summarize, have computed three different solutions to the problem of order size:</p>
+<p>To summarize, we have computed three different solutions to the problem of order size:</p>
 <ul>
-<li><p>The expected value of the mean solution (EVM) is the expected profit resulting from ordering the number of items expected to sold under all scenarios.</p></li>
-<li><p>The expected value of the stochastic solution (EVSS) is the expected profit found by solving an two-state optimization problem where the order size was the “here and now” decision without specific knowledge of which future scenario would transpire.</p></li>
-<li><p>The expected value of perfect information (EVPI) is the result of a hypotherical case where knowledge of the future scenario was somehow available when then order had to be placed.</p></li>
+<li><p>The expected value of the mean solution (EVM) is the expected profit resulting from ordering the number of items expected to be sold under all scenarios.</p></li>
+<li><p>The expected value of the stochastic solution (EVSS) is the expected profit found by solving a two-stage optimization problem, where the order size was the “here-and-now” decision without specific knowledge of which future scenario would transpire.</p></li>
+<li><p>The expected value of perfect information (EVPI) is the result of a hypothetical case, where knowledge of the future scenario was somehow available when the order had to be placed.</p></li>
 </ul>
 <p>For this example we found</p>
 <table class="caption-top table">
@@ -927,7 +928,7 @@ Expected profit: 10220.0</code></pre>
 \text{VPI} = \text{EVPI} - \text{EVSS} = 1,300
 \end{align*}
 \]</span></p>
-<p>As one might have expected, there is a cost that results from lack of knowledge about an uncertain future.</p>
+<p>As one might have expected, there is a cost that results from a lack of knowledge about an uncertain future.</p>
 
 
 </section>
@@ -1335,8 +1336,8 @@ Expected profit: 10220.0</code></pre>
   </script>
 <nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
-      <a href="../examples/D4_MRCPSP.html" class="pagination-link" aria-label="Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></span>
+      <a href="../examples/D4_MRCPSP.html" class="pagination-link" aria-label="Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ex. D4: Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP).</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
