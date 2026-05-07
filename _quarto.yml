@@ -4,7 +4,7 @@ project:
 
 book:
   title: "Optimal Scheduling for Cross-Facility Workflows"
-  subtitle: "XWF for CDT"
+  subtitle: "XWF for CCDS"
   author: "Mark Asch" 
   date: last-modified
   sidebar:
