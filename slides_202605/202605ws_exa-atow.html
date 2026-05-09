@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.10.0">
 
   <meta name="author" content="MARK ASCH">
-  <meta name="dcterms.date" content="2026-05-07">
+  <meta name="dcterms.date" content="2026-05-09">
   <title>Models, Shadows and Twins</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -150,7 +150,7 @@ MARK ASCH <a href="https://orcid.org/0000-0002-1014-4097" class="quarto-title-au
     </div>
 </div>
 
-  <p class="date">May 7, 2026</p>
+  <p class="date">May 9, 2026</p>
 </section>
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
@@ -211,7 +211,7 @@ MARK ASCH <a href="https://orcid.org/0000-0002-1014-4097" class="quarto-title-au
 <h2>Which Models for What?</h2>
 <ul>
 <li>state-space model for simulation</li>
-<li>optimal scheduling for planning</li>
+<li><span class="bg" style="--col: #F5C946">optimal scheduling for planning</span></li>
 <li>energy monitoring and management</li>
 </ul>
 </section>
@@ -268,6 +268,36 @@ Figure&nbsp;1: Objective function for a two-stage decision process with uncertai
 </figcaption>
 </figure>
 </div>
+</section>
+<section id="slp-metrics" class="slide level2 smaller">
+<h2>SLP Metrics</h2>
+<h3 id="when-is-a-stochastic-solution-needed">When is a stochastic solution needed?</h3>
+<p>There are 3 possible scenarios when uncertainty is present:</p>
+<ol type="1">
+<li>Expected Value of the Mean, <span class="math inline">\(\text{EVM},\)</span> where mean values are considered.</li>
+<li>Expected Value of the Stochastic Solution <span class="math inline">\(\text{EVSS},\)</span> by solving the recourse problem (RP).</li>
+<li>Expected Value with Perfect Information <span class="math inline">\(\text{EVPI},\)</span> where an oracle has provided full second-stage (future) information.</li>
+</ol>
+<p>These are related by the inequality, <span class="math display">\[ \text{EVM} \le \text{EVSS} \le \text{EVPI}.
+\]</span></p>
+<p>This inequality yields two stochastic performance <span class="ubdteal">metrics</span>:</p>
+<ol type="1">
+<li>Value of the <span class="ubdyellow">stochastic solution</span> <span class="math inline">\(\text{VSS} =  \text{EVSS} - \text{EVM}.\)</span></li>
+<li>Value of <span class="ubdyellow">perfect information</span> <span class="math inline">\(\text{VPI} =  \text{EVPI} - \text{EVSS}.\)</span></li>
+</ol>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="ubdred"><strong>VSS</strong></span> measures the possible gain, or value, from considering uncertainty, and is the consequence of a hedging strategy.</p>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="summary" class="title-slide slide level1 transition-slide-ubdteal center">
@@ -276,8 +306,20 @@ Figure&nbsp;1: Objective function for a two-stage decision process with uncertai
 </section>
 <section id="summary-1" class="slide level2">
 <h2>Summary</h2>
-<p>We propose a complete toolbox for shadowing the Digital Continuum. Optimization is fully documented at <a href="https://markasch.github.io/RCP4CDT/">https://markasch.github.io/RCP4CDT/</a></p>
+<p>We are preparing a complete toolbox for shadowing the Digital Continuum. Optimization is fully documented at <a href="https://markasch.github.io/RCP4CDT/">https://markasch.github.io/RCP4CDT/</a></p>
 <p><img data-src="./images/xwf.png" class="absolute" style="top: 180px; left: 150px; width: 750px; height: 800px; "></p>
+</section>
+<section id="optimal-scheduling-online-user-guide" class="slide level2">
+<h2>Optimal Scheduling Online User-Guide</h2>
+<ul>
+<li>general, accessible intro</li>
+<li>theory: deterministic LP, stochastic LP</li>
+<li>many, many examples (with CCDS context)</li>
+<li>use-cases (under construction)</li>
+</ul>
+<div class="footer">
+<p>Learn more: <a href="https://markasch.github.io/RCP4CDT/">https://markasch.github.io/RCP4CDT/</a></p>
+</div>
 </section>
 <section id="todo" class="slide level2">
 <h2>TODO</h2>

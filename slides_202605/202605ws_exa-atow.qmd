@@ -82,7 +82,7 @@ The optimization can be performed for various  <font color="red">objectives</fon
 ## Which Models for What?
 
 - state-space model for simulation
-- optimal scheduling for planning
+- [optimal scheduling for planning]{.bg style="--col: #F5C946"}
 - energy monitoring and management
 
 
@@ -152,18 +152,49 @@ Finally, restricting the summations over time to the intervals $[\mathrm{EF}_j, 
 Objective function for a two-stage decision process with uncertainty. The deterministic term is based on actual knowledge. Stochastic exogenous inputs $\xi$ become known afterwards. Recourse problem is solved for $Q(x;\xi).$
 :::
 
+## SLP Metrics {.smaller}
+### When is a stochastic solution needed?
+
+There are 3 possible scenarios when uncertainty is present:
+
+1. Expected Value of the Mean, $\text{EVM},$ where mean values are considered.
+2. Expected Value of the Stochastic Solution $\text{EVSS},$ by solving the recourse problem (RP).
+3. Expected Value with Perfect Information $\text{EVPI},$  where an oracle has provided full second-stage (future) information.
+
+These are related by the inequality,
+$$ \text{EVM} \le \text{EVSS} \le \text{EVPI}.
+$$
+
+This inequality yields two stochastic performance [metrics]{.ubdteal}:
+
+1. Value of the [stochastic solution]{.ubdyellow} $\text{VSS} =  \text{EVSS} - \text{EVM}.$
+2. Value of [perfect information]{.ubdyellow} $\text{VPI} =  \text{EVPI} - \text{EVSS}.$
+
+::: callout-important
+[**VSS**]{.ubdred} measures the possible gain, or value, from considering uncertainty, and is the consequence of a hedging strategy.
+:::
 
 # Summary {.transition-slide-ubdteal}
 
 
 ## Summary
 
-We propose a complete toolbox for shadowing the Digital Continuum. Optimization is fully documented at 
+We are preparing a complete toolbox for shadowing the Digital Continuum. Optimization is fully documented at 
 [https://markasch.github.io/RCP4CDT/](https://markasch.github.io/RCP4CDT/)
 
 ![](./images/xwf.png){.absolute top="180" left="150" width="750" height="800"}
 
 
+## Optimal Scheduling Online User-Guide
+
+- general, accessible intro
+- theory: deterministic LP, stochastic LP
+- many, many examples (with CCDS context)
+- use-cases (under construction)
+
+::: footer
+Learn more: [https://markasch.github.io/RCP4CDT/](https://markasch.github.io/RCP4CDT/)
+:::
 
 ## TODO
 
